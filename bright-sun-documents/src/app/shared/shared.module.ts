@@ -4,22 +4,26 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { LayoutComponent } from './layout/layout.component';
 import { RouterModule } from '@angular/router';
-
+import { CarouselHeaderComponent } from './carousel-header/carousel-header.component';
+import {CarouselModule} from 'primeng/carousel';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    LayoutComponent
+    LayoutComponent,
+    CarouselHeaderComponent
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    CarouselModule
   ],
   exports: [
     HeaderComponent,
     FooterComponent,
-    LayoutComponent
+    LayoutComponent,
+    CarouselHeaderComponent
   ]
 })
 export class SharedModule { }

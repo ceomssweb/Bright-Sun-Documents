@@ -1,7 +1,5 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { ConnectionsService } from './connections.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
+import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'bsd-contact',
@@ -9,37 +7,22 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
-
-  contactForm: FormGroup;
-  disabledSubmitButton: boolean = true;
-
-  @HostListener('input') oninput() {
-    if (this.contactForm.valid) {
-      this.disabledSubmitButton = false;
-    }
-  }
-
-  constructor(private fb: FormBuilder, private connectionService: ConnectionsService) {
-    this.contactForm = fb.group({
-      'contactFormName': ['', Validators.required],
-      'contactFormEmail': ['', Validators.compose([Validators.required, Validators.email])],
-      'contactFormSubjects': ['', Validators.required],
-      'contactFormMessage': ['', Validators.required],
-      'contactFormCopy': [''],
-    });
+  email = new FormControl('', [Validators.required, Validators.email]);
+  selected: any;
+  options: any;
+  constructor() {
   }
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.options = {
+      center: {lat: 11.599242, lng: 78.610340},
+      zoom: 12
+  };
   }
+  getErrorMessage() {
+    if (this.email.hasError('required')) {
+      return 'You must enter a value';
+    }
 
-  onSubmit() {
-    this.connectionService.sendMessage(this.contactForm.value).subscribe(() => {
-      alert('Your message has been sent.');
-      this.contactForm.reset();
-      this.disabledSubmitButton = true;
-    }, (error: any) => {
-      console.log('Error', error);
-    });
+    return this.email.hasError('email') ? 'Not a valid email' : '';
   }
-
 }
