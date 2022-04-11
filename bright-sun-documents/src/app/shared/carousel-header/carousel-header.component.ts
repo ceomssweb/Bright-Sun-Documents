@@ -1,18 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from './services/productservice';
-import {Product} from './services/product';
-
-
 @Component({
   selector: 'bsd-carousel-header',
   templateUrl: './carousel-header.component.html',
   styleUrls: ['./carousel-header.component.scss']
 })
+
 export class CarouselHeaderComponent {
-
+  imageName = 0;
 	constructor() {}
-
-	ngOnInit() {}
+	ngOnInit() {
+    this.autoImageSrc();
+  }
+  autoImageSrc(){
+    for(let i = 0; i<=66; i++){
+      setTimeout(() => {
+        this.imageName= i;
+      }, i * 70);
+    }
+  }
 }
-
 

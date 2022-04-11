@@ -11,7 +11,6 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import {GMapModule} from 'primeng/gmap';
 
 @NgModule({
   declarations: [
@@ -30,7 +29,6 @@ import {GMapModule} from 'primeng/gmap';
     MatFormFieldModule,
     MatCardModule,
     MatIconModule,
-    GMapModule
   ]
 })
 export class ContactModule { }
