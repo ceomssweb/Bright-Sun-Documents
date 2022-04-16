@@ -15,7 +15,7 @@ export class CarouselHeaderComponent {
     for(let i = 0; i<=66; i++){
       setTimeout(() => {
         this.imageName= i;
-      }, i * 70);
+      }, i * 100);
     }
   }
 }
