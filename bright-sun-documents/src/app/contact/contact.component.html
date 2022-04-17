@@ -1,0 +1,118 @@
+<bsd-header></bsd-header>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-12 py-2">
+          <h1>Reach us!</h1>
+        </div>
+      </div>
+      <div class="row py-2 body-content-height">
+        <div class="d-none d-md-block col-md-4 p-5">
+          <img src="assets/images/documents-main.png" class="document-dummy" alt=""/>
+        </div>
+        <div class="col-md-4 p-2">
+          <mat-card>
+            <p class="h4 mb-5">Mentor</p>
+            <div class="row">
+              <div class="col-md-12">
+                <label class="d-block fw-bold">Mr. E. Noor Mohammad M.A.,</label>
+                <label class="d-block">Document Writer<span class="text-danger mx-2">[STATE LICENSED]</span></label>
+                <div class="row my-4">
+                  <div class="col-md-12">
+                    <h3 class="about-address-left float-start">
+                      <em class="fa fa-map-marker location-icon" aria-hidden="true"></em>
+                    </h3>
+                    <div class="about-address-right float-end">
+                      <div class="mb-1">5-Avvaiyar Street,</div>
+                      <div class="mb-1">Mullaivadi,</div>
+                      <div class="mb-1">Pudupet Post, Attur</div>
+                      <div class="mb-1">Salem - 636141</div>
+                      <div class="mb-2">Tamilnadu, INDIA</div>
+                      <div class="mb-1">e-mail: <a href="mailto:noor4777atr@gmail.com">noor4777atr@gmail.com</a></div>
+                      <div class="mb-1">Phone no.: <a href="tel:+91994243777">+91 994243777</a></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 my-2">
+                  <div class="d-inline-block follow-link">
+                    <div class="d-inline-block fw-bold">Follow us:</div>
+                    <span class="mx-1 d-inline-block social-icons"><a href="" target="_blank" title="Follow us on Facebook"><em class="fa fa-facebook-square"></em></a></span>
+                    <span class="mx-1 d-inline-block social-icons"><a href="" target="_blank" title="Follow us on Instagram"><em class="fa fa-instagram"></em></a></span>
+                    <span class="mx-1 d-inline-block social-icons"><a href="" target="_blank" title="Follow us on Twitter"><em class="fa fa-twitter-square"></em></a></span>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </mat-card>
+        </div>
+        <div class="col-md-4 p-2">
+          <!-- Default form contact -->
+          <mat-card>
+            <p class="h5 mb-4">Contact us</p>
+            <!-- Name -->
+            <div class="row">
+              <div class="col-md-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Name</mat-label>
+                  <input matInput placeholder="Placeholder">
+                  <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                  <mat-hint>Type Your Full Name</mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="row">
+              <div class="col-md-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Enter your email</mat-label>
+                  <input matInput placeholder="pat@example.com" [formControl]="email" required>
+                  <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                  <mat-hint>Please give us a valid e-mail ID.</mat-hint>
+                  <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Subject -->
+            <div class="row">
+              <div class="col-md-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Select Questions</mat-label>
+                  <mat-select [(value)]="selected">
+                    <mat-option>None</mat-option>
+                    <mat-option value="option1">About Courses</mat-option>
+                    <mat-option value="option2">About Fees Structure</mat-option>
+                    <mat-option value="option3">Other Questions</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Message -->
+            <div class="row">
+              <div class="col-md-12">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Message</mat-label>
+                  <textarea matInput></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- Send button -->
+            <div class="row">
+              <div class="col-md-12">
+                <button mat-button class="btn btn-primary float-end">Send</button>
+              </div>
+            </div>
+          </mat-card>
+          <!-- Default form contact -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<bsd-footer></bsd-footer>

@@ -7,6 +7,11 @@ import { AppComponent } from './app.component';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from './shared/shared.module';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyDhl6vjZyG5bDB5MQJ8BSnWi5oUu8gxAXE",
   authDomain: "bright-sun-documents.firebaseapp.com",
@@ -26,7 +31,10 @@ const analytics = getAnalytics(app);
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    SharedModule,
+    RouterModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

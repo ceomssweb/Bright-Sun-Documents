@@ -1,0 +1,18 @@
+.navbar{
+  background: #fff;
+  .logo{
+    height: 5rem;
+  }
+  .navbar-brand{
+    color: coral;
+    &:hover, &:active{
+      color: coral;
+      text-decoration: none;
+    }
+  }
+}
+.background-fun{
+  height: 5px;
+  background: rgb(255,223,2);
+  background: linear-gradient(99deg, rgba(255,223,2,1) 0%, rgba(226,255,3,1) 12%, rgba(24,251,7,1) 14%, rgba(5,247,77,1) 25%, rgba(6,238,239,1) 27%, rgba(2,250,255,1) 40%, rgba(216,3,248,1) 42%, rgba(203,3,255,1) 54%, rgba(10,22,237,1) 56%, rgba(14,8,209,1) 69%, rgba(246,141,143,1) 71%, rgba(245,7,7,1) 85%, rgba(241,14,210,1) 87%, rgba(237,13,232,1) 100%);
+}

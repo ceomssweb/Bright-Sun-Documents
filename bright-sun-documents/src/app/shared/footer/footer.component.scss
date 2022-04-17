@@ -1,0 +1,17 @@
+.footer-container{
+  color: whitesmoke;
+  background: rgb(52,53,54);
+  background: linear-gradient(99deg, rgba(52,53,54,1) 0%, rgba(44,111,125,1) 26%, rgba(24,67,82,1) 90%, rgba(44,44,45,1) 100%);
+  a{
+    color: white;
+    text-decoration: none;
+    &:hover, &:active{
+      color: whitesmoke;
+      text-decoration: underline;
+    }
+  }
+  .social-icons{
+    font-size: 1.6rem !important;
+    vertical-align: middle;
+  }
+}

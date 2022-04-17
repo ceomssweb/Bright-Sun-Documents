@@ -1,0 +1,22 @@
+@import "../../variable.scss";
+.about-address-left{
+  width: 30px;
+  .location-icon{
+    font-size: 24px;
+  }
+}
+.about-address-right{
+  width: calc(100% - 30px);
+}
+
+.document-dummy{
+  width: 36vw;
+}
+
+.follow-link{
+  a{
+    color: $primary-color;
+    font-size: 2rem;
+    vertical-align: middle;
+  }
+}
