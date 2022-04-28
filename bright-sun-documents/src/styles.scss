@@ -51,6 +51,7 @@ h5{
 a,
 .nav-link{
   color: $primary-color !important;
+  cursor: pointer;
   &:hover, &:active{
     color: $primary-color !important;
     opacity: 0.7;

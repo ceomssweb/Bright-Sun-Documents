@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form class="sign-in-submit m3">
+        <div class="form-group my-2">
+          <label for="inputEmailID">Email address</label>
+          <input type="email" name="email" [(ngModel)]="userEmail" class="form-control" id="inputEmailID" aria-describedby="emailHelp" placeholder="Enter email">
+          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group my-2">
+          <label for="inputPassword">Password</label>
+          <input type="password" name="password" [(ngModel)]="userPassword" class="form-control" id="inputPassword" placeholder="Password">
+        </div>
+        <div class="form-group form-check my-2">
+          <input type="checkbox" class="form-check-input" id="checkConditions">
+          <label class="form-check-label" for="checkConditions">Please accept the <a href="">Terms and Conditions.</a></label>
+        </div>
+        <button type="submit" class="btn btn-primary my-2" (click)="onSignIn()">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>

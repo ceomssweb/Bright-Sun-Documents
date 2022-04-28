@@ -20,9 +20,26 @@
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/contact']">Contact</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="openSignIn()">Sign In</a>
+        </li>
+        <li class="nav-item" (click)="openSignUp()">
+          <a class="nav-link">Sign Up</a>
+        </li>
+        <li class="nav-item" (click)="signOut()">
+          <a class="nav-link">Sign Out</a>
+        </li>
       </ul>
     </div>
   </nav>
   <div class="w100 background-fun"></div>
 </div>
 
+<p-dialog header="Sign In" [(visible)]="showSignIn">
+  <bsd-sign-in></bsd-sign-in>
+</p-dialog>
+
+<p-dialog header="Sign In" [(visible)]="showSignUp">
+  <bsd-sign-up>
+  </bsd-sign-up>
+</p-dialog>

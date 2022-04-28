@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-
+import { getAuth, signOut } from 'firebase/auth';
 @Component({
   selector: 'bsd-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  showNav = false;
+  showNav: boolean = false;
+  showSignIn: boolean = false;
+  showSignUp: boolean = false;
   constructor(){
   }
 
@@ -15,5 +17,20 @@ export class HeaderComponent implements OnInit {
   toggleNav(){
     this.showNav = !this.showNav;
   }
-
+  openSignIn(){
+    this.showSignIn = true;
+  }
+  openSignUp(){
+    this.showSignUp = true;
+  }
+  signOut(){
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        //console.log("Sign Out")
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
 }
