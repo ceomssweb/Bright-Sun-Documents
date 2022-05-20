@@ -1,18 +1,34 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <form class="sign-in-submit m3">
-        <div class="form-group my-2">
-          <label for="inputEmailID">Email address</label>
-          <input type="email" name="email" [(ngModel)]="userEmail" class="form-control" id="inputEmailID" aria-describedby="emailHelp" placeholder="Enter email">
-          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group my-2">
-          <label for="inputPassword">Password</label>
-          <input type="password" name="password" [(ngModel)]="userPassword" class="form-control" id="inputPassword" placeholder="Password">
-        </div>
-        <button type="submit" class="btn btn-primary my-2" (click)="onSignIn()">Submit</button>
-      </form>
+<div class="displayTable">
+  <div class="displayTableCell">
+    <div class="authBlock">
+      <h3>Sign In</h3>
+      <div class="formGroup">
+        <input type="text" class="formControl" placeholder="Username" #userName required>
+      </div>
+      <div class="formGroup">
+        <input type="password" class="formControl" placeholder="Password" #userPassword required>
+      </div>
+      <!-- Calling SignIn Api from AuthService -->
+      <div class="formGroup">
+        <input type="button" class="btn btnPrimary" value="Log in" (click)="authService.SignIn(userName.value, userPassword.value)">
+      </div>
+      <div class="formGroup">
+        <span class="or"><span class="orInner">Or</span></span>
+      </div>
+      <!-- Calling GoogleAuth Api from AuthService -->
+      <div class="formGroup">
+        <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">
+          <i class="fab fa-google-plus-g"></i>
+          Log in with Google
+        </button>
+      </div>
+      <div class="forgotPassword">
+        <span routerLink="/forgot-password">Forgot Password?</span>
+      </div>
+    </div>
+    <div class="redirectToLogin">
+      <span>Don't have an account?<span class="redirect" routerLink="/register-user"> Sign Up</span></span>
     </div>
   </div>
 </div>
+

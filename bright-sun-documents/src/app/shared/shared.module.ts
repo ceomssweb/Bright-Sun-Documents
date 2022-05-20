@@ -4,26 +4,26 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { LayoutComponent } from './layout/layout.component';
 import { RouterModule } from '@angular/router';
-import { CarouselHeaderComponent } from './carousel-header/carousel-header.component';
-import {CarouselModule} from 'primeng/carousel';
-import {DialogModule} from 'primeng/dialog';
+import { DialogModule } from 'primeng/dialog';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { FormsModule } from '@angular/forms';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     LayoutComponent,
-    CarouselHeaderComponent,
     SignInComponent,
-    SignUpComponent
+    SignUpComponent,
+    ForgotPasswordComponent,
+    VerifyEmailComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
-    CarouselModule,
     DialogModule,
     FormsModule
   ],
@@ -31,9 +31,10 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     HeaderComponent,
     FooterComponent,
     LayoutComponent,
-    CarouselHeaderComponent,
     SignInComponent,
-    SignUpComponent
+    SignUpComponent,
+    ForgotPasswordComponent,
+    VerifyEmailComponent
   ]
 })
 export class SharedModule { }

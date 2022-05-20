@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { AuthService } from '../services-firebase/auth.service';
 
 @Component({
   selector: 'bsd-sign-in',
@@ -7,37 +8,11 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
   styleUrls: ['./sign-in.component.scss']
 })
 export class SignInComponent implements OnInit {
-  userEmail:string = '';
-  userPassword:string = '';
 
-  constructor() { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
   }
-
-
-  onSignIn(){
-    debugger;
-    const auth = getAuth();
-    const email = this.userEmail;
-    const password = this.userPassword;
-    signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      //console.log("Signed In");
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-      alert(errorMessage + " Please check the credentials for valid email id and correct password.");
-    });
-  }
-
-
-
-
-
-
 }
 
 

@@ -9,24 +9,9 @@
     <div class="navbar-collapse justify-content-md-end" [ngClass]="showNav === false ? 'collapse': ''" id="navbarNav">
       <ul class="navbar-nav mx-2">
         <li class="nav-item active">
-          <a class="nav-link" [routerLink]="['/home-page']">Home</a>
+          <a class="nav-link" [routerLink]="['home-page']">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/courses']">Courses</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/products']">Products</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/contact']">Contact</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" (click)="openSignIn()">Sign In</a>
-        </li>
-        <li class="nav-item" (click)="openSignUp()">
-          <a class="nav-link">Sign up</a>
-        </li>
-        <li class="nav-item" (click)="signOut()">
+        <li class="nav-item" (click)="authService.SignOut()">
           <a class="nav-link">Sign Out</a>
         </li>
       </ul>
@@ -35,11 +20,3 @@
   <div class="w100 background-fun"></div>
 </div>
 
-<p-dialog header="Sign In" [(visible)]="showSignIn">
-  <bsd-sign-in></bsd-sign-in>
-</p-dialog>
-
-<p-dialog header="Sign In" [(visible)]="showSignUp">
-  <bsd-sign-up>
-  </bsd-sign-up>
-</p-dialog>

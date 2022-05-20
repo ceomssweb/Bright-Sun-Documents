@@ -11,8 +11,16 @@ import { SharedModule } from './shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { AuthService } from './shared/services-firebase/auth.service';
 
-const firebaseConfig = {
+
+
+export const firebaseConfig = {
   apiKey: "AIzaSyDhl6vjZyG5bDB5MQJ8BSnWi5oUu8gxAXE",
   authDomain: "bright-sun-documents.firebaseapp.com",
   projectId: "bright-sun-documents",
@@ -20,13 +28,12 @@ const firebaseConfig = {
   messagingSenderId: "555788329592",
   appId: "1:555788329592:web:cb18b4f046d6f19947838d",
   measurementId: "G-MDETWJJ8T0"
-};
-
+}
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,9 +41,14 @@ const analytics = getAnalytics(app);
     BrowserAnimationsModule,
     SharedModule,
     RouterModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule,
+    AngularFireDatabaseModule,
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 

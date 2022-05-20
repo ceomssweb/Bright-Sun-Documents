@@ -1,26 +1,53 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <form class="sign-in-submit m3">
-        <div class="form-group my-2">
-          <label for="inputEmailID">Email address</label>
-          <input type="email" name="email" [(ngModel)]="userEmail" class="form-control" id="inputEmailID" aria-describedby="emailHelp" placeholder="Enter email">
-          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group my-2">
-          <label for="inputPassword">Password</label>
-          <input type="password" name="password" [(ngModel)]="userPassword" class="form-control" id="inputPassword" placeholder="Password">
-        </div>
-        <div class="form-group my-2">
-          <label for="inputPassword">Re-enter Password</label>
-          <input type="text" name="rePassword" class="form-control" id="inputRePassword" placeholder="Re-enter Password">
-        </div>
-        <div class="form-group form-check my-2">
-          <input type="checkbox" class="form-check-input" id="checkConditions">
-          <label class="form-check-label" for="checkConditions">Please accept the <a class="nav-link">Terms and Conditions.</a></label>
-        </div>
-        <button type="submit" class="btn btn-primary my-2" (click)="onSignUp()">Sign up</button>
-      </form>
+<div class="displayTable">
+  <div class="displayTableCell">
+    <div class="authBlock">
+      <h3>Sign Up</h3>
+      <div class="formGroup">
+        <input
+          type="email"
+          class="formControl"
+          placeholder="Email Address"
+          #userEmail
+          required
+        />
+      </div>
+      <div class="formGroup">
+        <input
+          type="password"
+          class="formControl"
+          placeholder="Password"
+          #userPwd
+          required
+        />
+      </div>
+      <div class="formGroup">
+        <input
+          type="button"
+          class="btn btnPrimary"
+          value="Sign Up"
+          (click)="authService.SignUp(userEmail.value, userPwd.value)"
+        />
+      </div>
+      <div class="formGroup">
+        <span class="or"><span class="orInner">Or</span></span>
+      </div>
+      <!-- Continue with Google -->
+      <div class="formGroup">
+        <button
+          type="button"
+          class="btn googleBtn"
+          (click)="authService.GoogleAuth()"
+        >
+          <i class="fab fa-google-plus-g"></i>
+          Continue with Google
+        </button>
+      </div>
+    </div>
+    <div class="redirectToLogin">
+      <span
+        >Already have an account?
+        <span class="redirect" routerLink="/sign-in">Log In</span></span
+      >
     </div>
   </div>
 </div>
