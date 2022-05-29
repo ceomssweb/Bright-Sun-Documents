@@ -11,7 +11,7 @@
         <li class="nav-item active">
           <a class="nav-link" [routerLink]="['home-page']">Home</a>
         </li>
-        <li class="nav-item" (click)="authService.SignOut()">
+        <li *ngIf="authService.userData as user" class="nav-item" (click)="authService.SignOut()">
           <a class="nav-link">Sign Out</a>
         </li>
       </ul>

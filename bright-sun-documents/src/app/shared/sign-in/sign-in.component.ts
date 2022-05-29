@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { AuthService } from '../services-firebase/auth.service';
 
 @Component({

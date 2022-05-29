@@ -15,18 +15,20 @@ export class UsersDocumentsComponent implements OnInit {
     public authService: AuthService, 
     public userApi: UsersDocuments,
     public fb: FormBuilder,
-    public toastr: ToastrService
+    public toastr: ToastrService,
     ) { }
 
   ngOnInit(): void {
-    this.userApi.GetUsersList();
+    const getSPValue = JSON.parse(localStorage.getItem('user')!).uid;
+    console.log(getSPValue);
+    this.userApi.GetUsersList(getSPValue);
     this.userFormData();
   }
 
   userFormData() {
     this.usersForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: [''],
+      fullName: ['', [Validators.required, Validators.minLength(2)]],
+      parentName: ['', [Validators.required, Validators.minLength(2)]],
       email: [
         '',
         [
@@ -35,11 +37,22 @@ export class UsersDocumentsComponent implements OnInit {
         ],
       ],
       mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      docType: [''],
+      currentOwnerName: ['', [Validators.required, Validators.minLength(2)]],
+      currentOwnerAddress: ['', [Validators.required, Validators.minLength(2)]],
+      currentOwnerAge: ['', [Validators.required, Validators.minLength(1)]],
+      currentOwnerSex: ['', [Validators.required, Validators.minLength(2)]],
+      buyerRelationType: ['', [Validators.required, Validators.minLength(2)]],
+      buyerName: ['', [Validators.required, Validators.minLength(2)]],
+      buyerAddress: ['', [Validators.required, Validators.minLength(2)]],
+      buyerAge: ['', [Validators.required, Validators.minLength(1)]],
+      buyerSex: ['', [Validators.required, Validators.minLength(2)]],
+      uploadFiles: [''],
     });
   }
 
-  get firstName() {
-    return this.usersForm.get('firstName');
+  get fullName() {
+    return this.usersForm.get('fullName');
   }
   get lastName() {
     return this.usersForm.get('lastName');
@@ -53,12 +66,14 @@ export class UsersDocumentsComponent implements OnInit {
   ResetForm() {
     this.usersForm.reset();
   }
-  submitStudentData() {
+  submitUserData() {
     this.userApi.AddUsers(this.usersForm.value);
     this.toastr.success(
-      this.usersForm.controls['firstName'].value + ' successfully added!'
+      this.usersForm.controls['fullName'].value + ' successfully added!'
     );
     this.ResetForm();
   }
+
+  uploadFiles(){}
 
 }
