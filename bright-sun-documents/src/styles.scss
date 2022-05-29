@@ -58,6 +58,27 @@ a,
   }
 }
 
+.no-link{
+  color: initial !important;
+  cursor: default;
+  &:hover, &:active{
+    color: initial !important;
+  }
+}
+
+.img-thumbnail{
+  height: 1.4rem;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    width: 1.4rem;
+  img{
+    height: inherit;
+    margin-left: -0.24rem;
+    margin-top: -0.5rem;
+  }
+}
+
 .footer-container{
   a,
   .nav-link{

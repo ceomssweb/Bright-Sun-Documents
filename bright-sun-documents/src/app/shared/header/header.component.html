@@ -11,12 +11,20 @@
         <li class="nav-item active">
           <a class="nav-link" [routerLink]="['home-page']">Home</a>
         </li>
-        <li *ngIf="authService.userData as user" class="nav-item" (click)="authService.SignOut()">
+        <li class="no-link" *ngIf="authService.userData as user">
+          <span class="mx-1">Hello: <strong>{{(user.displayName) ? user.displayName : 'User'}}</strong></span>
+          
+        <!-- <p>User ID: <strong>{{user.uid}}</strong></p> -->
+        <span class="mx-1">Email: <strong id="spMail" name="spMail" #spMail>{{user.email}}</strong></span>
+        <!-- <p>Email Verified: <strong>{{user.emailVerified}}</strong></p> -->
+        <span class="mx-1 img-thumbnail rounded-circle"><img src="{{(user.photoURL) ? user.photoURL : '/assets/images/no-image.png'}}"alt="{{user.displayName}}">
+        </span>
+        <span class="nav-item" (click)="authService.SignOut()">
           <a class="nav-link">Sign Out</a>
-        </li>
+        </span>
+      </li>
       </ul>
     </div>
   </nav>
   <div class="w100 background-fun"></div>
 </div>
-
