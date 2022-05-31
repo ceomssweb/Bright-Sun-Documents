@@ -14,6 +14,7 @@ import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "@angular/
 export class SendDocumentsComponent implements OnInit {
   public usersForm!: FormGroup;
   file: any = [];
+  userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
   constructor(
     public authService: AuthService,
     public userApi: UsersDocuments,
@@ -23,41 +24,45 @@ export class SendDocumentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const getSPValue = JSON.parse(localStorage.getItem('user')!).uid;
-    this.userApi.GetUsersList(getSPValue);
+    this.userApi.GetUsersList(this.userPath);
     this.userFormData();
   }
 
   chooseFile(event: any) {
-    this.file = event.target.files[0];
-    console.log(this.file);
+    for (var i = 0; i < event.target.files.length; i++) { 
+      this.file.push(event.target.files[i]);
+    }
   }
   addData() {
     const storage = getStorage();
-    const storageRef = ref(storage, 'images/' + this.file.name);
-    const uploadTask = uploadBytesResumable(storageRef, this.file);
-    uploadTask.on('state_changed',
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-      },
-      (error) => {
-        console.log(error.message);
-        switch (error.code) {
-          case 'storage/unauthorized':
-            break;
-          case 'storage/canceled':
-            break;
-          case 'storage/unknown':
-            break;
+    this.userPath = JSON.parse(localStorage.getItem('user')!).uid
+    for (var i = 0; i < this.file.length; i++) { 
+      const storageRef = ref(storage, 'users-documents/' + this.userPath + '/' + this.file[i].name);
+      const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
+   
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+        },
+        (error) => {
+          console.log(error.message);
+          switch (error.code) {
+            case 'storage/unauthorized':
+              break;
+            case 'storage/canceled':
+              break;
+            case 'storage/unknown':
+              break;
+          }
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            // console.log('File available at', downloadURL);
+          });
         }
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log('File available at', downloadURL);
-        });
-      }
-    )
+      )
+    }
   }
 
   userFormData() {
