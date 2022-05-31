@@ -8,42 +8,39 @@
       <div class="col-md-12">
         <ng-container *ngIf="authService.userData as user">
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
               <form [formGroup]="usersForm" (ngSubmit)="submitUserData()" novalidate>
                 <div class="row">
                   <div class="col-sm-12">
                     <h3 class="my-2">Client Info:</h3>
                     <div class="row">
-                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                      <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
                         <label>Full name</label>
                         <input
                           type="text"
                           formControlName="fullName"
                           class="form-control"
-                          pInputText
                           required
                         />
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
-                        <label>Father name</label>
-                        <input type="text" formControlName="fatherName" class="form-control" pInputText required/>
+                      <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
+                        <label>Parent name</label>
+                        <input type="text" formControlName="parentName" class="form-control" required/>
                       </div>
                     
-                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                      <div class="col-lg-4 col-md-6 col-sm-12">
                         <label>Email</label>
                         <input
                           type="email"
-                          pInputText
                           formControlName="email"
                           class="form-control"
                           required
                         />
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                      <div class="col-lg-4 col-md-6 col-sm-12">
                         <label>Mobile number</label>
                         <input
                           type="text"
-                          pInputText
                           formControlName="mobileNumber"
                           class="form-control"
                           required
@@ -57,97 +54,125 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                      <div class="col-lg-4 col-md-6 col-sm-12">
                         <label>Document Type</label>
-                        <p-dropdown [options]="documents" [(ngModel)]="selectedDoc" optionLabel="name" id="selectedDoc" formControlName="selectedDoc"></p-dropdown>
+                        <select name="docType" required id="docType" formControlName="docType"
+                        class="form-control"
+                        >
+                          <option value="Buiding sales deed">Buiding sales deed</option>
+                          <option value="Land sales deed">Land sales deed</option>
+                          <option value="Plot Sales deed">Plot Sales deed</option>
+                          <option value="Commertial Buiding sales deed">Commertial Buiding sales deed</option>
+                          <option value="Settlement deed">Settlement deed</option>
+                          <option value="Rental Aggrements">Rental Aggrements</option>
+                          <option value="Partition deed">Partition deed</option>
+                        </select>
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                      <div class="col-lg-4 col-md-6 col-sm-12">
                         <label>Current Owner Name</label>
-                        <input type="text" formControlName="currentOwnerName" class="form-control" pInputText required/>
+                        <input type="text" formControlName="currentOwnerName" class="form-control" required/>
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                      <div class="col-lg-4 col-md-6 col-sm-12">
                         <label>Owner Address</label>
-                        <input type="textarea" formControlName="currentOwnerAddress" class="form-control" pInputText required/>
+                        <input type="textarea" formControlName="currentOwnerAddress" class="form-control" required/>
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                      <div class="col-lg-4 col-md-6 col-sm-12">
                         <label>Owner Age</label>
-                        <input type="text" formControlName="currentOwnerAge" class="form-control" pInputText required/>
+                        <input type="text" formControlName="currentOwnerAge" class="form-control" required/>
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Owner Gender</label>
-                        <p-dropdown [options]="gender" [(ngModel)]="selectedGender" optionLabel="name" id="selectedGender" formControlName="selectedGender"></p-dropdown>
+                      <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label>Owner Sex</label>
+                        <select name="docType" required id="currentOwnerSex" formControlName="currentOwnerSex"
+                        class="form-control"
+                        >
+                          <option value="Buiding sales deed">Male</option>
+                          <option value="Land sales deed">Female</option>
+                          <option value="Land sales deed">Others</option>
+                        </select>
                       </div>
                       <!-- buyer details -->
-                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                          <div class="col-lg-4 col-md-6 col-sm-12">
                             <label>Buyer Relationship to Owner</label>
-                            <p-dropdown [options]="buyerRelation" [(ngModel)]="selectBuyerRelation" optionLabel="name" id="selectBuyerRelation" formControlName="selectBuyerRelation"></p-dropdown>
+                            <select name="buyerRelationType" required id="buyerRelationType" formControlName="buyerRelationType"
+                            class="form-control"
+                            >
+                              <option value="Father">Father</option>
+                              <option value="Mother">Mother</option>
+                              <option value="Husband">Husband</option>
+                              <option value="Wife">Wife</option>
+                              <option value="Brother">Brother</option>
+                              <option value="Sister">Sister</option>
+                              <option value="GrandFather">Grand Father</option>
+                              <option value="GrandMother">Grand Mother</option>
+                              <option value="Father">No Relation</option>
+                            </select>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                          <div class="col-lg-4 col-md-6 col-sm-12">
                             <label>Buyer Name</label>
-                            <input type="text" formControlName="buyerName" class="form-control" pInputText required/>
+                            <input type="text" formControlName="buyerName" class="form-control" required/>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                          <div class="col-lg-4 col-md-6 col-sm-12">
                             <label>Buyer Address</label>
-                            <input type="textarea" formControlName="buyerAddress" class="form-control" pInputText required/>
+                            <input type="textarea" formControlName="buyerAddress" class="form-control" required/>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                          <div class="col-lg-4 col-md-6 col-sm-12">
                             <label>Buyer Age</label>
-                            <input type="textarea" formControlName="buyerAge" class="form-control" pInputText required/>
+                            <input type="textarea" formControlName="buyerAge" class="form-control" required/>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                            <label>Buyer gender</label>
-                            <p-dropdown [options]="gender" [(ngModel)]="selectedGender" optionLabel="name" id="selectedBuyGender" formControlName="selectedBuyGender"></p-dropdown>
+                          <div class="col-lg-4 col-md-6 col-sm-12">
+                            <label>Buyer Sex</label>
+                            <select name="docType" required id="buyerSex" formControlName="buyerSex"
+                            class="form-control"
+                            >
+                              <option value="Buiding sales deed">Male</option>
+                              <option value="Land sales deed">Female</option>
+                              <option value="Land sales deed">Others</option>
+                            </select>
                           </div>
                         </div>
-                        
+                        <div class="row">
+                          <div class="col-md-6 border">
+                            <h3 class="my-2">Upload Requied Documents</h3>
+                            <!-- <input required type="file" id="uploadFiles" name="uploadFiles" multiple>
+                            <input type="button"
+                            class="btn btn-primary mx-2"
+                            (click)="uploadFiles()" Value="Upload"> -->
+                            <div class="row">
+                              <div class="col-md-8">
+                                <input class="form-control" type="file" 
+                                    (change)="chooseFile($event)" multiple>
+                              </div>
+                              <div class="col-md-4">
+                                <button (click)="addData()" 
+                                    class="btn btn-success">
+                                    Upload
+                                </button>
+                              </div>
+                            </div>
+                            <div class="border border-success p-2" *ngIf="widthVal != 0">
+                              <div class="progress-bar bg-info" [ngStyle]="{'width.%': widthVal}"></div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    
-              </form>
-            </div>
-            <div class="col-md-4">
-              <div class="row">
-                <div class="col-md-12 border">
-                  <h3 class="my-2">Upload Requied Documents</h3>
-                  <!-- <input required type="file" id="uploadFiles" name="uploadFiles" multiple>
-                  <input type="button"
-                  class="btn btn-primary mx-2"
-                  (click)="uploadFiles()" Value="Upload"> -->
-                  <div class="row my-2">
-                    <div class="col-md-8">
-                      <input class="form-control" type="file" 
-                          (change)="chooseFile($event)" multiple>
-                    </div>
-                    <div class="col-md-4">
-                      <button (click)="addData()" 
-                          class="btn btn-success">
-                          Upload
+                    <div class="pull-right my-2">
+                      <button
+                        type="button"
+                        class="btn btn-secondary mx-2"
+                        (click)="ResetForm()"
+                      >
+                        Reset
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        [disabled]="!usersForm.valid"
+                      >
+                        Add Client
                       </button>
                     </div>
-                  </div>
-                  <div class="border border-success p-2" *ngIf="widthVal != 0">
-                    <div class="progress-bar bg-info" [ngStyle]="{'width.%': widthVal}"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="pull-right my-2">
-                <button
-                  type="button"
-                  class="btn btn-secondary mx-2"
-                  (click)="ResetForm()"
-                >
-                  Reset
-                </button>
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  [disabled]="!usersForm.valid"
-                >
-                  Add Client
-                </button>
-              </div>
+              </form>
             </div>
           </div>
         </ng-container>
