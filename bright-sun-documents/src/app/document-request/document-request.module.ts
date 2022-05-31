@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UsersDocumentsComponent } from './send-documents/send-documents.component';
+import { SendDocumentsComponent } from './send-documents/send-documents.component';
 import { SharedModule } from '../shared/shared.module';
 import { DocumentRequestRoutingModule } from './document-request-routing.module';
 import { DocumentRequestComponent } from './document-request/document-request.component';
-import {FileUploadModule} from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    UsersDocumentsComponent,
-    DocumentRequestComponent
+    DocumentRequestComponent,
+    SendDocumentsComponent
   ],
   imports: [
     CommonModule,
@@ -24,3 +24,4 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   ]
 })
 export class DocumentRequestModule { }
+

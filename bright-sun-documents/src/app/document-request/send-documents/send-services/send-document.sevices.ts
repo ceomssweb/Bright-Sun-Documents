@@ -5,8 +5,8 @@ import {
   AngularFireList,
   AngularFireObject,
 } from '@angular/fire/compat/database';
-import { userInfo } from 'os';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,6 +14,7 @@ export class UsersDocuments {
   MultiUsersRef!: AngularFireList<any>;
   UsersRef!: AngularFireObject<any>;
   servicePro!: string;
+  
   constructor(private db: AngularFireDatabase, public ath: AuthService) {}
   // Create Users
   AddUsers(Users: Users) {

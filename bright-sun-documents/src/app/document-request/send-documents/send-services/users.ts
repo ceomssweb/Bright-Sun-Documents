@@ -1,18 +1,18 @@
 export interface Users {
-    $key: string;
-    fullName: string;
-    parentName: string;
-    email: string
+    $key: String;
+    fullName: String;
+    parentName: String;
+    email: String
     mobileNumber: Number;
-    docType: string;
-    currentOwnerName:string;
-    currentOwnerAddress: string;
+    docType: String;
+    currentOwnerName:String;
+    currentOwnerAddress: String;
     currentOwnerAge: Number;
-    currentOwnerSex: string;
-    buyerRelationType: string;
-    buyerName: string;
-    buyerAddress: string;
+    currentOwnerSex: String;
+    buyerRelationType: String;
+    buyerName: String;
+    buyerAddress: String;
     buyerAge: Number,
-    buyerSex: string,
-    uploadFiles: string,
+    buyerSex: String,
+    uploadFiles: File,
  }

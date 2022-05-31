@@ -133,10 +133,18 @@
                   <div class="row">
                     <div class="col-md-12">
                       <h3>Upload Requied Documents</h3>
-                      <input required type="file" id="uploadFiles" name="uploadFiles" multiple>
+                      <!-- <input required type="file" id="uploadFiles" name="uploadFiles" multiple>
                       <input type="button"
                       class="btn btn-primary mx-2"
-                      (click)="uploadFiles()" Value="Upload">
+                      (click)="uploadFiles()" Value="Upload"> -->
+                      <input class="form-control" type="file" 
+                              (change)="chooseFile($event)">
+                              
+
+                      <button (click)="addData()" 
+                          class="btn btn-success">
+                          Upload
+                      </button>
                     </div>
                   </div>
                 </div>

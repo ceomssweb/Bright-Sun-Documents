@@ -19,6 +19,7 @@ import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AuthService } from './shared/services-firebase/auth.service';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { getStorage } from 'firebase/storage';
 
 
 
@@ -33,6 +34,7 @@ export const firebaseConfig = {
 }
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const storage = getStorage(app);
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +57,7 @@ const analytics = getAnalytics(app);
       positionClass :'toast-bottom-right'
     })
   ],
-  providers: [AuthService],
+  providers: [AuthService, Storage],
   bootstrap: [AppComponent]
 })
 
