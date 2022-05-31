@@ -7,8 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePageComponent implements OnInit {
   constructor() { }
-
+  signInShow: boolean = true;
   ngOnInit(): void {
-  }
 
+  }
+clickLogIn(){
+  this.signInShow = true;
+}
+clickLogUp(){
+  this.signInShow = false;
+}
 }

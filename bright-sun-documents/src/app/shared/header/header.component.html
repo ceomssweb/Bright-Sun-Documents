@@ -1,7 +1,7 @@
 <div class="w-100 sticky-top">
   <nav class="navbar navbar-expand-lg p-0 navbar-light">
     <a class="navbar-brand p-0" href="#">
-      <img src="assets/images/BSD_Logo.png" class="rounded logo" alt="Bright Sun <span>Documents"/>
+      <img src="assets/images/BSD_Logo.png" class="rounded logo" alt="Bright Sun <span>Documents" />
     </a>
     <button class="navbar-toggler mx-2" type="button" (click)="toggleNav()">
       <span class="navbar-toggler-icon"></span>
@@ -11,18 +11,21 @@
         <li class="nav-item active">
           <a class="nav-link" [routerLink]="['home-page']">Home</a>
         </li>
-        <li class="no-link" *ngIf="authService.userData as user">
+        <li class="no-link" *ngIf="authService.isLoggedIn == true">
+          <span *ngIf="authService.userData as user">
           <span class="mx-1">Hello: <strong>{{(user.displayName) ? user.displayName : 'User'}}</strong></span>
-          
-        <!-- <p>User ID: <strong>{{user.uid}}</strong></p> -->
-        <span class="mx-1">Email: <strong id="spMail" name="spMail" #spMail>{{user.email}}</strong></span>
-        <!-- <p>Email Verified: <strong>{{user.emailVerified}}</strong></p> -->
-        <span class="mx-1 img-thumbnail rounded-circle"><img src="{{(user.photoURL) ? user.photoURL : '/assets/images/no-image.png'}}"alt="{{user.displayName}}">
+
+          <!-- <p>User ID: <strong>{{user.uid}}</strong></p> -->
+          <span class="mx-1">Email: <strong id="spMail" name="spMail" #spMail>{{user.email}}</strong></span>
+          <!-- <p>Email Verified: <strong>{{user.emailVerified}}</strong></p> -->
+          <span class="mx-1 nav-item img-thumbnail rounded-circle"><img
+              src="{{(user.photoURL) ? user.photoURL : '/assets/images/no-image.png'}}" alt="{{user.displayName}}">
+          </span>
+          <span (click)="authService.SignOut()">
+            <a class="mx-1">Sign Out</a>
+          </span>
         </span>
-        <span class="nav-item" (click)="authService.SignOut()">
-          <a class="nav-link">Sign Out</a>
-        </span>
-      </li>
+        </li>
       </ul>
     </div>
   </nav>

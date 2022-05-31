@@ -1,174 +1,182 @@
-<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-  <div class="inner-adjust">
-    <div class="pt-3 pb-2 mb-1 border-bottom">
-      <h1 class="h2">User Profile</h1>
+<div class="container-fluid">
+  <div class="w-100">
+    <div class="my-2 border-bottom">
+        <h2>Request for Documents to be Prepared</h2>
     </div>
     <!-- Show user data when logged in -->
-    <div class="row" *ngIf="authService.userData as user">
+    <div class="row body-content-height">
       <div class="col-md-12">
-        <div class="pt-3 pb-2 mb-1 border-bottom">
-          <h2>Request for Documents to be Prepared:</h2>
-        </div>
-        <form [formGroup]="usersForm" (ngSubmit)="submitUserData()" novalidate>
+        <ng-container *ngIf="authService.userData as user">
           <div class="row">
-            <div class="col-lg-5 col-md-12 col-sm-12">
-              <h3>Client Info:</h3>
-              <div class="row">
-                <div class="col-md-12 mb-1">
-                  <label>Full name</label>
-                  <input
-                    type="text"
-                    formControlName="fullName"
-                    class="form-control"
-                    required
-                  />
-                </div>
-                <div class="col-md-12 mb-1">
-                  <label>Parent name</label>
-                  <input type="text" formControlName="parentName" class="form-control" required/>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12 mb-1">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    formControlName="email"
-                    class="form-control"
-                    required
-                  />
-                </div>
-                <div class="col-md-12 mb-1">
-                  <label>Mobile number</label>
-                  <input
-                    type="text"
-                    formControlName="mobileNumber"
-                    class="form-control"
-                    required
-                  />
-                  <!-- errors-->
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <h3>Required Document Info:</h3>
-                  <div class="row">
-                    <div class="col-md-12 mb-1">
-                      <label>Document Type</label>
-                      <select name="docType" required id="docType" formControlName="docType"
-                      class="form-control"
+            <div class="col-md-12">
+              <form [formGroup]="usersForm" (ngSubmit)="submitUserData()" novalidate>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h3 class="my-2">Client Info:</h3>
+                    <div class="row">
+                      <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
+                        <label>Full name</label>
+                        <input
+                          type="text"
+                          formControlName="fullName"
+                          class="form-control"
+                          required
+                        />
+                      </div>
+                      <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
+                        <label>Parent name</label>
+                        <input type="text" formControlName="parentName" class="form-control" required/>
+                      </div>
+                    
+                      <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          formControlName="email"
+                          class="form-control"
+                          required
+                        />
+                      </div>
+                      <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label>Mobile number</label>
+                        <input
+                          type="text"
+                          formControlName="mobileNumber"
+                          class="form-control"
+                          required
+                        />
+                        <!-- errors-->
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <h3 class="my-2">Required Document Info:</h3>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label>Document Type</label>
+                        <select name="docType" required id="docType" formControlName="docType"
+                        class="form-control"
+                        >
+                          <option value="Buiding sales deed">Buiding sales deed</option>
+                          <option value="Land sales deed">Land sales deed</option>
+                          <option value="Plot Sales deed">Plot Sales deed</option>
+                          <option value="Commertial Buiding sales deed">Commertial Buiding sales deed</option>
+                          <option value="Settlement deed">Settlement deed</option>
+                          <option value="Rental Aggrements">Rental Aggrements</option>
+                          <option value="Partition deed">Partition deed</option>
+                        </select>
+                      </div>
+                      <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label>Current Owner Name</label>
+                        <input type="text" formControlName="currentOwnerName" class="form-control" required/>
+                      </div>
+                      <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label>Owner Address</label>
+                        <input type="textarea" formControlName="currentOwnerAddress" class="form-control" required/>
+                      </div>
+                      <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label>Owner Age</label>
+                        <input type="text" formControlName="currentOwnerAge" class="form-control" required/>
+                      </div>
+                      <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label>Owner Sex</label>
+                        <select name="docType" required id="currentOwnerSex" formControlName="currentOwnerSex"
+                        class="form-control"
+                        >
+                          <option value="Buiding sales deed">Male</option>
+                          <option value="Land sales deed">Female</option>
+                          <option value="Land sales deed">Others</option>
+                        </select>
+                      </div>
+                      <!-- buyer details -->
+                          <div class="col-lg-4 col-md-6 col-sm-12">
+                            <label>Buyer Relationship to Owner</label>
+                            <select name="buyerRelationType" required id="buyerRelationType" formControlName="buyerRelationType"
+                            class="form-control"
+                            >
+                              <option value="Father">Father</option>
+                              <option value="Mother">Mother</option>
+                              <option value="Husband">Husband</option>
+                              <option value="Wife">Wife</option>
+                              <option value="Brother">Brother</option>
+                              <option value="Sister">Sister</option>
+                              <option value="GrandFather">Grand Father</option>
+                              <option value="GrandMother">Grand Mother</option>
+                              <option value="Father">No Relation</option>
+                            </select>
+                          </div>
+                          <div class="col-lg-4 col-md-6 col-sm-12">
+                            <label>Buyer Name</label>
+                            <input type="text" formControlName="buyerName" class="form-control" required/>
+                          </div>
+                          <div class="col-lg-4 col-md-6 col-sm-12">
+                            <label>Buyer Address</label>
+                            <input type="textarea" formControlName="buyerAddress" class="form-control" required/>
+                          </div>
+                          <div class="col-lg-4 col-md-6 col-sm-12">
+                            <label>Buyer Age</label>
+                            <input type="textarea" formControlName="buyerAge" class="form-control" required/>
+                          </div>
+                          <div class="col-lg-4 col-md-6 col-sm-12">
+                            <label>Buyer Sex</label>
+                            <select name="docType" required id="buyerSex" formControlName="buyerSex"
+                            class="form-control"
+                            >
+                              <option value="Buiding sales deed">Male</option>
+                              <option value="Land sales deed">Female</option>
+                              <option value="Land sales deed">Others</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 border">
+                            <h3 class="my-2">Upload Requied Documents</h3>
+                            <!-- <input required type="file" id="uploadFiles" name="uploadFiles" multiple>
+                            <input type="button"
+                            class="btn btn-primary mx-2"
+                            (click)="uploadFiles()" Value="Upload"> -->
+                            <div class="row">
+                              <div class="col-md-8">
+                                <input class="form-control" type="file" 
+                                    (change)="chooseFile($event)" multiple>
+                              </div>
+                              <div class="col-md-4">
+                                <button (click)="addData()" 
+                                    class="btn btn-success">
+                                    Upload
+                                </button>
+                              </div>
+                            </div>
+                            <div class="border border-success p-2" *ngIf="widthVal != 0">
+                              <div class="progress-bar bg-info" [ngStyle]="{'width.%': widthVal}"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="pull-right my-2">
+                      <button
+                        type="button"
+                        class="btn btn-secondary mx-2"
+                        (click)="ResetForm()"
                       >
-                        <option value="Buiding sales deed">Buiding sales deed</option>
-                        <option value="Land sales deed">Land sales deed</option>
-                        <option value="Plot Sales deed">Plot Sales deed</option>
-                        <option value="Commertial Buiding sales deed">Commertial Buiding sales deed</option>
-                        <option value="Settlement deed">Settlement deed</option>
-                        <option value="Rental Aggrements">Rental Aggrements</option>
-                        <option value="Partition deed">Partition deed</option>
-                      </select>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                      <label>Current Owner Name</label>
-                      <input type="text" formControlName="currentOwnerName" class="form-control" required/>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                      <label>Owner Address</label>
-                      <input type="textarea" formControlName="currentOwnerAddress" class="form-control" required/>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                      <label>Owner Age</label>
-                      <input type="text" formControlName="currentOwnerAge" class="form-control" required/>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                      <label>Owner Sex</label>
-                      <select name="docType" required id="currentOwnerSex" formControlName="currentOwnerSex"
-                      class="form-control"
+                        Reset
+                      </button>
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        [disabled]="!usersForm.valid"
                       >
-                        <option value="Buiding sales deed">Male</option>
-                        <option value="Land sales deed">Female</option>
-                        <option value="Land sales deed">Others</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12 mb-1">
-                      <label>Buyer Relationship to Owner</label>
-                      <select name="buyerRelationType" required id="buyerRelationType" formControlName="buyerRelationType"
-                      class="form-control"
-                      >
-                        <option value="Father">Father</option>
-                        <option value="Mother">Mother</option>
-                        <option value="Husband">Husband</option>
-                        <option value="Wife">Wife</option>
-                        <option value="Brother">Brother</option>
-                        <option value="Sister">Sister</option>
-                        <option value="GrandFather">Grand Father</option>
-                        <option value="GrandMother">Grand Mother</option>
-                        <option value="Father">No Relation</option>
-                      </select>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                      <label>Buyer Name</label>
-                      <input type="text" formControlName="buyerName" class="form-control" required/>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                      <label>Buyer Address</label>
-                      <input type="textarea" formControlName="buyerAddress" class="form-control" required/>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                      <label>Buyer Age</label>
-                      <input type="textarea" formControlName="buyerAge" class="form-control" required/>
-                    </div>
-                    <div class="col-md-12 mb-1">
-                      <label>Buyer Sex</label>
-                      <select name="docType" required id="buyerSex" formControlName="buyerSex"
-                      class="form-control"
-                      >
-                        <option value="Buiding sales deed">Male</option>
-                        <option value="Land sales deed">Female</option>
-                        <option value="Land sales deed">Others</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <h3>Upload Requied Documents</h3>
-                      <!-- <input required type="file" id="uploadFiles" name="uploadFiles" multiple>
-                      <input type="button"
-                      class="btn btn-primary mx-2"
-                      (click)="uploadFiles()" Value="Upload"> -->
-                      <input class="form-control" type="file" 
-                              (change)="chooseFile($event)" multiple>
-                              
-
-                      <button (click)="addData()" 
-                          class="btn btn-success">
-                          Upload
+                        Add Client
                       </button>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="pull-right my-2">
-                <button
-                  type="button"
-                  class="btn btn-secondary mx-2"
-                  (click)="ResetForm()"
-                >
-                  Reset
-                </button>
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  [disabled]="!usersForm.valid"
-                >
-                  Add Client
-                </button>
-              </div>
+              </form>
             </div>
           </div>
-        </form>
+        </ng-container>
       </div>
     </div>
   </div>
-</main>
+</div>

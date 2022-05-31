@@ -15,6 +15,7 @@ export class SendDocumentsComponent implements OnInit {
   public usersForm!: FormGroup;
   file: any = [];
   userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
+  widthVal: number = 0;
   constructor(
     public authService: AuthService,
     public userApi: UsersDocuments,
@@ -43,7 +44,7 @@ export class SendDocumentsComponent implements OnInit {
       uploadTask.on('state_changed',
         (snapshot) => {
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
+          this.widthVal = progress;
         },
         (error) => {
           console.log(error.message);

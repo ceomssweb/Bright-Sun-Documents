@@ -11,7 +11,7 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: white; font-size: 14px; }
 .body-content-height{
-  height: calc(100vh - 194px);
+  height: calc(100vh - 193px);
   overflow-y: auto;
 }
 
@@ -31,7 +31,7 @@ h1{
 }
 
 h2{
-  font-size: 28px !important;
+  font-size: 18px !important;
 }
 
 h3{
@@ -61,6 +61,7 @@ a,
 .no-link{
   color: initial !important;
   cursor: default;
+  padding: 0.5rem;
   &:hover, &:active{
     color: initial !important;
   }
