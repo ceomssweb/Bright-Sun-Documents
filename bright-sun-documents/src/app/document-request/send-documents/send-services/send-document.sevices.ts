@@ -20,19 +20,19 @@ export class UsersDocuments {
   AddUsers(Users: Users) {
     this.MultiUsersRef.push({
       firstName: Users.fullName,
-      parentName: Users.parentName,
+      fatherName: Users.fatherName,
       email: Users.email,
       mobileNumber: Users.mobileNumber,
-      docType: Users.docType,
+      selectedDoc: Users.selectedDoc,
       currentOwnerName: Users.currentOwnerName,
       currentOwnerAddress: Users.currentOwnerAddress,
       currentOwnerAge: Users.currentOwnerAge,
-      currentOwnerSex: Users.currentOwnerSex,
-      buyerRelationType: Users.buyerRelationType,
+      currentOwnergender: Users.currentOwnergender,
+      selectBuyerRelation: Users.selectBuyerRelation,
       buyerName: Users.buyerName,
       buyerAddress: Users.buyerAddress,
       buyerAge: Users.buyerAge,
-      buyerSex: Users.buyerSex,
+      selectedBuyGender: Users.selectedBuyGender,
       uploadFiles: Users.uploadFiles,
     });
   }
@@ -50,20 +50,20 @@ export class UsersDocuments {
   UpdateUsers(Users: Users) {
     this.UsersRef.update({
       firstName: Users.fullName,
-      parentName: Users.parentName,
+      fatherName: Users.fatherName,
       email: Users.email,
       mobileNumber: Users.mobileNumber,
-      docType: Users.docType,
+      selectedDoc: Users.selectedDoc,
       currentOwnerName: Users.currentOwnerName,
       currentOwnerAddress: Users.currentOwnerAddress,
       currentOwnerAge: Users.currentOwnerAge,
-      currentOwnerSex: Users.currentOwnerSex,
-      buyerRelationType: Users.buyerRelationType,
+      currentOwnergender: Users.currentOwnergender,
+      selectBuyerRelation: Users.selectBuyerRelation,
       buyerName: Users.buyerName,
       buyerAddress: Users.buyerAddress,
       buyerAge: Users.buyerAge,
-      buyerSex: Users.buyerSex,
-      // uploadFiles: Users.uploadFiles,
+      selectedBuyGender: Users.selectedBuyGender,
+      uploadFiles: Users.uploadFiles,
     });
   }
   // Delete Users Object
