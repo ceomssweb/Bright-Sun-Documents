@@ -5,6 +5,7 @@ import { UsersDocuments } from './send-services/send-document.sevices';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "@angular/fire/storage";
+import { Dropdown } from './send-services/dropdowns'
 
 @Component({
   selector: 'bsd-send-documents',
@@ -12,6 +13,15 @@ import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "@angular/
   styleUrls: ['./send-documents.component.scss']
 })
 export class SendDocumentsComponent implements OnInit {
+  documents: Dropdown[];
+  selectedDoc!: Dropdown;
+
+  gender: Dropdown[];
+  selectedGender!: Dropdown;
+
+  buyerRelation: Dropdown[];
+  selectBuyerRelation!: Dropdown;
+
   public usersForm!: FormGroup;
   file: any = [];
   userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
@@ -22,7 +32,36 @@ export class SendDocumentsComponent implements OnInit {
     public fb: FormBuilder,
     public toastr: ToastrService,
 
-  ) {}
+  ) {
+    this.documents = [
+      {key: 1, name: 'Buiding sales deed'},
+      {key: 2, name: 'Land sales deed'},
+      {key: 3, name: 'Plot Sales deed'},
+      {key: 4, name: 'Commertial Buiding sales deed'},
+      {key: 5, name: 'Settlement deed'},
+      {key: 6, name: 'Rental Aggrements'},
+      {key: 7, name: 'Settlement deed'},
+      {key: 8, name: 'Partition deed'},
+      {key: 9, name: 'Partnership Aggreement'},
+  ];
+  this.gender = [
+    {key: 1, name: 'Male'},
+      {key: 2, name: 'Female'},
+      {key: 3, name: 'Others'},
+  ];
+  this.buyerRelation = [
+    {key: 1, name: 'Father'},
+      {key: 2, name: 'Mother'},
+      {key: 3, name: 'Brother'},
+      {key: 4, name: 'Sister'},
+      {key: 5, name: 'Husband'},
+      {key: 6, name: 'Wife'},
+      {key: 7, name: 'Grand Father'},
+      {key: 8, name: 'Grand Mother'},
+      {key: 9, name: 'No Relation'}
+  ]
+
+  }
 
   ngOnInit(): void {
     this.userApi.GetUsersList(this.userPath);
@@ -58,7 +97,7 @@ export class SendDocumentsComponent implements OnInit {
           }
         },
         () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
             // console.log('File available at', downloadURL);
           });
         }
@@ -69,7 +108,7 @@ export class SendDocumentsComponent implements OnInit {
   userFormData() {
     this.usersForm = this.fb.group({
       fullName: ['', [Validators.required, Validators.minLength(2)]],
-      parentName: ['', [Validators.required, Validators.minLength(2)]],
+      fatherName: ['', [Validators.required, Validators.minLength(2)]],
       email: [
         '',
         [
@@ -78,16 +117,16 @@ export class SendDocumentsComponent implements OnInit {
         ],
       ],
       mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
-      docType: [''],
+      selectedDoc: [''],
       currentOwnerName: ['', [Validators.required, Validators.minLength(2)]],
       currentOwnerAddress: ['', [Validators.required, Validators.minLength(2)]],
       currentOwnerAge: ['', [Validators.required, Validators.minLength(1)]],
-      currentOwnerSex: ['', [Validators.required, Validators.minLength(2)]],
-      buyerRelationType: ['', [Validators.required, Validators.minLength(2)]],
+      selectedGender: ['', [Validators.required, Validators.minLength(2)]],
+      selectBuyerRelation: ['', [Validators.required, Validators.minLength(2)]],
       buyerName: ['', [Validators.required, Validators.minLength(2)]],
       buyerAddress: ['', [Validators.required, Validators.minLength(2)]],
       buyerAge: ['', [Validators.required, Validators.minLength(1)]],
-      buyerSex: ['', [Validators.required, Validators.minLength(2)]],
+      selectedBuyGender: ['', [Validators.required, Validators.minLength(2)]],
       uploadFiles: [''],
     });
   }
