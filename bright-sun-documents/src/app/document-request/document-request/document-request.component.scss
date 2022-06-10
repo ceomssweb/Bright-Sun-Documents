@@ -1,0 +1,9 @@
+.left-side{
+    width: 220px;
+    float: left;
+}
+
+.right-side{
+    width: calc(100% - 220px);
+    float: right;
+}

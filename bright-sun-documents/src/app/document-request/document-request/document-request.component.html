@@ -1,3 +1,36 @@
 <bsd-header></bsd-header>
-<bsd-send-documents></bsd-send-documents>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 py-2">
+                    <h2>{{title}}</h2>
+                </div>
+            </div>
+            <div class="row py-2 body-content-height">
+                <div class="left-side">
+                    <p-menu [model]="items"></p-menu>
+                </div>
+                <div class="right-side">
+                    <div class="row">
+                        <div class="col-md-12" *ngIf="showDetails">
+                            <div *ngIf="authService.userData as user">
+                                <label>Email:</label><label class="mx-1">{{(user.email)}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12" *ngIf="sendDocShow">
+                            <bsd-send-documents></bsd-send-documents>
+                        </div>
+                        <div class="col-md-12" *ngIf="viewDocShow">
+                            <bsd-view-documents></bsd-view-documents>
+                        </div>
+                        <div class="col-md-12" *ngIf="sendReport">
+                            Report
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <bsd-footer></bsd-footer>

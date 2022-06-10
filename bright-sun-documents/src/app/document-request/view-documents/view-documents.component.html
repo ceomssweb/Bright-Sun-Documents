@@ -1,0 +1,68 @@
+
+<div class="mx-auto">
+  <div class="no-data text-center" *ngIf="preLoader">
+    <img src="" class="preloader-icon" alt="No userList" />
+  </div>
+  <div class="no-data text-center" *ngIf="noData">
+    <img src="" class="nodata-msg" alt="No userList" />
+    <p class="nodata-msg">No userList added yet!</p>
+    <a routerLink="/register-userList" class="btn btn-success"> Add userList </a>
+  </div>
+  <div class="table-responsive" *ngIf="hideWhenNouserList">
+    <table
+      class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg"
+    >
+      <thead>
+        <tr>
+          <th class="text-center">Sl/no.</th>
+          <th *ngFor="let items of cols" scope="col">{{items.header}}</th>
+          <th class="text-center" scope="col">Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let user of userList
+              | paginate: { itemsPerPage: 8, currentPage: p };
+            let i = index
+          "
+        >
+          <!-- <th scope="row">{{ user.email }}</th> -->
+          <td class="text-center">{{ i + 1 }}</td>
+          <td>{{ user.fullName }}</td>
+          <td>{{ user.fatherName }}</td>
+          <td>{{ user.email }}</td>
+          <td class="text-center">{{ user.mobileNumber }}</td>
+
+          <td>{{ user.selectedDoc }}</td>
+          <td>{{ user.currentOwnerName }}</td>
+          <td>{{ user.currentOwnerAddress }}</td>
+          <td class="text-center">{{ user.currentOwnerAge }}</td>
+
+          <td class="text-center">{{ user.currentOwnergender }}</td>
+          <td>{{ user.selectBuyerRelation }}</td>
+          <td>{{ user.buyerName }}</td>
+          <td>{{ user.buyerAddress }}</td>
+          <td class="text-center">{{ user.buyerAge }}</td>
+          <td class="text-center">{{ user.selectedBuyGender }}</td>
+          <td>{{ user.selectedDocuments }}</td>
+
+          <td class="text-center action-block">
+            <span
+              class="mx-2 btn btn-outline-primary btn-sm"
+              routerLink="/edit-userList/{{ user.key }}"
+              >Edit</span
+            >
+            <span
+              class="btn btn-outline-danger btn-sm"
+              (click)="deleteUsers(user)"
+              >Delete</span
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+

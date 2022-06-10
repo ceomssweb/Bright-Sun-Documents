@@ -28,6 +28,7 @@
     "debug": "^4.3.4",
     "firebase": "^9.8.1",
     "material-icons": "^1.10.8",
+    "ngx-pagination": "^6.0.1",
     "ngx-toastr": "^14.3.0",
     "primeicons": "^5.0.0",
     "primeng": "^13.3.0",

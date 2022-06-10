@@ -7,13 +7,19 @@ import { DocumentRequestComponent } from './document-request/document-request.co
 import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {DropdownModule} from 'primeng/dropdown';
-import {InputTextModule} from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { ViewDocumentsComponent } from './view-documents/view-documents.component';
+import { MenuModule } from 'primeng/menu';
+import {TableModule} from 'primeng/table';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
     DocumentRequestComponent,
-    SendDocumentsComponent
+    SendDocumentsComponent,
+    ViewDocumentsComponent
+
   ],
   imports: [
     CommonModule,
@@ -24,7 +30,10 @@ import {InputTextModule} from 'primeng/inputtext';
     ReactiveFormsModule,
     FormsModule,
     DropdownModule,
-    InputTextModule
+    InputTextModule,
+    MenuModule,
+    TableModule,
+    NgxPaginationModule  
   ]
 })
 export class DocumentRequestModule { }

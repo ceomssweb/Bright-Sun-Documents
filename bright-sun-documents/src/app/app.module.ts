@@ -37,7 +37,7 @@ const analytics = getAnalytics(app);
 const storage = getStorage(app);
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,

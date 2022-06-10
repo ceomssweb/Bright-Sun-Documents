@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   userData: any; // Save logged in user data
+  static user: any;
   
   constructor(
     public afs: AngularFirestore, // Inject Firestore service

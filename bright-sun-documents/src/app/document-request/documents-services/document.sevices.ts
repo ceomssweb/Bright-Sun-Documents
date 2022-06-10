@@ -13,13 +13,13 @@ import { AuthService } from 'src/app/shared/services-firebase/auth.service';
 export class UsersDocuments {
   MultiUsersRef!: AngularFireList<any>;
   UsersRef!: AngularFireObject<any>;
-  servicePro!: string;
   
   constructor(private db: AngularFireDatabase, public ath: AuthService) {}
   // Create Users
+  userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
   AddUsers(Users: Users) {
     this.MultiUsersRef.push({
-      firstName: Users.fullName,
+      fullName: Users.fullName,
       fatherName: Users.fatherName,
       email: Users.email,
       mobileNumber: Users.mobileNumber,
@@ -33,23 +33,23 @@ export class UsersDocuments {
       buyerAddress: Users.buyerAddress,
       buyerAge: Users.buyerAge,
       selectedBuyGender: Users.selectedBuyGender,
-      uploadFiles: Users.uploadFiles,
+      selectedDocuments: Users.selectedDocuments
     });
   }
   // Fetch Single Users Object
   GetUsers(id: string, getSP: string) {
-    this.UsersRef = this.db.object('Users-list/'+ getSP +'/' + id);
+    this.UsersRef = this.db.object('Users-list/'+ this.userPath +'/' + id);
     return this.UsersRef;
   }
   // Fetch Users List
-  GetUsersList(getSP: string) {
-    this.MultiUsersRef = this.db.list('Users-list/'+ getSP +'/');
+  GetUsersList() {
+    this.MultiUsersRef = this.db.list('Users-list/' + this.userPath);
     return this.MultiUsersRef;
   }
   // Update Users Object
   UpdateUsers(Users: Users) {
     this.UsersRef.update({
-      firstName: Users.fullName,
+      fullName: Users.fullName,
       fatherName: Users.fatherName,
       email: Users.email,
       mobileNumber: Users.mobileNumber,
@@ -63,12 +63,12 @@ export class UsersDocuments {
       buyerAddress: Users.buyerAddress,
       buyerAge: Users.buyerAge,
       selectedBuyGender: Users.selectedBuyGender,
-      uploadFiles: Users.uploadFiles,
+      selectedDocuments: Users.selectedDocuments
     });
   }
   // Delete Users Object
-  DeleteUsers(id: string, getSP: string) {
-    this.UsersRef = this.db.object('Users-list/'+ getSP +'/' + id);
+  DeleteUsers(id: string) {
+    this.UsersRef = this.db.object('Users-list/'+ this.userPath +'/' + id);
     this.UsersRef.remove();
   }
 }
