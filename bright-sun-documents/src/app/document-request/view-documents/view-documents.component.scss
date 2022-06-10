@@ -5,3 +5,7 @@ th{
 .action-block{
     min-width: 150px;
 }
+.no-data{
+    width: calc(100vw - 250px);
+    position: absolute;
+}

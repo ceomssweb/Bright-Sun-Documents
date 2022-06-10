@@ -1,14 +1,6 @@
 
 <div class="mx-auto">
-  <div class="no-data text-center" *ngIf="preLoader">
-    <img src="" class="preloader-icon" alt="No userList" />
-  </div>
-  <div class="no-data text-center" *ngIf="noData">
-    <img src="" class="nodata-msg" alt="No userList" />
-    <p class="nodata-msg">No userList added yet!</p>
-    <a routerLink="/register-userList" class="btn btn-success"> Add userList </a>
-  </div>
-  <div class="table-responsive" *ngIf="hideWhenNouserList">
+  <div class="table-responsive">
     <table
       class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg"
     >
@@ -16,10 +8,29 @@
         <tr>
           <th class="text-center">Sl/no.</th>
           <th *ngFor="let items of cols" scope="col">{{items.header}}</th>
-          <th class="text-center" scope="col">Edit</th>
+          <th class="text-center" scope="col">Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="!hideWhenNouserList">
+        <tr>
+          <td colspan="17">
+            <div class="no-data text-center" *ngIf="preLoader">
+              <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="noData">
+        <tr>
+          <td colspan="17">
+            <div class="no-data text-center">
+              <p class="nodata-msg">No users added yet!</p>
+              <!-- <a routerLink="/register-userList" class="btn btn-success"> Add userList </a> -->
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="hideWhenNouserList">
         <tr
           *ngFor="
             let user of userList
@@ -63,6 +74,5 @@
       </tbody>
     </table>
   </div>
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  <pagination-controls (pageChange)="p = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
 </div>
-
