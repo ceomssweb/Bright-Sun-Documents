@@ -37,7 +37,7 @@ export class UsersDocuments {
     });
   }
   // Fetch Single Users Object
-  GetUsers(id: string, getSP: string) {
+  GetUsers(id: string) {
     this.UsersRef = this.db.object('Users-list/'+ this.userPath +'/' + id);
     return this.UsersRef;
   }

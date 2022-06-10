@@ -12,6 +12,7 @@ export class ViewDocumentsComponent implements OnInit {
   p: number = 1;
   userList!: Users[];
   cols!: Columns[];
+
   hideWhenNouserList: boolean = false;
   noData: boolean = false;
   preLoader: boolean = true;
@@ -24,10 +25,12 @@ export class ViewDocumentsComponent implements OnInit {
     s.snapshotChanges().subscribe(data => {
       this.userList = [];
       data.forEach(item => {
-        let getItem = item.payload.toJSON(); 
-        // getItem['key'] = item.key;
+        let getItem: any = item.payload.toJSON(); 
+        getItem['key'] = item.key;
         this.userList.push(getItem as Users);
+        console.log(getItem['key'])
       });
+      
       this.cols = [
         { id: 1, header: 'Full Name' },
         { id: 2, header: 'Father Name' },
@@ -48,7 +51,6 @@ export class ViewDocumentsComponent implements OnInit {
         { id: 15, header: 'Added Documents' },
     ];
     });
-    
   }
   dataState() {     
     this.userServices.GetUsersList().valueChanges().subscribe(data => {
@@ -64,7 +66,7 @@ export class ViewDocumentsComponent implements OnInit {
   }
   deleteUsers(user: any) {
     if (window.confirm('Are sure you want to delete this student ?')) { 
-      this.userServices.DeleteUsers(user.$key)
+      this.userServices.DeleteUsers(user.key);
       this.toastr.success(user.fullName + ' successfully deleted!');
     }
   }

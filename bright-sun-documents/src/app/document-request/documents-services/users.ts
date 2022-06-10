@@ -1,5 +1,5 @@
 export interface Users {
-    key: any;
+    key: String;
     fullName: String;
     fatherName: String;
     email: String
