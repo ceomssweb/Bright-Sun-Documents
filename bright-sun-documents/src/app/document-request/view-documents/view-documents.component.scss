@@ -18,3 +18,23 @@ tbody{
     max-height: calc(100vh - 400px);
     vertical-align: middle;
 }
+.doc-images{
+    border-radius: 1rem;
+    border-color: darkgrey;
+    box-shadow: 10px 10px 10px #e9e7e7;
+    width: 100%;
+    min-height: 100px;
+    img{
+        width: 100%;
+    }
+}
+.doc-show-dialog{
+    width: 80vw;
+    height: 70vw;
+    overflow-y: auto;
+}
+::ng-deep{
+    .p-dialog-mask{
+        background: #00000050 !important;
+    }
+}

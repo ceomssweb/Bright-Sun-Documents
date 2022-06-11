@@ -14,9 +14,11 @@ export class SendDocumentsComponent implements OnInit {
 
   public usersForm!: FormGroup;
   file: any = [];
+  widthContainer: boolean = false;
   widthVal: number = 0;
-  getFilNames!: any;
+  getFilNames: String[] = [];
   enableAdd: boolean = false;
+  userEmail: string = '';
   constructor(
     public authService: AuthService,
     public userApi: UsersDocuments,
@@ -38,14 +40,15 @@ export class SendDocumentsComponent implements OnInit {
     }
   }
   addData() {
+    if(this.usersForm.valid){
     const storage = getStorage();
-    this.getFilNames = ref(storage, 'users-documents/' + this.userApi.userPath);
+    this.userEmail = this.email?.value;
     for (var i = 0; i < this.file.length; i++) { 
-      const storageRef = ref(storage, 'users-documents/' + this.userApi.userPath + '/' + this.file[i].name);
+      const storageRef = ref(storage, 'users-documents/' + this.userApi.userPath + '/' + this.userEmail + '/' + this.file[i].name);
       const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
-   
       uploadTask.on('state_changed',
         (snapshot) => {
+          this.widthContainer=true;
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           this.widthVal = progress;
         },
@@ -62,13 +65,16 @@ export class SendDocumentsComponent implements OnInit {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
-            //  this.getFilNames += '<a class="nav-link">' +_downloadURL + '</a> <br>';
+           this.getFilNames.push(_downloadURL);
           });
           this.enableAdd = true;
         }
       )
     }
+  }else{
+    alert("Pease fill the form before uploading the Documents!")
   }
+}
 
   userFormData() {
     this.usersForm = this.fb.group({
@@ -92,7 +98,7 @@ export class SendDocumentsComponent implements OnInit {
       buyerAddress: ['', [Validators.required, Validators.minLength(2)]],
       buyerAge: ['', [Validators.required, Validators.minLength(1)]],
       selectedBuyGender: ['', [Validators.required, Validators.minLength(2)]],
-      selectedDocuments: ['', [Validators.required]]
+      selectedDocuments: ['']
     });
   }
 
@@ -112,6 +118,7 @@ export class SendDocumentsComponent implements OnInit {
     this.usersForm.reset();
     this.enableAdd = false;
     this.widthVal = 0;
+    this.widthContainer = false;
   }
   submitUserData() {
     if(!this.usersForm.invalid && this.enableAdd){

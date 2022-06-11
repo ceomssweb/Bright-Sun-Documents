@@ -13,13 +13,15 @@ import { ViewDocumentsComponent } from './view-documents/view-documents.componen
 import { MenuModule } from 'primeng/menu';
 import {TableModule} from 'primeng/table';
 import { NgxPaginationModule } from 'ngx-pagination';
+import {DialogModule} from 'primeng/dialog';
+import {ProgressBarModule} from 'primeng/progressbar';
+import {ToastModule} from 'primeng/toast';
 
 @NgModule({
   declarations: [
     DocumentRequestComponent,
     SendDocumentsComponent,
     ViewDocumentsComponent
-
   ],
   imports: [
     CommonModule,
@@ -33,7 +35,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
     InputTextModule,
     MenuModule,
     TableModule,
-    NgxPaginationModule  
+    NgxPaginationModule,
+    DialogModule,
+    ProgressBarModule,
+    ToastModule
   ]
 })
 export class DocumentRequestModule { }

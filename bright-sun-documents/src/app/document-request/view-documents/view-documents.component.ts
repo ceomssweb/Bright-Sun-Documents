@@ -12,10 +12,13 @@ export class ViewDocumentsComponent implements OnInit {
   p: number = 1;
   userList!: Users[];
   cols!: Columns[];
+  dialogHeader!: String;
+  dialogDoc!: String[];
 
   hideWhenNouserList: boolean = false;
   noData: boolean = false;
   preLoader: boolean = true;
+  showDocDialog: boolean = false;
 
   constructor(public userServices: UsersDocuments, public toastr: ToastrService) { }
 
@@ -69,7 +72,13 @@ export class ViewDocumentsComponent implements OnInit {
       this.toastr.success(user.fullName + ' successfully deleted!');
     }
   }
-  showDocuments(getPath:any){
-    alert(getPath);
+  showDocuments(getPath:any, name:any){
+    this.showDocDialog = true;
+    this.dialogHeader = name;
+    this.dialogDoc = Object.values(getPath);
+  }
+  hideDocDialog(){
+    this.showDocDialog = false;
+    this.dialogHeader = "";
   }
 }
