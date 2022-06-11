@@ -11,19 +11,19 @@
           <th class="text-center" scope="col">Actions</th>
         </tr>
       </thead>
-      <tbody *ngIf="!hideWhenNouserList">
+      <tbody *ngIf="preLoader">
         <tr>
           <td colspan="17">
-            <div class="no-data text-center" *ngIf="preLoader">
+            <div class="no-data my-4 text-center">
               <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
             </div>
           </td>
         </tr>
       </tbody>
-      <tbody *ngIf="noData">
+      <tbody *ngIf="noData && !preLoader">
         <tr>
           <td colspan="17">
-            <div class="no-data text-center">
+            <div class="no-data my-4 text-center">
               <p class="nodata-msg">No users added yet!</p>
               <!-- <a routerLink="/register-userList" class="btn btn-success"> Add userList </a> -->
             </div>
@@ -31,7 +31,7 @@
         </tr>
       </tbody>
       <tbody *ngIf="hideWhenNouserList">
-        <tr
+        <tr 
           *ngFor="
             let user of userList
               | paginate: { itemsPerPage: 8, currentPage: p };
@@ -56,7 +56,13 @@
           <td>{{ user.buyerAddress }}</td>
           <td class="text-center">{{ user.buyerAge }}</td>
           <td class="text-center">{{ user.selectedBuyGender }}</td>
-          <td>{{ user.selectedDocuments }}</td>
+          <td [innerHTML] = "">
+            <span
+              class="mx-2 btn btn-outline-primary btn-sm"
+              (click)="showDocuments(user.selectedDocuments)"
+              >View Documents</span
+            >
+          </td>
 
           <td class="text-center action-block">
             <span
@@ -74,5 +80,7 @@
       </tbody>
     </table>
   </div>
-  <pagination-controls (pageChange)="p = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
+  <div class="my-2">
+    <pagination-controls (pageChange)="p = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
+  </div>
 </div>

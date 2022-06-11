@@ -28,7 +28,6 @@ export class ViewDocumentsComponent implements OnInit {
         let getItem: any = item.payload.toJSON(); 
         getItem['key'] = item.key;
         this.userList.push(getItem as Users);
-        console.log(getItem['key'])
       });
       
       this.cols = [
@@ -70,5 +69,7 @@ export class ViewDocumentsComponent implements OnInit {
       this.toastr.success(user.fullName + ' successfully deleted!');
     }
   }
-
+  showDocuments(getPath:any){
+    alert(getPath);
+  }
 }

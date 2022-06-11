@@ -1,3 +1,5 @@
+@import "../../../variable.scss";
+
 th{
     max-width:100%;
     white-space:nowrap;
@@ -8,4 +10,11 @@ th{
 .no-data{
     width: calc(100vw - 250px);
     position: absolute;
+}
+.table > :not(:first-child){
+    border: 1px solid $border-color;
+}
+tbody{
+    max-height: calc(100vh - 400px);
+    vertical-align: middle;
 }

@@ -17,7 +17,7 @@ export class UsersDocuments {
   constructor(private db: AngularFireDatabase, public ath: AuthService) {}
   // Create Users
   userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
-  AddUsers(Users: Users) {
+  AddUsers(Users: Users, getFilNames: any) {
     this.MultiUsersRef.push({
       fullName: Users.fullName,
       fatherName: Users.fatherName,
@@ -33,7 +33,7 @@ export class UsersDocuments {
       buyerAddress: Users.buyerAddress,
       buyerAge: Users.buyerAge,
       selectedBuyGender: Users.selectedBuyGender,
-      selectedDocuments: Users.selectedDocuments
+      selectedDocuments: getFilNames
     });
   }
   // Fetch Single Users Object
@@ -47,7 +47,7 @@ export class UsersDocuments {
     return this.MultiUsersRef;
   }
   // Update Users Object
-  UpdateUsers(Users: Users) {
+  UpdateUsers(Users: Users, getFilNames: any) {
     this.UsersRef.update({
       fullName: Users.fullName,
       fatherName: Users.fatherName,
@@ -63,7 +63,7 @@ export class UsersDocuments {
       buyerAddress: Users.buyerAddress,
       buyerAge: Users.buyerAge,
       selectedBuyGender: Users.selectedBuyGender,
-      selectedDocuments: Users.selectedDocuments
+      selectedDocuments: getFilNames
     });
   }
   // Delete Users Object
