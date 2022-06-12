@@ -17,6 +17,7 @@ export class SendDocumentsComponent implements OnInit {
   widthContainer: boolean = false;
   widthVal: number = 0;
   getFilNames: String[] = [];
+  fileNames: String[] = [];
   enableAdd: boolean = false;
   userEmail: string = '';
   constructor(
@@ -44,6 +45,7 @@ export class SendDocumentsComponent implements OnInit {
     const storage = getStorage();
     this.userEmail = this.email?.value;
     for (var i = 0; i < this.file.length; i++) { 
+      this.fileNames.push(this.file[i].name);
       const storageRef = ref(storage, 'users-documents/' + this.userApi.userPath + '/' + this.userEmail + '/' + this.file[i].name);
       const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
       uploadTask.on('state_changed',
@@ -122,7 +124,7 @@ export class SendDocumentsComponent implements OnInit {
   }
   submitUserData() {
     if(!this.usersForm.invalid && this.enableAdd){
-      this.userApi.AddUsers(this.usersForm.value, this.getFilNames);
+      this.userApi.AddUsers(this.usersForm.value, this.getFilNames, this.fileNames);
       this.toastr.success(
         this.usersForm.controls['fullName'].value + ' successfully added!'
       );

@@ -90,8 +90,16 @@
   </ng-template>
   <div class="container-fluid doc-show-dialog">
     <div class="row">
-      <div class="col-md-6 col-lg-4" *ngFor="let item of dialogDoc">
-        <div class="p-2 border doc-images"><img src="{{item}}" alt="{{item}}" title="{{item}}"/></div>
+      <div class="col-md-12" *ngFor="let item of dialogDoc">
+        <div class="p-2 border doc-images mb-2 text-center" (mouseover)="changeText=true" (mouseout)="changeText=false">
+          <img src="{{item}}" alt="{{item}}" title="{{item}}"/>
+          <div id="{{item}}" class="download-doc py-2" [ngClass]="changeText? '' : 'hide'">
+            <span
+              class="my-2 btn btn-primary btn-sm"
+              >Download</span
+            >
+          </div>
+        </div>
       </div>
     </div>
   </div>

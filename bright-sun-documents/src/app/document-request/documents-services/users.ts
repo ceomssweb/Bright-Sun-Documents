@@ -15,6 +15,7 @@ export interface Users {
     buyerAge: Number,
     selectedBuyGender: String,
     selectedDocuments: String,
+    originalNames: String
  }
 
  export interface Columns {
