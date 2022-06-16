@@ -49,6 +49,7 @@ export class UsersDocuments {
   }
   // Update Users Object
   UpdateUsers(Users: Users, getFilNames: any, filename: any) {
+    debugger;
     this.UsersRef.update({
       fullName: Users.fullName,
       fatherName: Users.fatherName,

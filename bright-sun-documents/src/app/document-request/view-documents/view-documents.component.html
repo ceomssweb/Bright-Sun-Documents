@@ -66,8 +66,7 @@
 
           <td class="text-center action-block">
             <span
-              class="mx-2 btn btn-outline-primary btn-sm"
-              routerLink="/edit-userList/{{ user.fullName}}"
+              class="mx-2 btn btn-outline-primary btn-sm" (click)="editMyUsers(user.key, user)"
               >Edit</span
             >
             <span
@@ -84,7 +83,7 @@
     <pagination-controls (pageChange)="p = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
   </div>
 </div>
-<p-dialog [(visible)]="showDocDialog" (onHide)="hideDocDialog">
+<p-dialog [(visible)]="showDocDialog" (onHide)="hideDocDialog()">
   <ng-template pTemplate="header">
     <label>View Documents of {{dialogHeader}}</label>
   </ng-template>
@@ -108,6 +107,182 @@
     class="mx-2 btn btn-outline-primary btn-sm"
     >Edit</span
   > -->
+  <span
+    class="btn btn-outline-danger btn-sm"
+    (click)="hideDocDialog()"
+    >Close</span
+  >
+  </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="showEditDialog" (onHide)="hideEditDialog()">
+  <ng-template pTemplate="header">
+    <label>Edit {{dialogEditHeader}}</label>
+  </ng-template>
+  <div class="container-fluid edit-show-dialog">
+    <div class="row">
+      <div class="col-md-12">
+        <form [formGroup]="editUsersForm" novalidate>
+          <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="row">
+                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                        <label>Full name</label>
+                        <input
+                          type="text"
+                          formControlName="fullName"
+                          class="form-control"
+                          pInputText
+                          required
+                        />
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                        <label>Father name</label>
+                        <input type="text" formControlName="fatherName" class="form-control" pInputText required/>
+                      </div>
+                    
+                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                        <label>Email</label>
+                        <input
+                          type="email"
+                          pInputText
+                          formControlName="email"
+                          class="form-control"
+                          required
+                        />
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                        <label>Mobile number</label>
+                        <input
+                          type="text"
+                          pInputText
+                          formControlName="mobileNumber"
+                          class="form-control"
+                          required
+                        />
+                        <!-- errors-->
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                        <label>Document Type</label>
+                        <select name="selectedDoc" required id="selectedDoc" formControlName="selectedDoc"
+                        class="form-select"
+                        >
+                          <option value="Buiding sales deed">Buiding sales deed</option>
+                          <option value="Land sales deed">Land sales deed</option>
+                          <option value="Plot Sales deed">Plot Sales deed</option>
+                          <option value="Commertial Buiding sales deed">Commertial Buiding sales deed</option>
+                          <option value="Settlement deed">Settlement deed</option>
+                          <option value="Rental Aggrements">Rental Aggrements</option>
+                          <option value="Partition deed">Partition deed</option>
+                        </select>
+                       </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                        <label>Current Owner Name</label>
+                        <input type="text" formControlName="currentOwnerName" class="form-control" pInputText required/>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                        <label>Owner Address</label>
+                        <input type="textarea" formControlName="currentOwnerAddress" class="form-control" pInputText required/>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                        <label>Owner Age</label>
+                        <input type="text" formControlName="currentOwnerAge" class="form-control" pInputText required/>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                        <label>Owner Gender</label>
+                        <select name="currentOwnergender" required id="currentOwnergender" formControlName="currentOwnergender"
+                        class="form-select"
+                        >
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Others">Others</option>
+                        </select>
+                        </div>
+                      <!-- buyer details -->
+                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                            <label>Buyer Relationship to Owner</label>
+                            <select name="selectBuyerRelation" required id="selectBuyerRelation" formControlName="selectBuyerRelation"
+                            class="form-select"
+                            >
+                              <option value="Father">Father</option>
+                              <option value="Mother">Mother</option>
+                              <option value="Husband">Husband</option>
+                              <option value="Wife">Wife</option>
+                              <option value="Brother">Brother</option>
+                              <option value="Sister">Sister</option>
+                              <option value="GrandFather">Grand Father</option>
+                              <option value="GrandMother">Grand Mother</option>
+                              <option value="Father">No Relation</option>
+                            </select>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                            <label>Buyer Name</label>
+                            <input type="text" formControlName="buyerName" class="form-control" pInputText required/>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                            <label>Buyer Address</label>
+                            <input type="textarea" formControlName="buyerAddress" class="form-control" pInputText required/>
+                          </div>
+                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                            <label>Buyer Age</label>
+                            <input type="text" formControlName="buyerAge" class="form-control" pInputText required/>
+                            </div>
+                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                            <label>Buyer gender</label>
+                            <select name="selectedBuyGender" required id="selectedBuyGender" formControlName="selectedBuyGender"
+                            class="form-select"
+                            >
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                              <option value="Others">Others</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                   </div> 
+
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-12 border">
+                          <h3 class="my-2">Upload Requied Documents</h3>
+                          <!-- <input required type="file" id="uploadFiles" name="uploadFiles" multiple>
+                          <input type="button"
+                          class="btn btn-primary mx-2"
+                          (click)="uploadFiles()" Value="Upload"> -->
+                          <div class="row my-2">
+                            <div class="col-md-8">
+                              <input class="form-control" type="file" 
+                                  (change)="chooseFile($event)" multiple formControlName="selectedDocuments"/>
+                            </div>
+                            <div class="col-md-4">
+                              <button (click)="updateData()" 
+                                  class="btn btn-success">
+                                  Upload
+                              </button>
+                            </div>
+                          </div>
+                          <div class="py-2" *ngIf="widthContainer">
+                            <p-progressBar [value]="widthVal"></p-progressBar>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <span
+    class="mx-2 btn btn-outline-primary btn-sm"
+    (click)="updateForm()"
+    >Update and Save</span
+  > 
   <span
     class="btn btn-outline-danger btn-sm"
     (click)="hideDocDialog()"

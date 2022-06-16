@@ -2,7 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { UsersDocuments } from '../documents-services/document.sevices';
 import { Columns, Users } from '../documents-services/users';
 import { ToastrService } from 'ngx-toastr';
-import { getStorage, ref, deleteObject } from 'firebase/storage';
+import { getStorage, ref, deleteObject, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'bsd-view-documents',
@@ -14,17 +15,30 @@ export class ViewDocumentsComponent implements OnInit {
   userList!: Users[];
   cols!: Columns[];
   dialogHeader!: String;
+  dialogEditHeader!: String;
   dialogDoc!: String[];
   showDownBtn!: any;
   hideWhenNouserList: boolean = false;
   noData: boolean = false;
   preLoader: boolean = true;
   showDocDialog: boolean = false;
+  showEditDialog: boolean = false;
   changeText: boolean = false;
+  file: any = [];
   userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
   getRealDocName!: string[];
+  dialogEdit!: any[];
+  public editUsersForm!: FormGroup;
+  getFilNames: String[] = [];
+  getID: any;
+  fileNames: String[] = [];
+  availableFiles: String[] = [];
+  userEmail: string = '';
+  widthContainer: boolean = false;
+  widthVal: number = 0;
   constructor(
     public userServices: UsersDocuments, 
+    public fb: FormBuilder,
     public toastr: ToastrService
     ) { }
 
@@ -36,6 +50,7 @@ export class ViewDocumentsComponent implements OnInit {
       data.forEach(item => {
         let getItem: any = item.payload.toJSON(); 
         getItem['key'] = item.key;
+        this.getID = item.key;
         this.userList.push(getItem as Users);
 
       });
@@ -60,6 +75,7 @@ export class ViewDocumentsComponent implements OnInit {
         { id: 15, header: 'Added Documents' },
     ];
     });
+    this.userEditFormData();
   }
   dataState() {     
     this.userServices.GetUsersList().valueChanges().subscribe(data => {
@@ -106,5 +122,107 @@ export class ViewDocumentsComponent implements OnInit {
   hideDocDialog(){
     this.showDocDialog = false;
     this.dialogHeader = "";
+  }
+  editMyUsers(id:any, user:any){
+    //this.dialogEdit = Object.values(list);
+    this.dialogEditHeader = user.email;
+    this.userEmail = user.email;
+    this.userServices
+      .GetUsers(id)
+      .valueChanges()
+      .subscribe((data) => {
+        this.editUsersForm.setValue(data);
+      });
+      this.getFilNames = Object.values(user.selectedDocuments);
+      this.availableFiles = user.originalFiles;
+      
+    this.showEditDialog = true;
+  }
+
+  chooseFile(event: any) {
+    for (var i = 0; i < event.target.files.length; i++) { 
+      this.file.push(event.target.files[i]);
+    }
+  }
+  updateData() {
+    if(this.editUsersForm.valid){
+    const storage = getStorage();
+    for (var i = 0; i < this.file.length; i++) { 
+      this.fileNames.push(this.file[i].name);
+      const storageRef = ref(storage, 'users-documents/' + this.userServices.userPath + '/' + this.userEmail + '/' + this.file[i].name);
+      const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          this.widthContainer=true;
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.widthVal = progress;
+        },
+        (error) => {
+          console.log(error.message);
+          switch (error.code) {
+            case 'storage/unauthorized':
+              break;
+            case 'storage/canceled':
+              break;
+            case 'storage/unknown':
+              break;
+          }
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
+            debugger;
+            this.getFilNames.push(_downloadURL);
+          });
+          // this.enableUpdate = true;
+        }
+      )
+    }
+  }else{
+    alert("Pease fill the form before uploading the Documents!")
+  }
+}
+  
+updateForm() {
+  this.userServices.UpdateUsers(this.editUsersForm.value, this.getFilNames, this.fileNames);
+  this.toastr.success(
+    this.editUsersForm.controls['fullName'].value + ' updated successfully'
+  );
+  this.ResetForm();
+}
+ResetForm() {
+  this.widthVal = 0;
+  this.widthContainer = false;
+}
+  userEditFormData(){
+    // if(this.editUsersForm === undefined) {return}
+    this.editUsersForm = this.fb.group({
+      fullName: ['', [Validators.required, Validators.minLength(2)]],
+      fatherName: ['', [Validators.required, Validators.minLength(2)]],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+        ],
+      ],
+      mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      selectedDoc: ['', [Validators.required, Validators.minLength(2)]],
+      currentOwnerName: ['', [Validators.required, Validators.minLength(2)]],
+      currentOwnerAddress: ['', [Validators.required, Validators.minLength(2)]],
+      currentOwnerAge: ['', [Validators.required, Validators.minLength(1)]],
+      currentOwnergender: ['', [Validators.required, Validators.minLength(2)]],
+      selectBuyerRelation: ['', [Validators.required, Validators.minLength(2)]],
+      buyerName: ['', [Validators.required, Validators.minLength(2)]],
+      buyerAddress: ['', [Validators.required, Validators.minLength(2)]],
+      buyerAge: ['', [Validators.required, Validators.minLength(1)]],
+      selectedBuyGender: ['', [Validators.required, Validators.minLength(2)]],
+      selectedDocuments: [''],
+      originalNames: ['']
+    });
+  }
+  hideEditDialog(){
+    this.showEditDialog = false;
+    this.dialogEditHeader = "";
+    this.dialogEdit = [];
   }
 }

@@ -45,7 +45,8 @@ tbody{
         border-bottom-right-radius: 1rem;
     }
 }
-.doc-show-dialog{
+.doc-show-dialog,
+.edit-show-dialog{
     width: 80vw;
     height: 60vh;
     overflow-y: auto;
