@@ -1,0 +1,32 @@
+::ng-deep{
+    .p-dropdown{
+        width: 100% !important;
+    }
+    .p-inputtext{
+        padding: 0.5rem 0.7rem !important;
+    }
+}
+
+.report-content-height{
+    height: calc(100% - 300px);
+    overflow-y: auto;
+}
+
+.no-data{
+    width: calc(100vw - 250px);
+  }
+  tbody{
+    height: calc(100vh - 400px);
+    vertical-align: middle;
+    border: 2px solid #2199e8;
+  }
+  
+  thead{
+    background: #2199e8;
+    color: #ffffff;
+    border: 2px solid #2199e8;
+    th{
+        font-weight: normal !important;
+    }
+  }
+

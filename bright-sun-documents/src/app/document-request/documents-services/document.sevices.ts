@@ -34,7 +34,8 @@ export class UsersDocuments {
       buyerAge: Users.buyerAge,
       selectedBuyGender: Users.selectedBuyGender,
       selectedDocuments: getFilNames,
-      originalNames: filename
+      originalNames: filename,
+      paymentStatus: Users.paymentStatus
     });
   }
   // Fetch Single Users Object
@@ -49,7 +50,6 @@ export class UsersDocuments {
   }
   // Update Users Object
   UpdateUsers(Users: Users, getFilNames: any, filename: any) {
-    debugger;
     this.UsersRef.update({
       fullName: Users.fullName,
       fatherName: Users.fatherName,
@@ -66,7 +66,8 @@ export class UsersDocuments {
       buyerAge: Users.buyerAge,
       selectedBuyGender: Users.selectedBuyGender,
       selectedDocuments: getFilNames,
-      originalNames: filename
+      originalNames: filename,
+      paymentStatus: Users.paymentStatus
     });
   }
   // Delete Users Object

@@ -67,6 +67,15 @@ a,
   }
 }
 
+
+
+.button-link{
+  color: white !important; 
+  &:hover{
+    color: whitesmoke !important;
+  }
+}
+
 .img-thumbnail{
   height: 1.4rem;
     overflow: hidden;

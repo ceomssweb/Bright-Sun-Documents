@@ -11,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./view-documents.component.scss']
 })
 export class ViewDocumentsComponent implements OnInit {
-  p: number = 1;
+  page: number = 1;
   userList!: Users[];
   cols!: Columns[];
   dialogHeader!: String;
@@ -23,7 +23,6 @@ export class ViewDocumentsComponent implements OnInit {
   preLoader: boolean = true;
   showDocDialog: boolean = false;
   showEditDialog: boolean = false;
-  changeText: boolean = false;
   file: any = [];
   userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
   getRealDocName!: string[];
@@ -32,7 +31,6 @@ export class ViewDocumentsComponent implements OnInit {
   getFilNames: String[] = [];
   getID: any;
   fileNames: String[] = [];
-  availableFiles: String[] = [];
   userEmail: string = '';
   widthContainer: boolean = false;
   widthVal: number = 0;
@@ -52,7 +50,7 @@ export class ViewDocumentsComponent implements OnInit {
         getItem['key'] = item.key;
         this.getID = item.key;
         this.userList.push(getItem as Users);
-
+        this.fileNames.push(getItem.originalNames);
       });
       
       this.cols = [
@@ -72,7 +70,8 @@ export class ViewDocumentsComponent implements OnInit {
         { id: 12, header: 'Second Party Adress' },
         { id: 13, header: 'Second Party Age' },
         { id: 14, header: 'Second Party Gender' },
-        { id: 15, header: 'Added Documents' },
+        { id: 15, header: 'Payment Status' },
+        { id: 16, header: 'Added Documents' },
     ];
     });
     this.userEditFormData();
@@ -131,10 +130,12 @@ export class ViewDocumentsComponent implements OnInit {
       .GetUsers(id)
       .valueChanges()
       .subscribe((data) => {
-        this.editUsersForm.setValue(data);
+        if(data != null){
+          this.editUsersForm.setValue(data);
+        }
+        
       });
       this.getFilNames = Object.values(user.selectedDocuments);
-      this.availableFiles = user.originalFiles;
       
     this.showEditDialog = true;
   }
@@ -170,7 +171,6 @@ export class ViewDocumentsComponent implements OnInit {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
-            debugger;
             this.getFilNames.push(_downloadURL);
           });
           // this.enableUpdate = true;
@@ -182,17 +182,19 @@ export class ViewDocumentsComponent implements OnInit {
   }
 }
   
-updateForm() {
-  this.userServices.UpdateUsers(this.editUsersForm.value, this.getFilNames, this.fileNames);
-  this.toastr.success(
-    this.editUsersForm.controls['fullName'].value + ' updated successfully'
-  );
-  this.ResetForm();
-}
-ResetForm() {
-  this.widthVal = 0;
-  this.widthContainer = false;
-}
+  updateForm() {
+    if(this.editUsersForm.valid){
+    this.userServices.UpdateUsers(this.editUsersForm.value, this.getFilNames, this.fileNames);
+    this.toastr.success(
+      this.editUsersForm.controls['fullName'].value + ' updated successfully'
+    );
+    }
+  }
+  ResetForm() {
+    this.widthVal = 0;
+    this.widthContainer = false;
+    this.editUsersForm.reset();
+  }
   userEditFormData(){
     // if(this.editUsersForm === undefined) {return}
     this.editUsersForm = this.fb.group({
@@ -217,12 +219,13 @@ ResetForm() {
       buyerAge: ['', [Validators.required, Validators.minLength(1)]],
       selectedBuyGender: ['', [Validators.required, Validators.minLength(2)]],
       selectedDocuments: [''],
-      originalNames: ['']
+      originalNames: [''],
+      paymentStatus: ['']
     });
   }
   hideEditDialog(){
     this.showEditDialog = false;
     this.dialogEditHeader = "";
-    this.dialogEdit = [];
+    this.ResetForm();
   }
 }

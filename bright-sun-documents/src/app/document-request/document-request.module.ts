@@ -16,12 +16,14 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import {DialogModule} from 'primeng/dialog';
 import {ProgressBarModule} from 'primeng/progressbar';
 import {ToastModule} from 'primeng/toast';
+import { ReportDocumentsComponent } from './report-documents/report-documents.component';
 
 @NgModule({
   declarations: [
     DocumentRequestComponent,
     SendDocumentsComponent,
-    ViewDocumentsComponent
+    ViewDocumentsComponent,
+    ReportDocumentsComponent
   ],
   imports: [
     CommonModule,

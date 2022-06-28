@@ -100,7 +100,8 @@ export class SendDocumentsComponent implements OnInit {
       buyerAddress: ['', [Validators.required, Validators.minLength(2)]],
       buyerAge: ['', [Validators.required, Validators.minLength(1)]],
       selectedBuyGender: ['', [Validators.required, Validators.minLength(2)]],
-      selectedDocuments: ['']
+      selectedDocuments: [''],
+      paymentStatus: ['']
     });
   }
 
@@ -123,7 +124,7 @@ export class SendDocumentsComponent implements OnInit {
     this.widthContainer = false;
   }
   submitUserData() {
-    if(!this.usersForm.invalid && this.enableAdd){
+    if(!this.usersForm.invalid && this.enableAdd && this.fileNames !== []){
       this.userApi.AddUsers(this.usersForm.value, this.getFilNames, this.fileNames);
       this.toastr.success(
         this.usersForm.controls['fullName'].value + ' successfully added!'
