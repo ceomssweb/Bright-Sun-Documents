@@ -70,19 +70,19 @@
                         </select>
                        </div>
                       <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Current Owner Name</label>
+                        <label>Seller Name</label>
                         <input type="text" formControlName="currentOwnerName" class="form-control" pInputText required/>
                       </div>
                       <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Owner Address</label>
-                        <input type="textarea" formControlName="currentOwnerAddress" class="form-control" pInputText required/>
+                        <label>Seller Address</label>
+                        <textarea type="text" formControlName="currentOwnerAddress" rows="3" class="form-control" pInputText required></textarea>
                       </div>
                       <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Owner Age</label>
+                        <label>Seller Age</label>
                         <input type="text" formControlName="currentOwnerAge" class="form-control" pInputText required/>
                       </div>
                       <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Owner Gender</label>
+                        <label>Seller Gender</label>
                         <select name="currentOwnergender" required id="currentOwnergender" formControlName="currentOwnergender"
                         class="form-select"
                         >
@@ -93,7 +93,7 @@
                         </div>
                       <!-- buyer details -->
                           <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                            <label>Buyer Relationship to Owner</label>
+                            <label>Buyer/Seller Relation</label>
                             <select name="selectBuyerRelation" required id="selectBuyerRelation" formControlName="selectBuyerRelation"
                             class="form-select"
                             >
@@ -114,11 +114,11 @@
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-12 my-2">
                             <label>Buyer Address</label>
-                            <input type="textarea" formControlName="buyerAddress" class="form-control" pInputText required/>
+                            <textarea type="text" formControlName="buyerAddress" rows="3" class="form-control" pInputText required></textarea>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-12 my-2">
                             <label>Buyer Age</label>
-                            <input type="textarea" formControlName="buyerAge" class="form-control" pInputText required/>
+                            <input type="text" formControlName="buyerAge" class="form-control" pInputText required/>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-12 my-2">
                             <label>Buyer gender</label>
@@ -158,14 +158,30 @@
                           class="btn btn-primary mx-2"
                           (click)="uploadFiles()" Value="Upload"> -->
                           <div class="row my-2">
-                            <div class="col-md-8">
-                              <input class="form-control" type="file" 
+                            <div class="col-md-12">
+                              <input class="form-control mb-2" type="file" 
                                   (change)="chooseFile($event)" multiple formControlName="selectedDocuments">
-                            </div>
-                            <div class="col-md-4">
-                              <button (click)="addData()" 
-                                  class="btn btn-success">
+                            
+                              <!-- <button (click)="addData()" 
+                                  class="btn btn-success w-100">
                                   Upload
+                              </button> -->
+                            </div>
+                            <div class="pull-right my-2">
+                              <button
+                                type="button"
+                                class="btn btn-secondary mx-2"
+                                (click)="ResetForm()"
+                              >
+                                Reset
+                              </button>
+                              <button
+                                type="submit"
+                                class="btn btn-primary"
+                                [disabled]="!usersForm.valid || !enableAdd"
+                                (click)="submitUserData()"
+                              >
+                                Add Client
                               </button>
                             </div>
                           </div>
@@ -173,25 +189,6 @@
                             <p-progressBar [value]="widthVal"></p-progressBar>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="pull-right my-2">
-                        <button
-                          type="button"
-                          class="btn btn-secondary mx-2"
-                          (click)="ResetForm()"
-                        >
-                          Reset
-                        </button>
-                        <button
-                          type="submit"
-                          class="btn btn-primary"
-                          [disabled]="!usersForm.valid || !enableAdd"
-                          (click)="submitUserData()"
-                        >
-                          Add Client
-                        </button>
                       </div>
                     </div>
                     </div>

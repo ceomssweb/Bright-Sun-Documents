@@ -14,8 +14,18 @@
                 <div class="right-side">
                     <div class="row">
                         <div class="col-md-12" *ngIf="showDetails">
-                            <div *ngIf="authService.userData as user">
-                                <label>Email:</label><label class="mx-1">{{(user.email)}}</label>
+                            <div *ngIf="authService.userData as user" class="row">
+                                <div class="col-md-6 py-2">
+                                    <label class="bold-label">Profile Name :</label><label class="mx-1">{{(user.displayName)}}</label>
+                                </div>
+                                <div class="col-md-6 py-2">
+                                    <label class="bold-label">Email :</label><label class="mx-1">{{(user.email)}}</label>
+                                </div>
+                                <!-- <div class="col-md-6 py-2">
+                                    <label class="bold-label">Email Verified :</label>
+                                    <label class="mx-1" *ngIf="user.emailVerified">Verified</label>
+                                    <label class="mx-1" *ngIf="!user.emailVerified">Please Verify your Email id!</label>
+                                </div> -->
                             </div>
                         </div>
                         <div class="col-md-12" *ngIf="sendDocShow">

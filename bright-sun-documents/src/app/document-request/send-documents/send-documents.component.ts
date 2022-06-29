@@ -39,44 +39,10 @@ export class SendDocumentsComponent implements OnInit {
     for (var i = 0; i < event.target.files.length; i++) { 
       this.file.push(event.target.files[i]);
     }
-  }
-  addData() {
-    if(this.usersForm.valid){
-    const storage = getStorage();
-    this.userEmail = this.email?.value;
-    for (var i = 0; i < this.file.length; i++) { 
-      this.fileNames.push(this.file[i].name);
-      const storageRef = ref(storage, 'users-documents/' + this.userApi.userPath + '/' + this.userEmail + '/' + this.file[i].name);
-      const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
-      uploadTask.on('state_changed',
-        (snapshot) => {
-          this.widthContainer=true;
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.widthVal = progress;
-        },
-        (error) => {
-          console.log(error.message);
-          switch (error.code) {
-            case 'storage/unauthorized':
-              break;
-            case 'storage/canceled':
-              break;
-            case 'storage/unknown':
-              break;
-          }
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
-           this.getFilNames.push(_downloadURL);
-          });
-          this.enableAdd = true;
-        }
-      )
+    if(event.target.files.length > 0){
+      this.enableAdd = true;
     }
-  }else{
-    alert("Pease fill the form before uploading the Documents!")
   }
-}
 
   userFormData() {
     this.usersForm = this.fb.group({
@@ -122,14 +88,54 @@ export class SendDocumentsComponent implements OnInit {
     this.enableAdd = false;
     this.widthVal = 0;
     this.widthContainer = false;
+    this.fileNames = [];
   }
   submitUserData() {
     if(!this.usersForm.invalid && this.enableAdd && this.fileNames !== []){
-      this.userApi.AddUsers(this.usersForm.value, this.getFilNames, this.fileNames);
-      this.toastr.success(
-        this.usersForm.controls['fullName'].value + ' successfully added!'
+      const storage = getStorage();
+    this.userEmail = this.email?.value;
+    for (var i = 0; i < this.file.length; i++) { 
+      this.fileNames.push(this.file[i].name);
+      const storageRef = ref(storage, 'users-documents/' + this.userApi.userPath + '/' + this.userEmail + '/' + this.file[i].name);
+      const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          this.widthContainer=true;
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.widthVal = progress;
+        },
+        (error) => {
+          console.log(error.message);
+          switch (error.code) {
+            case 'storage/unauthorized':
+              break;
+            case 'storage/canceled':
+              break;
+            case 'storage/unknown':
+              break;
+          }
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
+           this.getFilNames.push(_downloadURL);
+           this.widthVal = 0;
+           this.widthContainer = false;
+          });
+          
+        }
       );
-      this.ResetForm();
+      debugger;
+      if(i == (this.file.length - 1)){
+        this.userApi.AddUsers(this.usersForm.value, this.fileNames);
+        this.ResetForm();
+        this.toastr.success(
+          this.usersForm.controls['fullName'].value + ' successfully added!'
+        );
+      }
+    }
+      
+    }else{
+      alert("Pease fill all the fields in the form!")
     }
   }
 

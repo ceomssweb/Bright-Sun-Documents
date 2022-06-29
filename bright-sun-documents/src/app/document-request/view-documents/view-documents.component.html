@@ -60,14 +60,14 @@
           <td >
             <span
               class="mx-2 btn btn-outline-primary btn-sm"
-              (click)="showDocuments(user.selectedDocuments, user.fullName)"
+              (click)="showDocuments(user.key, user)"
               >View Documents</span
             >
           </td>
 
           <td class="text-center action-block">
             <span
-              class="mx-2 btn btn-outline-primary btn-sm" (click)="editMyUsers(user.key, user)"
+              class="mx-2 btn btn-outline-primary btn-sm" (click)="editMyUsers(user.key, user, i)"
               >Edit</span
             >
             <span
@@ -90,7 +90,7 @@
   </ng-template>
   <div class="container-fluid doc-show-dialog">
     <div class="row">
-      <div class="col-md-3" *ngFor="let item of dialogDoc">
+      <div class="col-md-3" *ngFor="let item of getActDoc">
         <div class="p-2 border doc-images mb-2 mr-2 text-center" >
           <img src="{{item}}" alt="{{item}}" title="{{item}}"/>
           <div id="{{item}}" class="download-doc  w-100 py-2">
@@ -182,19 +182,19 @@
                         </select>
                        </div>
                       <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Current Owner Name</label>
+                        <label>Seller Name</label>
                         <input type="text" formControlName="currentOwnerName" class="form-control" pInputText required/>
                       </div>
                       <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Owner Address</label>
-                        <input type="textarea" formControlName="currentOwnerAddress" class="form-control" pInputText required/>
+                        <label>Seller Address</label>
+                        <textarea type="text" formControlName="currentOwnerAddress" rows="3" class="form-control" pInputText required></textarea>
                       </div>
                       <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Owner Age</label>
+                        <label>Seller Age</label>
                         <input type="text" formControlName="currentOwnerAge" class="form-control" pInputText required/>
                       </div>
                       <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Owner Gender</label>
+                        <label>Seller Gender</label>
                         <select name="currentOwnergender" required id="currentOwnergender" formControlName="currentOwnergender"
                         class="form-select"
                         >
@@ -205,7 +205,7 @@
                         </div>
                       <!-- buyer details -->
                           <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                            <label>Buyer Relationship to Owner</label>
+                            <label>Buyer/Seller Relation</label>
                             <select name="selectBuyerRelation" required id="selectBuyerRelation" formControlName="selectBuyerRelation"
                             class="form-select"
                             >
@@ -226,7 +226,7 @@
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-12 my-2">
                             <label>Buyer Address</label>
-                            <input type="textarea" formControlName="buyerAddress" class="form-control" pInputText required/>
+                            <textarea type="text" formControlName="buyerAddress" rows="3" class="form-control" pInputText required></textarea>
                           </div>
                           <div class="col-lg-3 col-md-6 col-sm-12 my-2">
                             <label>Buyer Age</label>
@@ -264,29 +264,29 @@
                         </div>
                       <div class="row">
                         <div class="col-md-12 border">
-                          <!-- <input type="textarea" rows="5" formControlName="originalNames"/> -->
+                          <!-- <textarea type="text" rows="5" formControlName="originalNames"></textarea> -->
                           <h3 class="my-2">Upload Requied Documents</h3>
                           <div class="row my-2">
-                            <div class="col-md-8">
-                              <input class="form-control" type="file" 
+                            <div class="col-md-12">
+                              <input class="form-control mb-3" type="file" 
                                   (change)="chooseFile($event)" multiple/>
-                            </div>
-                            <div class="col-md-4">
-                              <button (click)="updateData()" 
-                                  class="btn btn-success">
+                            
+                              <!-- <button (click)="updateData()" 
+                                  class="btn btn-success w-100">
                                   Upload
-                              </button>
+                              </button> -->
                             </div>
                           </div>
                           <div class="py-2" *ngIf="widthContainer">
                             <p-progressBar [value]="widthVal"></p-progressBar>
                           </div>
-                          <div class="row my-2 image-preview">
+                          <!--  Reset has getActDoc = []
+                            <div class="row my-2 image-preview">
                             <h4 class="my-2">Files Preview</h4>
-                            <div class="col-md-4" *ngFor="let items of getFilNames">
+                            <div class="col-md-4" *ngFor="let items of getActDoc">
                               <img class="show-doc-edit" alt="{{items}}" src="{{items}}"/>
                             </div>
-                          </div>
+                          </div> -->
                           <!-- <input [hidden]="true" type="textarea" rows="5" formControlName="selectedDocuments"/> -->
                         </div>
                       </div>
@@ -300,7 +300,7 @@
     <span
     class="mx-2 btn btn-outline-primary btn-sm"
     (click)="updateForm()"
-    >Update and Save</span
+    >Update and Close</span
   > 
   <span
     class="btn btn-outline-danger btn-sm"

@@ -18,13 +18,18 @@ export class ReportDocumentsComponent implements OnInit {
   hideWhenNouserList: boolean = false;
   noData: boolean = false;
   preLoader: boolean = true;
+  chartData: any;
+  chartOptions: any;
+  payStat: any[] = [];
+  datetimes: any[] = [];
+count: string[] = [];
 
   constructor(
     public authService: AuthService,
     public userServices: UsersDocuments,
     public userApi: UsersDocuments,
     public fb: FormBuilder,
-    public toastr: ToastrService,
+    public toastr: ToastrService
 
   ) {
 
@@ -41,9 +46,45 @@ export class ReportDocumentsComponent implements OnInit {
         getItem['key'] = item.key;
         this.getID = item.key;
         this.userList.push(getItem as Users);
+        this.payStat.push(getItem.paymentStatus);
       });
-    })
+      this.count = this.payStat.reduce((acc, value) => ({
+        ...acc,
+        [value]: (acc[value] || 0) + 1
+     }), {});
+     
+      this.chartData = {
+        labels: Object.keys(this.count),
+        datasets: [
+            {
+                data: Object.values(this.count),
+                backgroundColor: [
+                    "#42A5F5",
+                    "#66BB6A",
+                    "#FFA726",
+                    "#808080",
+                    "#696969"
+                ],
+                hoverBackgroundColor: [
+                    "#64B5F6",
+                    "#81C784",
+                    "#FFB74D",
+                    "#C0C0C0",
+                    "#A9A9A9"
+
+                ]
+            }
+        ]
+    };
+    });
+    this.chartOptions = {
+      responsive: false,
+      maintainAspectRatio: false,
+      
+    };
   }
+  
+
   dataState() {     
     this.userServices.GetUsersList().valueChanges().subscribe(data => {
       this.preLoader = false;

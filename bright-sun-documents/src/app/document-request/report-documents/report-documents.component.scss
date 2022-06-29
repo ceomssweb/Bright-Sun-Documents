@@ -15,8 +15,18 @@
 .no-data{
     width: calc(100vw - 250px);
   }
+//   table{
+//     height: calc(100vh - 400px);
+//   }
+::ng-deep{
+    html,
+    body {
+        margin: 0;
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+}
   tbody{
-    height: calc(100vh - 400px);
     vertical-align: middle;
     border: 2px solid #2199e8;
   }
@@ -28,5 +38,9 @@
     th{
         font-weight: normal !important;
     }
+  }
+
+  .pi-spin{
+    color: #2199e8;
   }
 

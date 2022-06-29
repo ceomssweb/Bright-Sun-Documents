@@ -28,12 +28,13 @@ export class ViewDocumentsComponent implements OnInit {
   getRealDocName!: string[];
   dialogEdit!: any[];
   public editUsersForm!: FormGroup;
-  getFilNames: String[] = [];
   getID: any;
-  fileNames: String[] = [];
+  fileNames: any[] = [];
   userEmail: string = '';
   widthContainer: boolean = false;
   widthVal: number = 0;
+  getRowDoc: any[] = [];
+  getActDoc: any[] = [];
   constructor(
     public userServices: UsersDocuments, 
     public fb: FormBuilder,
@@ -50,30 +51,30 @@ export class ViewDocumentsComponent implements OnInit {
         getItem['key'] = item.key;
         this.getID = item.key;
         this.userList.push(getItem as Users);
+        debugger;
         this.fileNames.push(getItem.originalNames);
       });
-      
-      this.cols = [
-        { id: 1, header: 'Full Name' },
-        { id: 2, header: 'Father Name' },
-        { id: 3, header: 'Email' },
-        { id: 4, header: 'Mobile Number' },
-
-        { id: 5, header: 'Document Type' },
-        { id: 6, header: 'First Party Name' },
-        { id: 7, header: 'First Party Adress' },
-        { id: 8, header: 'First Party Age' },
-        { id: 9, header: 'First Party Gender' },
-
-        { id: 10, header: 'Relationship' },
-        { id: 11, header: 'Second Party Name' },
-        { id: 12, header: 'Second Party Adress' },
-        { id: 13, header: 'Second Party Age' },
-        { id: 14, header: 'Second Party Gender' },
-        { id: 15, header: 'Payment Status' },
-        { id: 16, header: 'Added Documents' },
-    ];
     });
+    this.cols = [
+      { id: 1, header: 'Full Name' },
+      { id: 2, header: 'Father Name' },
+      { id: 3, header: 'Email' },
+      { id: 4, header: 'Mobile Number' },
+
+      { id: 5, header: 'Document Type' },
+      { id: 6, header: 'First Party Name' },
+      { id: 7, header: 'First Party Adress' },
+      { id: 8, header: 'First Party Age' },
+      { id: 9, header: 'First Party Gender' },
+
+      { id: 10, header: 'Relationship' },
+      { id: 11, header: 'Second Party Name' },
+      { id: 12, header: 'Second Party Adress' },
+      { id: 13, header: 'Second Party Age' },
+      { id: 14, header: 'Second Party Gender' },
+      { id: 15, header: 'Payment Status' },
+      { id: 16, header: 'Added Documents' },
+  ];
     this.userEditFormData();
   }
   dataState() {     
@@ -113,16 +114,70 @@ export class ViewDocumentsComponent implements OnInit {
       
     }
   }
-  showDocuments(getPath:any, name:any){
+  showDocuments(key: any, user: any){
     this.showDocDialog = true;
-    this.dialogHeader = name;
-    this.dialogDoc = Object.values(getPath);
+    this.dialogHeader = user.email;
+    // Get the download URL
+    this.getRowDoc = Object.values(user.originalNames);
+    const storage = getStorage();
+    for(let i = 0; i < this.getRowDoc.length; i++){
+      const storageRef = ref(storage, 'users-documents/' + this.userPath + '/' + user.email + '/' + this.getRowDoc[i]);
+      
+      getDownloadURL(storageRef)
+  .then((url) => {
+    this.getActDoc.push(url);
+  })
+  .catch((error) => {
+    // A full list of error codes is available at
+    // https://firebase.google.com/docs/storage/web/handle-errors
+    switch (error.code) {
+      case 'storage/object-not-found':
+        // File doesn't exist
+        break;
+      case 'storage/unauthorized':
+        // User doesn't have permission to access the object
+        break;
+      case 'storage/canceled':
+        // User canceled the upload
+        break;
+
+      // ...
+
+      case 'storage/unknown':
+        // Unknown error occurred, inspect the server response
+        break;
+    }
+  });
+    }
+    
+// .catch((error) => {
+//   // A full list of error codes is available at
+//   // https://firebase.google.com/docs/storage/web/handle-errors
+//   switch (error.code) {
+//     case 'storage/object-not-found':
+//       // File doesn't exist
+//       break;
+//     case 'storage/unauthorized':
+//       // User doesn't have permission to access the object
+//       break;
+//     case 'storage/canceled':
+//       // User canceled the upload
+//       break;
+
+//     // ...
+
+//     case 'storage/unknown':
+//       // Unknown error occurred, inspect the server response
+//       break;
+//   }
+// });
   }
   hideDocDialog(){
     this.showDocDialog = false;
     this.dialogHeader = "";
+    this.getActDoc = [];
   }
-  editMyUsers(id:any, user:any){
+  editMyUsers(id:any, user:any, index: number){
     //this.dialogEdit = Object.values(list);
     this.dialogEditHeader = user.email;
     this.userEmail = user.email;
@@ -132,10 +187,10 @@ export class ViewDocumentsComponent implements OnInit {
       .subscribe((data) => {
         if(data != null){
           this.editUsersForm.setValue(data);
+          this.fileNames = Object.values(this.fileNames[index]);
         }
         
       });
-      this.getFilNames = Object.values(user.selectedDocuments);
       
     this.showEditDialog = true;
   }
@@ -145,10 +200,13 @@ export class ViewDocumentsComponent implements OnInit {
       this.file.push(event.target.files[i]);
     }
   }
-  updateData() {
+
+  
+  updateForm() {
     if(this.editUsersForm.valid){
     const storage = getStorage();
     for (var i = 0; i < this.file.length; i++) { 
+      debugger;
       this.fileNames.push(this.file[i].name);
       const storageRef = ref(storage, 'users-documents/' + this.userServices.userPath + '/' + this.userEmail + '/' + this.file[i].name);
       const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
@@ -171,29 +229,31 @@ export class ViewDocumentsComponent implements OnInit {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
-            this.getFilNames.push(_downloadURL);
-          });
+            this.widthVal = 0;
+            this.widthContainer = false;
+        });
           // this.enableUpdate = true;
         }
       )
-    }
-  }else{
-    alert("Pease fill the form before uploading the Documents!")
-  }
-}
-  
-  updateForm() {
-    if(this.editUsersForm.valid){
-    this.userServices.UpdateUsers(this.editUsersForm.value, this.getFilNames, this.fileNames);
-    this.toastr.success(
-      this.editUsersForm.controls['fullName'].value + ' updated successfully'
-    );
+      if(i == (this.file.length - 1)){
+        debugger;
+        this.userServices.UpdateUsers(this.editUsersForm.value, this.fileNames);
+          
+          this.toastr.success(
+            this.editUsersForm.controls['fullName'].value + ' updated successfully'
+          );
+      }
+    };
+    
+    }else{
+      alert("Pease fill all the fields in the form!")
     }
   }
   ResetForm() {
     this.widthVal = 0;
     this.widthContainer = false;
     this.editUsersForm.reset();
+    this.getActDoc = [];
   }
   userEditFormData(){
     // if(this.editUsersForm === undefined) {return}
@@ -218,7 +278,6 @@ export class ViewDocumentsComponent implements OnInit {
       buyerAddress: ['', [Validators.required, Validators.minLength(2)]],
       buyerAge: ['', [Validators.required, Validators.minLength(1)]],
       selectedBuyGender: ['', [Validators.required, Validators.minLength(2)]],
-      selectedDocuments: [''],
       originalNames: [''],
       paymentStatus: ['']
     });

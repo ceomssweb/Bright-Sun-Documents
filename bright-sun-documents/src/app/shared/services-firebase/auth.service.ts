@@ -48,10 +48,18 @@ export class AuthService {
       });
   }
   // Sign up with email/password
-  SignUp(email: string, password: string) {
+  SignUp(email: string, password: string, username: string) {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
+      .then((result:any) => {
+        result.user.updateProfile({
+          displayName: username
+      }).then(function() {
+          // Update successful.
+      })
+      .catch((error: any) => {
+        window.alert(error.message);
+      });;        
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
         this.SendVerificationMail();

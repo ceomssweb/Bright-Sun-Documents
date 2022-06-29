@@ -14,7 +14,6 @@ export interface Users {
     buyerAddress: String;
     buyerAge: Number,
     selectedBuyGender: String,
-    selectedDocuments: String,
     originalNames: String,
     paymentStatus: String
  }

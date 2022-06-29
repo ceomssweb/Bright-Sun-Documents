@@ -17,6 +17,7 @@ import {DialogModule} from 'primeng/dialog';
 import {ProgressBarModule} from 'primeng/progressbar';
 import {ToastModule} from 'primeng/toast';
 import { ReportDocumentsComponent } from './report-documents/report-documents.component';
+import {ChartModule} from 'primeng/chart';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ReportDocumentsComponent } from './report-documents/report-documents.co
     NgxPaginationModule,
     DialogModule,
     ProgressBarModule,
-    ToastModule
+    ToastModule,
+    ChartModule
   ]
 })
 export class DocumentRequestModule { }

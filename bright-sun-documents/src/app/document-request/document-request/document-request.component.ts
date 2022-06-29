@@ -18,7 +18,7 @@ export class DocumentRequestComponent implements OnInit {
 
   ngOnInit(): void {
     this.items = [
-      {label: 'User Details', icon: 'pi pi-fw pi-home', command: () => this.showUserDetails(),},
+      {label: 'My Profile', icon: 'pi pi-fw pi-home', command: () => this.showUserDetails(),},
       {label: 'Add Client', icon: 'pi pi-fw pi-plus', command: () => this.showAddNew(),},
       {label: 'View/Edit Client', icon: 'pi pi-fw pi-eye', command: () => this.showView(),},
       {label: 'Report', icon: 'pi pi-fw pi-bolt', command: () => this.showReport(),}
