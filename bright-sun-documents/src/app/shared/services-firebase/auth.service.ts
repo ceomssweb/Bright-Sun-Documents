@@ -60,10 +60,10 @@ export class AuthService {
     this.empRef = this.db.list('Emp-list/');
     return this.empRef;
   }
+
   // Sign up with email/password
   SignUp(email: string, password: string, username: string, picture: any) {
-    debugger;
-    this.empRef.push({epmEmail: email});
+    this.empRef.push(email);
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result:any) => {

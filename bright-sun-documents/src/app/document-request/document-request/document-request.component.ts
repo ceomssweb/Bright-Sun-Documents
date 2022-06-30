@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireList } from '@angular/fire/compat/database';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
 import { UsersDocuments } from '../documents-services/document.sevices';
@@ -19,7 +20,7 @@ export class DocumentRequestComponent implements OnInit {
   showDetails: boolean = true;
   sendReport: boolean = false;
   items!: MenuItem[];
-
+  getEmp!: any[];
   constructor(public authService: AuthService, public userService: UsersDocuments) { }
 
   ngOnInit(): void {
@@ -29,6 +30,30 @@ export class DocumentRequestComponent implements OnInit {
       {label: 'View/Edit Client', icon: 'pi pi-fw pi-eye', command: () => this.showView(),},
       {label: 'Report', icon: 'pi pi-fw pi-bolt', command: () => this.showReport(),}
     ];
+    this.dataState();
+    let s = this.authService.GetEmpList();
+    s.snapshotChanges().subscribe(data => {
+      this.getEmp = [];
+      data.forEach(item => {
+        let getItem: any = item.payload.toJSON(); 
+        debugger;
+        this.getEmp.push(getItem);
+      });
+    });
+    
+
+  }
+  dataState() {     
+    this.authService.GetEmpList().valueChanges().subscribe(data => {
+      this.preLoader = false;
+      if(data.length <= 0){
+        this.hideWhenNouserList = false;
+        this.noData = true;
+      } else {
+        this.hideWhenNouserList = true;
+        this.noData = false;
+      }
+    })
   }
   showUserDetails(){
     this.sendDocShow = false;
