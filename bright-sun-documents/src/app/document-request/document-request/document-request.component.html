@@ -68,18 +68,17 @@
                                                                 </tr>
                                                                 </tbody>
                                                                 <tbody *ngIf="hideWhenNouserList">
-                                                                <tr 
+                                                                <!-- <tr 
                                                                     *ngFor=" 
                                                                     let user of getUsers
                                                                         | paginate: { itemsPerPage: 8, currentPage: page };
                                                                     let i = index
                                                                     "
                                                                 >
-                                                                    <!-- <th scope="row">{{ user.email }}</th> -->
                                                                     <td class="text-center">{{ i + 1 }}</td>
                                                                     <td>{{ user }}</td>
                                                                     
-                                                                </tr>
+                                                                </tr> -->
                                                                 </tbody>
                                                             </table>
                                                             </div>

@@ -38,6 +38,10 @@ export class UsersDocuments {
       paymentStatus: Users.paymentStatus
     });
   }
+  GetEmp(email: any){
+    // this.empRef = this.db.object('emp-list/');
+    // this.empRef.push(email);
+  }
   // Fetch Single Users Object
   GetUsers(id: string) {
     this.UsersRef = this.db.object('Users-list/'+ this.userPath +'/' + id);

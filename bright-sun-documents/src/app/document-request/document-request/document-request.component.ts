@@ -19,12 +19,10 @@ export class DocumentRequestComponent implements OnInit {
   showDetails: boolean = true;
   sendReport: boolean = false;
   items!: MenuItem[];
-  getUsers: any[] = [];
 
   constructor(public authService: AuthService, public userService: UsersDocuments) { }
 
   ngOnInit(): void {
-    console.log(this.getUsers);
     this.items = [
       {label: 'My Profile', icon: 'pi pi-fw pi-home', command: () => this.showUserDetails(),},
       {label: 'Add Client', icon: 'pi pi-fw pi-plus', command: () => this.showAddNew(),},

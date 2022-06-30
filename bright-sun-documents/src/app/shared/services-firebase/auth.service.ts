@@ -8,14 +8,20 @@ import {
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import {
+  AngularFireDatabase,
+  AngularFireList,
+  AngularFireObject,
+} from '@angular/fire/compat/database';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   userData: any; // Save logged in user data
   static user: any;
-  
+  empRef!: AngularFireList<any>;
   constructor(
+    private db: AngularFireDatabase,
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
@@ -33,6 +39,7 @@ export class AuthService {
         JSON.parse(localStorage.getItem('user')!);
       }
     });
+    
   }
   // Sign in with email/password
   SignIn(email: string, password: string) {
@@ -48,9 +55,15 @@ export class AuthService {
         window.alert(error.message);
       });
   }
+
+  GetEmpList() {
+    this.empRef = this.db.list('Emp-list/');
+    return this.empRef;
+  }
   // Sign up with email/password
   SignUp(email: string, password: string, username: string, picture: any) {
     debugger;
+    this.empRef.push({epmEmail: email});
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result:any) => {
@@ -58,6 +71,7 @@ export class AuthService {
           displayName: username
       }).then(function() {
         var userEmail = email;
+        var userID = result.uid;
         const storage = getStorage();
         var storageRef = ref(storage, 'profile-picture/'+ userEmail + '/' + picture[0].name);
         const uploadTask = uploadBytesResumable(storageRef, picture[0]);
@@ -81,6 +95,7 @@ export class AuthService {
             photoURL: _downloadURL
           })
           });
+
           
         }
       );
@@ -168,8 +183,4 @@ export class AuthService {
       this.router.navigate(['home-page']);
     });
   }
-
-  getUsers(){
-    return this.afAuth.user
-}
 }

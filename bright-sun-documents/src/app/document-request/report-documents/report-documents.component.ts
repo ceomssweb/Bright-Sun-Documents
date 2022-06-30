@@ -22,7 +22,7 @@ export class ReportDocumentsComponent implements OnInit {
   chartOptions: any;
   payStat: any[] = [];
   datetimes: any[] = [];
-count: string[] = [];
+  count: string[] = [];
 
   constructor(
     public authService: AuthService,

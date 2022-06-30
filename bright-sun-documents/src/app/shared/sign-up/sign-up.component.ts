@@ -13,10 +13,10 @@ export class SignUpComponent implements OnInit {
   constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
+    this.authService.GetEmpList();
   }
 
   chooseFile(event: any){
-    debugger;
       this.file = event.target.files;
   }
 
