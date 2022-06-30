@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
+import { UsersDocuments } from '../documents-services/document.sevices';
 
 @Component({
   selector: 'bsd-document-request',
@@ -9,14 +10,21 @@ import { AuthService } from 'src/app/shared/services-firebase/auth.service';
 })
 export class DocumentRequestComponent implements OnInit {
   title = "Welcome to Bright Sun Documents";
+  page = 1;
+  preLoader: boolean = false;
+  noData: boolean = false;
+  hideWhenNouserList: boolean = false;
   sendDocShow: boolean = false;
   viewDocShow: boolean = false;
   showDetails: boolean = true;
   sendReport: boolean = false;
   items!: MenuItem[];
-  constructor(public authService: AuthService) { }
+  getUsers: any[] = [];
+
+  constructor(public authService: AuthService, public userService: UsersDocuments) { }
 
   ngOnInit(): void {
+    console.log(this.getUsers);
     this.items = [
       {label: 'My Profile', icon: 'pi pi-fw pi-home', command: () => this.showUserDetails(),},
       {label: 'Add Client', icon: 'pi pi-fw pi-plus', command: () => this.showAddNew(),},

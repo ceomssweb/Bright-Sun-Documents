@@ -11,6 +11,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./view-documents.component.scss']
 })
 export class ViewDocumentsComponent implements OnInit {
+  @ViewChild('fileInput', { static: false })
+  // this InputVar is a reference to our input.
+  InputVar!: ElementRef;
+  docSpinner:boolean = false;
   page: number = 1;
   userList!: Users[];
   cols!: Columns[];
@@ -51,7 +55,6 @@ export class ViewDocumentsComponent implements OnInit {
         getItem['key'] = item.key;
         this.getID = item.key;
         this.userList.push(getItem as Users);
-        debugger;
         this.fileNames.push(getItem.originalNames);
       });
     });
@@ -115,6 +118,7 @@ export class ViewDocumentsComponent implements OnInit {
     }
   }
   showDocuments(key: any, user: any){
+    this.docSpinner = true;
     this.showDocDialog = true;
     this.dialogHeader = user.email;
     // Get the download URL
@@ -126,6 +130,7 @@ export class ViewDocumentsComponent implements OnInit {
       getDownloadURL(storageRef)
   .then((url) => {
     this.getActDoc.push(url);
+    this.docSpinner = false;
   })
   .catch((error) => {
     // A full list of error codes is available at
@@ -206,7 +211,6 @@ export class ViewDocumentsComponent implements OnInit {
     if(this.editUsersForm.valid){
     const storage = getStorage();
     for (var i = 0; i < this.file.length; i++) { 
-      debugger;
       this.fileNames.push(this.file[i].name);
       const storageRef = ref(storage, 'users-documents/' + this.userServices.userPath + '/' + this.userEmail + '/' + this.file[i].name);
       const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
@@ -228,17 +232,18 @@ export class ViewDocumentsComponent implements OnInit {
           }
         },
         () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
-            this.widthVal = 0;
-            this.widthContainer = false;
-        });
+          
+        //   getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
+            
+        // });
           // this.enableUpdate = true;
         }
       )
       if(i == (this.file.length - 1)){
-        debugger;
         this.userServices.UpdateUsers(this.editUsersForm.value, this.fileNames);
-          
+        this.InputVar.nativeElement.value = "";
+        this.widthVal = 0;
+        this.widthContainer = false;
           this.toastr.success(
             this.editUsersForm.controls['fullName'].value + ' updated successfully'
           );

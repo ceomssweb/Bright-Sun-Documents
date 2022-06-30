@@ -7,3 +7,19 @@
     width: calc(100% - 220px);
     float: right;
 }
+
+.profile-picture{
+    height: calc(100vh - 350px);
+    overflow-y: auto;
+    .img-container{
+        border-radius: 100%;
+        overflow: hidden;
+        width: 10rem;
+        height: 10rem;
+        margin: auto;
+        img{
+            width: 12rem;
+            margin-left: -1rem;
+        }
+    }
+}

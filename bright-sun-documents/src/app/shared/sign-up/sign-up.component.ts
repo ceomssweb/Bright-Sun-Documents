@@ -9,9 +9,15 @@ import { AuthService } from '../services-firebase/auth.service';
 })
 export class SignUpComponent implements OnInit {
 
+  file: any;
   constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
+  }
+
+  chooseFile(event: any){
+    debugger;
+      this.file = event.target.files;
   }
 
 }

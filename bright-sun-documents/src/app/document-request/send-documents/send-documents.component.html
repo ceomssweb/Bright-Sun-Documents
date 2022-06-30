@@ -159,7 +159,7 @@
                           (click)="uploadFiles()" Value="Upload"> -->
                           <div class="row my-2">
                             <div class="col-md-12">
-                              <input class="form-control mb-2" type="file" 
+                              <input #fileInput class="form-control mb-2" type="file" 
                                   (change)="chooseFile($event)" multiple formControlName="selectedDocuments">
                             
                               <!-- <button (click)="addData()" 

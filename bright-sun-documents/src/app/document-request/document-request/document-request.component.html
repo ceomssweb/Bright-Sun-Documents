@@ -8,37 +8,103 @@
                 </div>
             </div>
             <div class="row py-2 body-content-height">
-                <div class="left-side">
-                    <p-menu [model]="items"></p-menu>
-                </div>
-                <div class="right-side">
-                    <div class="row">
-                        <div class="col-md-12" *ngIf="showDetails">
-                            <div *ngIf="authService.userData as user" class="row">
-                                <div class="col-md-6 py-2">
-                                    <label class="bold-label">Profile Name :</label><label class="mx-1">{{(user.displayName)}}</label>
+                    <div class="left-side">
+                        <p-menu [model]="items"></p-menu>
+                    </div>
+                    <div class="right-side">
+                        <div class="row">
+                            <div class="col-md-12" *ngIf="showDetails">
+                                <div *ngIf="authService.userData as user" class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4 profile-picture mb-2 border">
+                                                <div class="img-container d-block border my-3">
+                                                    <span *ngIf="user.photoURL">
+                                                        <img src="{{user.photoURL}}" alt="Profile Picture"/>
+                                                    </span>
+                                                    <span *ngIf="!user.photoURL">
+                                                        <img src="/assets/images/no-image.png" alt="No Picture"/>
+                                                    </span>
+                                                </div>
+                                                <div class=""my-2>
+                                                    <label class="bold-label">Profile Name :</label><label class="mx-1">{{(user.displayName)}}</label>
+                                                </div>
+                                                <div>
+                                                    <label class="bold-label">Email :</label><label class="mx-1">{{(user.email)}}</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-8" *ngIf="user.email == userService.adminUser">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="mx-auto">
+                                                            <div class="table-responsive">
+                                                            <table
+                                                                class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg custom-table"
+                                                            >
+                                                                <thead>
+                                                                <tr>
+                                                                    <th class="text-center">Sl/no.</th>
+                                                                    <th scope="col">Folk Details</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody *ngIf="preLoader">
+                                                                <tr>
+                                                                    <td colspan="5">
+                                                                    <div class="no-data my-4 text-center">
+                                                                        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                                                                    </div>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                                <tbody *ngIf="noData && !preLoader">
+                                                                <tr>
+                                                                    <td colspan="5">
+                                                                    <div class="no-data my-4 text-center">
+                                                                        <p class="nodata-msg">No users added yet!</p>
+                                                                        <!-- <a routerLink="/register-userList" class="btn btn-success"> Add userList </a> -->
+                                                                    </div>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                                <tbody *ngIf="hideWhenNouserList">
+                                                                <tr 
+                                                                    *ngFor=" 
+                                                                    let user of getUsers
+                                                                        | paginate: { itemsPerPage: 8, currentPage: page };
+                                                                    let i = index
+                                                                    "
+                                                                >
+                                                                    <!-- <th scope="row">{{ user.email }}</th> -->
+                                                                    <td class="text-center">{{ i + 1 }}</td>
+                                                                    <td>{{ user }}</td>
+                                                                    
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            </div>
+                                                            <div class="my-2">
+                                                            <pagination-controls (pageChange)="page = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 py-2">
-                                    <label class="bold-label">Email :</label><label class="mx-1">{{(user.email)}}</label>
+                                <div class="col-md-12" *ngIf="sendDocShow">
+                                    <bsd-send-documents></bsd-send-documents>
                                 </div>
-                                <!-- <div class="col-md-6 py-2">
-                                    <label class="bold-label">Email Verified :</label>
-                                    <label class="mx-1" *ngIf="user.emailVerified">Verified</label>
-                                    <label class="mx-1" *ngIf="!user.emailVerified">Please Verify your Email id!</label>
-                                </div> -->
+                                <div class="col-md-12" *ngIf="viewDocShow">
+                                    <bsd-view-documents></bsd-view-documents>
+                                </div>
+                                <div class="col-md-12" *ngIf="sendReport">
+                                    <bsd-report-documents></bsd-report-documents>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-12" *ngIf="sendDocShow">
-                            <bsd-send-documents></bsd-send-documents>
-                        </div>
-                        <div class="col-md-12" *ngIf="viewDocShow">
-                            <bsd-view-documents></bsd-view-documents>
-                        </div>
-                        <div class="col-md-12" *ngIf="sendReport">
-                            <bsd-report-documents></bsd-report-documents>
-                        </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>

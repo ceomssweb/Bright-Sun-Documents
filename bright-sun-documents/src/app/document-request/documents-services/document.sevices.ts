@@ -17,6 +17,7 @@ export class UsersDocuments {
   constructor(private db: AngularFireDatabase, public ath: AuthService) {}
   // Create Users
   userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
+  adminUser: String = 'saravanan039@hotmail.com';
   AddUsers(Users: Users, filename: any) {
     this.MultiUsersRef.push({
       fullName: Users.fullName,
@@ -49,7 +50,6 @@ export class UsersDocuments {
   }
   // Update Users Object
   UpdateUsers(Users: Users, filename: any) {
-    debugger;
     this.UsersRef.update({
       fullName: Users.fullName,
       fatherName: Users.fatherName,

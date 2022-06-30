@@ -118,15 +118,14 @@ export class SendDocumentsComponent implements OnInit {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
            this.getFilNames.push(_downloadURL);
-           this.widthVal = 0;
-           this.widthContainer = false;
           });
           
         }
       );
-      debugger;
       if(i == (this.file.length - 1)){
         this.userApi.AddUsers(this.usersForm.value, this.fileNames);
+        this.widthVal = 0;
+        this.widthContainer = false;
         this.ResetForm();
         this.toastr.success(
           this.usersForm.controls['fullName'].value + ' successfully added!'

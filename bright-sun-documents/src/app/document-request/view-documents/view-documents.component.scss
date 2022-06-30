@@ -37,6 +37,12 @@ th{
     height: 10rem;
     overflow-y: auto;
 }
+.doc-spin{
+    position: absolute;
+    z-index: 1000;
+    top: 30%;
+    left: 45%;
+}
 .doc-images{
     border-radius: 1rem;
     position: relative;
@@ -45,7 +51,8 @@ th{
     height: 10rem;
     cursor: pointer;
     img{
-        height: 7rem;
+        height: 100%;
+        width: 70%;
     }
     .download-doc{
         position: absolute;

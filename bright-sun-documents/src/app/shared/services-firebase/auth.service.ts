@@ -7,6 +7,7 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 @Injectable({
   providedIn: 'root',
 })
@@ -48,18 +49,45 @@ export class AuthService {
       });
   }
   // Sign up with email/password
-  SignUp(email: string, password: string, username: string) {
+  SignUp(email: string, password: string, username: string, picture: any) {
+    debugger;
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result:any) => {
         result.user.updateProfile({
           displayName: username
       }).then(function() {
-          // Update successful.
+        var userEmail = email;
+        const storage = getStorage();
+        var storageRef = ref(storage, 'profile-picture/'+ userEmail + '/' + picture[0].name);
+        const uploadTask = uploadBytesResumable(storageRef, picture[0]);
+        uploadTask.on('state_changed',
+        (snapshot) => {
+        },
+        (error) => {
+          console.log(error.message);
+          switch (error.code) {
+            case 'storage/unauthorized':
+              break;
+            case 'storage/canceled':
+              break;
+            case 'storage/unknown':
+              break;
+          }
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
+            result.user.updateProfile({
+            photoURL: _downloadURL
+          })
+          });
+          
+        }
+      );
       })
       .catch((error: any) => {
         window.alert(error.message);
-      });;        
+      });       
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
         this.SendVerificationMail();
@@ -140,4 +168,8 @@ export class AuthService {
       this.router.navigate(['home-page']);
     });
   }
+
+  getUsers(){
+    return this.afAuth.user
+}
 }
