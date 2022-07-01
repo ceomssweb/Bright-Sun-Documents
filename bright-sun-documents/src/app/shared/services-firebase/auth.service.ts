@@ -26,6 +26,7 @@ export class AuthService {
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
     public ngZone: NgZone // NgZone service to remove outside scope warning
+    
   ) {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
@@ -180,7 +181,8 @@ export class AuthService {
   SignOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
-      this.router.navigate(['home-page']);
+      window.location.reload();
+      // this.router.navigate(['home-page']);
     });
   }
 }

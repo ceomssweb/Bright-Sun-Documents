@@ -16,7 +16,6 @@ export class ViewDocumentsComponent implements OnInit {
   InputVar!: ElementRef;
   docSpinner:boolean = false;
   page: number = 1;
-  userList!: Users[];
   cols!: Columns[];
   dialogHeader!: String;
   dialogEditHeader!: String;
@@ -47,7 +46,7 @@ export class ViewDocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataState();
-    this.userList = [];
+    this.userServices.userList = [];
     let s = this.userServices.GetUsersList();
     s.snapshotChanges().subscribe(data => {
       data.forEach(item => {
@@ -55,7 +54,7 @@ export class ViewDocumentsComponent implements OnInit {
         getItem['key'] = item.key;
         this.getID = item.key;
         debugger;
-        this.userList.push(getItem as Users);
+        this.userServices.userList.push(getItem as Users);
         this.fileNames.push(getItem.originalNames);
       });
     });
@@ -292,5 +291,9 @@ export class ViewDocumentsComponent implements OnInit {
     this.showEditDialog = false;
     this.dialogEditHeader = "";
     this.ResetForm();
+  }
+  ngOnDestroy(){
+    debugger;
+    this.userServices.userList = [];
   }
 }

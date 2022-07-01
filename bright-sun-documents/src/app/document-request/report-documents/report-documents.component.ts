@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
 import { UsersDocuments } from '../documents-services/document.sevices';
 import { Columns, Users } from '../documents-services/users';
@@ -13,7 +13,6 @@ import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "@angular/
 })
 export class ReportDocumentsComponent implements OnInit {
   page: number = 1;
-  userList: any[] = [];
   getID!: any;
   hideWhenNouserList: boolean = false;
   noData: boolean = false;
@@ -36,7 +35,7 @@ export class ReportDocumentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userList = [];
+    this.userServices.userList = [];
     this.dataState();
     this.userApi.GetUsersList();
     let s = this.userServices.GetUsersList();
@@ -45,8 +44,7 @@ export class ReportDocumentsComponent implements OnInit {
         let getItem: any = item.payload.toJSON(); 
         getItem['key'] = item.key;
         this.getID = item.key;
-        debugger;
-        this.userList.push(getItem as Users);
+        this.userServices.userList.push(getItem as Users);
         this.payStat.push(getItem.paymentStatus);
       });
       this.count = this.payStat.reduce((acc, value) => ({
@@ -97,5 +95,9 @@ export class ReportDocumentsComponent implements OnInit {
         this.noData = false;
       }
     })
+  }
+
+  ngOnDestroy(){
+    this.userServices.userList = [];
   }
 }

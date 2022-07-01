@@ -33,7 +33,7 @@
       <tbody *ngIf="hideWhenNouserList">
         <tr 
           *ngFor="
-            let user of userList
+            let user of userServices.userList
               | paginate: { itemsPerPage: 8, currentPage: page };
             let i = index
           "

@@ -45,7 +45,7 @@
                                                                 <thead>
                                                                 <tr>
                                                                     <th class="text-center">Sl/no.</th>
-                                                                    <th scope="col">Folk Details</th>
+                                                                    <th scope="col">Agent Details</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody *ngIf="preLoader">
@@ -74,10 +74,11 @@
                                                                         | paginate: { itemsPerPage: 8, currentPage: page };
                                                                     let i = index
                                                                     "
+                                                                    [ngClass]="item == userService.adminUser ? 'admin-row' : ''"
                                                                 >
                                                                     <td class="text-center">{{ i + 1 }}</td>
                                                                     <td>
-                                                                        {{ item }}
+                                                                        <span *ngIf="item == userService.adminUser" class="mx-2 text-danger fw-bild">Admin</span>{{ item }}
                                                                         
                                                                     </td>
                                                                     

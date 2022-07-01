@@ -13,6 +13,7 @@ import { AuthService } from 'src/app/shared/services-firebase/auth.service';
 export class UsersDocuments {
   MultiUsersRef!: AngularFireList<any>;
   UsersRef!: AngularFireObject<any>;
+  userList!: Users[];
   
   constructor(private db: AngularFireDatabase, public ath: AuthService) {}
   // Create Users
