@@ -124,12 +124,12 @@ export class SendDocumentsComponent implements OnInit {
       );
       if(i == (this.file.length - 1)){
         this.userApi.AddUsers(this.usersForm.value, this.fileNames);
-        this.widthVal = 0;
-        this.widthContainer = false;
-        this.ResetForm();
+        
         this.toastr.success(
           this.usersForm.controls['fullName'].value + ' successfully added!'
         );
+
+        this.ResetForm();
       }
     }
       

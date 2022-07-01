@@ -20,6 +20,7 @@ export class DocumentRequestComponent implements OnInit {
   showDetails: boolean = true;
   sendReport: boolean = false;
   items!: MenuItem[];
+  userEmail: string = JSON.parse(localStorage.getItem('user')!).email;
   getEmp!: any[];
   constructor(public authService: AuthService, public userService: UsersDocuments) { }
 
@@ -31,16 +32,16 @@ export class DocumentRequestComponent implements OnInit {
       {label: 'Report', icon: 'pi pi-fw pi-bolt', command: () => this.showReport(),}
     ];
     this.dataState();
+    if(this.userEmail == this.userService.adminUser){
     let s = this.authService.GetEmpList();
     s.snapshotChanges().subscribe(data => {
       this.getEmp = [];
       data.forEach(item => {
         let getItem: any = item.payload.toJSON(); 
-        debugger;
         this.getEmp.push(getItem);
       });
     });
-    
+  }
 
   }
   dataState() {     

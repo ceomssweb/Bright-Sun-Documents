@@ -47,13 +47,14 @@ export class ViewDocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataState();
+    this.userList = [];
     let s = this.userServices.GetUsersList();
     s.snapshotChanges().subscribe(data => {
-      this.userList = [];
       data.forEach(item => {
         let getItem: any = item.payload.toJSON(); 
         getItem['key'] = item.key;
         this.getID = item.key;
+        debugger;
         this.userList.push(getItem as Users);
         this.fileNames.push(getItem.originalNames);
       });

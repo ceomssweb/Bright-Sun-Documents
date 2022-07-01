@@ -36,15 +36,16 @@ export class ReportDocumentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userList = [];
     this.dataState();
     this.userApi.GetUsersList();
     let s = this.userServices.GetUsersList();
     s.snapshotChanges().subscribe(data => {
-      this.userList = [];
       data.forEach(item => {
         let getItem: any = item.payload.toJSON(); 
         getItem['key'] = item.key;
         this.getID = item.key;
+        debugger;
         this.userList.push(getItem as Users);
         this.payStat.push(getItem.paymentStatus);
       });

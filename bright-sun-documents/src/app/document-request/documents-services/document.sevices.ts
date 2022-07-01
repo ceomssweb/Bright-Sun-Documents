@@ -49,6 +49,7 @@ export class UsersDocuments {
   }
   // Fetch Users List
   GetUsersList() {
+    debugger;
     this.MultiUsersRef = this.db.list('Users-list/' + this.userPath);
     return this.MultiUsersRef;
   }
