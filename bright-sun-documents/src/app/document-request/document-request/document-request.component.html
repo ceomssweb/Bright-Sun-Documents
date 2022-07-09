@@ -44,13 +44,15 @@
                                                             >
                                                                 <thead>
                                                                 <tr>
-                                                                    <th class="text-center">Sl/no.</th>
-                                                                    <th scope="col">Agent Details</th>
+                                                                    <th class="text-center" scope="col">Sl/no.</th>
+                                                                    <th scope="col">Name</th>
+                                                                    <th scope="col">Email</th>
+                                                                    <th scope="col">Actions</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody *ngIf="preLoader">
                                                                 <tr>
-                                                                    <td colspan="5">
+                                                                    <td colspan="4">
                                                                     <div class="no-data my-4 text-center">
                                                                         <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
                                                                     </div>
@@ -59,7 +61,7 @@
                                                                 </tbody>
                                                                 <tbody *ngIf="noData && !preLoader">
                                                                 <tr>
-                                                                    <td colspan="5">
+                                                                    <td colspan="4">
                                                                     <div class="no-data my-4 text-center">
                                                                         <p class="nodata-msg">No users added yet!</p>
                                                                         <!-- <a routerLink="/register-userList" class="btn btn-success"> Add userList </a> -->
@@ -78,10 +80,19 @@
                                                                 >
                                                                     <td class="text-center">{{ i + 1 }}</td>
                                                                     <td>
-                                                                        <span *ngIf="item == userService.adminUser" class="mx-2 text-danger fw-bild">Admin</span>{{ item }}
+                                                                        <span *ngIf="item == userService.adminUser" class="mx-2 text-danger fw-bild">Admin</span>{{ item.name }}
                                                                         
                                                                     </td>
-                                                                    
+                                                                    <td>
+                                                                        <span>{{ item.mail }}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <button
+                                                                        class="mx-2 btn btn-outline-primary btn-sm"
+                                                                        (click)="showEmpDetails(item)"
+                                                                        >View Details</button
+                                                                        >
+                                                                    </td>
                                                                 </tr>
                                                                 </tbody>
                                                             </table>
@@ -112,4 +123,14 @@
         </div>
     </div>
 </div>
+<p-dialog [(visible)]="showEmpDialog" (onHide)="hideEmpDialog()">
+    <ng-template pTemplate="header">
+      <label>View Details of {{showEmpHeader}}</label>
+    </ng-template>
+    <div class="container-fluid edit-emp-dialog">
+        <div class="row">
+                {{ empData }}
+        </div>
+    </div>
+</p-dialog>
 <bsd-footer></bsd-footer>

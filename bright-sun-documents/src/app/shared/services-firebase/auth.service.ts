@@ -64,7 +64,7 @@ export class AuthService {
 
   // Sign up with email/password
   SignUp(email: string, password: string, username: string, picture: any) {
-    this.empRef.push(email);
+    this.empRef.push({mail: email, name: username});
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result:any) => {

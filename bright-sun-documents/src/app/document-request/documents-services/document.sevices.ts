@@ -39,10 +39,6 @@ export class UsersDocuments {
       paymentStatus: Users.paymentStatus
     });
   }
-  GetEmp(email: any){
-    // this.empRef = this.db.object('emp-list/');
-    // this.empRef.push(email);
-  }
   // Fetch Single Users Object
   GetUsers(id: string) {
     this.UsersRef = this.db.object('Users-list/'+ this.userPath +'/' + id);
@@ -50,7 +46,6 @@ export class UsersDocuments {
   }
   // Fetch Users List
   GetUsersList() {
-    debugger;
     this.MultiUsersRef = this.db.list('Users-list/' + this.userPath);
     return this.MultiUsersRef;
   }

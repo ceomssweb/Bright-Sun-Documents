@@ -22,6 +22,9 @@ export class DocumentRequestComponent implements OnInit {
   items!: MenuItem[];
   userEmail: string = JSON.parse(localStorage.getItem('user')!).email;
   getEmp!: any[];
+  showEmpDialog: boolean = false;
+  showEmpHeader!: string;
+  empData!: any[];
   constructor(public authService: AuthService, public userService: UsersDocuments) { }
 
   ngOnInit(): void {
@@ -83,5 +86,13 @@ export class DocumentRequestComponent implements OnInit {
     this.showDetails = false;
     this.sendReport = true;
     this.title="Overall Report of available Clients"
+  }
+  showEmpDetails(getUser:any){
+    this.showEmpDialog = true;
+    this.showEmpHeader = getUser.name;
+    this.empData = getUser.mail;
+  }
+  hideEmpDialog(){
+    this.showEmpDialog = false;
   }
 }

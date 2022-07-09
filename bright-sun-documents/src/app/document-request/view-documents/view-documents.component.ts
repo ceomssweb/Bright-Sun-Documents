@@ -53,7 +53,6 @@ export class ViewDocumentsComponent implements OnInit {
         let getItem: any = item.payload.toJSON(); 
         getItem['key'] = item.key;
         this.getID = item.key;
-        debugger;
         this.userServices.userList.push(getItem as Users);
         this.fileNames.push(getItem.originalNames);
       });
@@ -293,7 +292,6 @@ export class ViewDocumentsComponent implements OnInit {
     this.ResetForm();
   }
   ngOnDestroy(){
-    debugger;
     this.userServices.userList = [];
   }
 }

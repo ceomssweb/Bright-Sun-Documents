@@ -7,6 +7,16 @@
     width: calc(100% - 220px);
     float: right;
 }
+.edit-emp-dialog{
+    width: 80vw;
+    height: 60vh;
+    overflow-y: auto;
+}
+::ng-deep{
+    .p-dialog-mask{
+        background: #00000050 !important;
+    }
+}
 .admin-row{
     background-color: darkcyan;
     color: #fff;
