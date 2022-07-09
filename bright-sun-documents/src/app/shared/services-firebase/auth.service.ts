@@ -42,14 +42,15 @@ export class AuthService {
     });
     
   }
+  
   // Sign in with email/password
   SignIn(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.ngZone.run(() => {
+        setTimeout(() => {
           this.router.navigate(['document-request']);
-        });
+        }, 10);
         this.SetUserData(result.user);
       })
       .catch((error) => {
