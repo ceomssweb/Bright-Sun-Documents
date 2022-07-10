@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AngularFireList } from '@angular/fire/compat/database';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
@@ -24,7 +24,9 @@ export class DocumentRequestComponent implements OnInit {
   getEmp!: any[];
   showEmpDialog: boolean = false;
   showEmpHeader!: string;
-  empData!: any[];
+  empData: string = '';
+  @Output() viewEmpData = new EventEmitter<string>();
+
   constructor(public authService: AuthService, public userService: UsersDocuments) { }
 
   ngOnInit(): void {
@@ -91,6 +93,7 @@ export class DocumentRequestComponent implements OnInit {
     this.showEmpDialog = true;
     this.showEmpHeader = getUser.name;
     this.empData = getUser.mail;
+    this.viewEmpData.emit(this.empData);
   }
   hideEmpDialog(){
     this.showEmpDialog = false;

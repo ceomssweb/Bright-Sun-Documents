@@ -127,9 +127,13 @@
     <ng-template pTemplate="header">
       <label>View Details of {{showEmpHeader}}</label>
     </ng-template>
-    <div class="container-fluid edit-emp-dialog">
-        <div class="row">
-                {{ empData }}
+    <div class="edit-emp-dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 px-0">
+                    <bsd-view-emp [mailKey]="empData"></bsd-view-emp>
+                </div>
+            </div>
         </div>
     </div>
 </p-dialog>
