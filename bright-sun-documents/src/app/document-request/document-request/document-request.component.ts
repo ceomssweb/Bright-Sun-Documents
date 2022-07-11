@@ -25,7 +25,8 @@ export class DocumentRequestComponent implements OnInit {
   showEmpDialog: boolean = false;
   showEmpHeader!: string;
   empData: string = '';
-  @Output() viewEmpData = new EventEmitter<string>();
+  @Output() viewEmpMail = new EventEmitter<string>();
+  @Output() viewEmpName = new EventEmitter<string>();
 
   constructor(public authService: AuthService, public userService: UsersDocuments) { }
 
@@ -93,7 +94,8 @@ export class DocumentRequestComponent implements OnInit {
     this.showEmpDialog = true;
     this.showEmpHeader = getUser.name;
     this.empData = getUser.mail;
-    this.viewEmpData.emit(this.empData);
+    this.viewEmpMail.emit(this.empData);
+    this.viewEmpName.emit(this.showEmpHeader);
   }
   hideEmpDialog(){
     this.showEmpDialog = false;

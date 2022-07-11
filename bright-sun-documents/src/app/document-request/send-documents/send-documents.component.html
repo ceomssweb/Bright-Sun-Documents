@@ -175,10 +175,18 @@
                               >
                                 Reset
                               </button>
-                              <button
+                              <!-- <button
                                 type="submit"
                                 class="btn btn-primary"
                                 [disabled]="!usersForm.valid || !enableAdd"
+                                (click)="submitUserData()"
+                              >
+                                Add Client
+                              </button> -->
+                              <button
+                                type="submit"
+                                class="btn btn-primary"
+                                [disabled]="!enableAdd"
                                 (click)="submitUserData()"
                               >
                                 Add Client

@@ -65,15 +65,15 @@ export class AuthService {
 
   // Sign up with email/password
   SignUp(email: string, password: string, username: string, picture: any) {
-    this.empRef.push({mail: email, name: username});
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result:any) => {
+        var getId = result.user.uid;
+        this.empRef.push({mail: email, name: username, key: getId});
         result.user.updateProfile({
           displayName: username
-      }).then(function() {
-        var userEmail = email;
-        var userID = result.uid;
+      }).then((out: any) => {
+        var userEmail = out.email;
         const storage = getStorage();
         var storageRef = ref(storage, 'profile-picture/'+ userEmail + '/' + picture[0].name);
         const uploadTask = uploadBytesResumable(storageRef, picture[0]);
@@ -137,6 +137,7 @@ export class AuthService {
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user')!);
     return user !== null && user.emailVerified !== false ? true : false;
+    //return user !== null
   }
   // Sign in with Google
   GoogleAuth() {

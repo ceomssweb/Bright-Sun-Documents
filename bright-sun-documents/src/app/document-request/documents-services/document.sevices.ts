@@ -49,6 +49,10 @@ export class UsersDocuments {
     this.MultiUsersRef = this.db.list('Users-list/' + this.userPath);
     return this.MultiUsersRef;
   }
+  GetEmpList(){
+    this.MultiUsersRef = this.db.list('Users-list/' + this.userPath);
+    return this.MultiUsersRef;
+  }
   // Update Users Object
   UpdateUsers(Users: Users, filename: any) {
     this.UsersRef.update({

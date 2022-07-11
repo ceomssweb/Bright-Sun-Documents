@@ -1,7 +1,312 @@
 <div class="w-100">
-    <div class="row mx-0">
+    <div class="row mx-0 mb-2">
+        <div class="col-md-6 px-0">
+            <label class="fw-bold">Name :</label> <span class="mx-2">{{nameKey}}</span>
+        </div>
+        <div class="col-md-6 px-0 text-right">
+            <label class="fw-bold">e-mail :</label> <span class="mx-2">{{mailKey}}</span>
+        </div>
+    </div>
+    <div class="row mx-0 mb-2">
         <div class="col-md-12 px-0">
-            <label class="fw-bold">User e-mail :</label> <span class="mx-2">{{mailKey}}</span>
+            <!-- <div class="mx-auto">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg custom-table"
+                  >
+                    <thead>
+                      <tr>
+                        <th class="text-center">Sl/no.</th>
+                        <th *ngFor="let items of cols" scope="col">{{items.header}}</th>
+                        <th class="text-center" scope="col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="preLoader">
+                      <tr>
+                        <td colspan="17">
+                          <div class="no-data my-4 text-center">
+                            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody *ngIf="noData && !preLoader">
+                      <tr>
+                        <td colspan="17">
+                          <div class="no-data my-4 text-center">
+                            <p class="nodata-msg">No users added yet!</p>
+                            </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody *ngIf="hideWhenNouserList">
+                      <tr 
+                        *ngFor="
+                          let user of userServices.userList
+                            | paginate: { itemsPerPage: 8, currentPage: page };
+                          let i = index
+                        "
+                      >
+                        
+                        <td class="text-center">{{ i + 1 }}</td>
+                        <td>{{ user.fullName }}</td>
+                        <td>{{ user.fatherName }}</td>
+                        <td>{{ user.email }}</td>
+                        <td class="text-center">{{ user.mobileNumber }}</td>
+              
+                        <td>{{ user.selectedDoc }}</td>
+                        <td>{{ user.currentOwnerName }}</td>
+                        <td>{{ user.currentOwnerAddress }}</td>
+                        <td class="text-center">{{ user.currentOwnerAge }}</td>
+              
+                        <td class="text-center">{{ user.currentOwnergender }}</td>
+                        <td>{{ user.selectBuyerRelation }}</td>
+                        <td>{{ user.buyerName }}</td>
+                        <td>{{ user.buyerAddress }}</td>
+                        <td class="text-center">{{ user.buyerAge }}</td>
+                        <td class="text-center">{{ user.selectedBuyGender }}</td>
+                        <td class="text-center">{{ user.paymentStatus }}</td>
+                        <td >
+                          <button
+                            class="mx-2 btn btn-outline-primary btn-sm"
+                            (click)="showDocuments(user.key, user)"
+                            >View Documents</button
+                          >
+                        </td>
+              
+                        <td class="text-center action-block">
+                          <span
+                            class="mx-2 btn btn-outline-primary btn-sm" (click)="editMyUsers(user.key, user, i)"
+                            >Edit</span
+                          >
+                          <span
+                            class="btn btn-outline-danger btn-sm"
+                            (click)="deleteUsers(user)"
+                            >Delete</span
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="my-2">
+                  <pagination-controls (pageChange)="page = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
+                </div>
+              </div>
+              <p-dialog [(visible)]="showDocDialog" (onHide)="hideDocDialog()">
+                <ng-template pTemplate="header">
+                  <label>View Documents of {{dialogHeader}}</label>
+                </ng-template>
+                <div class="container-fluid doc-show-dialog">
+                  <div class="row">
+                    <div class="col-md-3" *ngFor="let item of getActDoc">
+                      <div class="p-2 border doc-images mb-2 mr-2 text-center" >
+                        <img src="{{item}}" alt="{{item}}" title="{{item}}"/>
+                        <div id="{{item}}" class="download-doc  w-100 py-2">
+                          <a href="{{item}}" target="_blank"
+                            class="my-2 btn btn-primary btn-sm button-link"
+                            >Download</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="doc-spin" *ngIf="docSpinner">
+                      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                    </div>
+                  </div>
+                </div>
+                <ng-template pTemplate="footer">
+                 
+                <span
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="hideDocDialog()"
+                  >Close</span
+                >
+                </ng-template>
+              </p-dialog>
+              
+              <p-dialog [(visible)]="showEditDialog" (onHide)="hideEditDialog()">
+                <ng-template pTemplate="header">
+                  <label>Edit {{dialogEditHeader}}</label>
+                </ng-template>
+                <div class="container-fluid edit-show-dialog">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <form [formGroup]="editUsersForm" novalidate>
+                        <div class="row">
+                          <div class="col-md-8">
+                              <div class="row">
+                                <div class="col-sm-12">
+                                  <div class="row">
+                                    <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                                      <label>Full name</label>
+                                      <input
+                                        type="text"
+                                        formControlName="fullName"
+                                        class="form-control"
+                                        pInputText
+                                        required
+                                      />
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                                      <label>Father name</label>
+                                      <input type="text" formControlName="fatherName" class="form-control" pInputText required/>
+                                    </div>
+                                  
+                                    <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                                      <label>Email</label>
+                                      <input
+                                        type="email"
+                                        pInputText
+                                        formControlName="email"
+                                        class="form-control"
+                                        required
+                                      />
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                                      <label>Mobile number</label>
+                                      <input
+                                        type="text"
+                                        pInputText
+                                        formControlName="mobileNumber"
+                                        class="form-control"
+                                        required
+                                      />
+                                      
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                                      <label>Document Type</label>
+                                      <select name="selectedDoc" required id="selectedDoc" formControlName="selectedDoc"
+                                      class="form-select"
+                                      >
+                                        <option value="Buiding sales deed">Buiding sales deed</option>
+                                        <option value="Land sales deed">Land sales deed</option>
+                                        <option value="Plot Sales deed">Plot Sales deed</option>
+                                        <option value="Commertial Buiding sales deed">Commertial Buiding sales deed</option>
+                                        <option value="Settlement deed">Settlement deed</option>
+                                        <option value="Rental Aggrements">Rental Aggrements</option>
+                                        <option value="Partition deed">Partition deed</option>
+                                      </select>
+                                     </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                                      <label>Seller Name</label>
+                                      <input type="text" formControlName="currentOwnerName" class="form-control" pInputText required/>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                                      <label>Seller Address</label>
+                                      <textarea type="text" formControlName="currentOwnerAddress" rows="3" class="form-control" pInputText required></textarea>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                                      <label>Seller Age</label>
+                                      <input type="text" formControlName="currentOwnerAge" class="form-control" pInputText required/>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                                      <label>Seller Gender</label>
+                                      <select name="currentOwnergender" required id="currentOwnergender" formControlName="currentOwnergender"
+                                      class="form-select"
+                                      >
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Others">Others</option>
+                                      </select>
+                                      </div>
+                                    
+                                        <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                                          <label>Buyer/Seller Relation</label>
+                                          <select name="selectBuyerRelation" required id="selectBuyerRelation" formControlName="selectBuyerRelation"
+                                          class="form-select"
+                                          >
+                                            <option value="Father">Father</option>
+                                            <option value="Mother">Mother</option>
+                                            <option value="Husband">Husband</option>
+                                            <option value="Wife">Wife</option>
+                                            <option value="Brother">Brother</option>
+                                            <option value="Sister">Sister</option>
+                                            <option value="GrandFather">Grand Father</option>
+                                            <option value="GrandMother">Grand Mother</option>
+                                            <option value="Father">No Relation</option>
+                                          </select>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                                          <label>Buyer Name</label>
+                                          <input type="text" formControlName="buyerName" class="form-control" pInputText required/>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                                          <label>Buyer Address</label>
+                                          <textarea type="text" formControlName="buyerAddress" rows="3" class="form-control" pInputText required></textarea>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                                          <label>Buyer Age</label>
+                                          <input type="text" formControlName="buyerAge" class="form-control" pInputText required/>
+                                          </div>
+                                        <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                                          <label>Buyer gender</label>
+                                          <select name="selectedBuyGender" required id="selectedBuyGender" formControlName="selectedBuyGender"
+                                          class="form-select"
+                                          >
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Others">Others</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                 </div> 
+              
+                                  <div class="col-md-4">
+                                    <div class="row">
+                                      <div class="col-md-12 my-2">
+                                        <label>Payment Status</label>
+                                        <select name="paymentStatus" required id="paymentStatus" formControlName="paymentStatus"
+                                        class="form-select"
+                                        >
+                                        <option value="Pending">Pending</option>
+                                        <option value="Done">Done</option>
+                                        <option value="Partial">Partial</option>
+                                        <option value="cheque Recieved">cheque Recieved</option>
+                                        <option value="cheque Returned/Bounced">cheque Returned/Bounced</option>
+                                        </select>
+                                      </div>
+                                      </div>
+                                    <div class="row">
+                                      <div class="col-md-12 border">
+                                        
+                                        <h3 class="my-2">Upload Requied Documents</h3>
+                                        <div class="row my-2">
+                                          <div class="col-md-12">
+                                            <input id="inputFile" #fileInput class="form-control mb-3"  type="file" 
+                                                (change)="chooseFile($event)" multiple/>
+                                          
+                                           
+                                          </div>
+                                        </div>
+                                        <div class="py-2" *ngIf="widthContainer">
+                                          <p-progressBar [value]="widthVal"></p-progressBar>
+                                        </div>
+                                       </div>
+                                    </div>
+                                  </div>
+                                  </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <ng-template pTemplate="footer">
+                  <span
+                  class="mx-2 btn btn-outline-primary btn-sm"
+                  (click)="updateForm()"
+                  >Update and Close</span
+                > 
+                <span
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="hideEditDialog()"
+                  >Close</span
+                >
+                </ng-template>
+              </p-dialog> -->
         </div>
     </div>
 </div>

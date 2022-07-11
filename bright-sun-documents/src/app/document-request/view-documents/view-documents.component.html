@@ -8,7 +8,7 @@
         <tr>
           <th class="text-center">Sl/no.</th>
           <th *ngFor="let items of cols" scope="col">{{items.header}}</th>
-          <th class="text-center" scope="col">Actions</th>
+          
         </tr>
       </thead>
       <tbody *ngIf="preLoader">
@@ -33,14 +33,35 @@
       <tbody *ngIf="hideWhenNouserList">
         <tr 
           *ngFor="
-            let user of userServices.userList
+            let user of userList
               | paginate: { itemsPerPage: 8, currentPage: page };
             let i = index
           "
         >
           <!-- <th scope="row">{{ user.email }}</th> -->
+          
           <td class="text-center">{{ i + 1 }}</td>
+          <td class="text-center action-block">
+            <span
+              class="mx-2 btn btn-outline-primary btn-sm" (click)="editMyUsers(user.key, user, i)"
+              >Edit</span
+            >
+            <span
+              class="btn btn-outline-danger btn-sm"
+              (click)="deleteUsers(user)"
+              >Delete</span
+            >
+          </td>
           <td>{{ user.fullName }}</td>
+          <td >
+            <button
+              class="mx-2 btn btn-outline-primary btn-sm"
+              (click)="showDocuments(user.key, user)"
+              >View Documents</button
+            >
+          </td>
+
+         
           <td>{{ user.fatherName }}</td>
           <td>{{ user.email }}</td>
           <td class="text-center">{{ user.mobileNumber }}</td>
@@ -57,25 +78,6 @@
           <td class="text-center">{{ user.buyerAge }}</td>
           <td class="text-center">{{ user.selectedBuyGender }}</td>
           <td class="text-center">{{ user.paymentStatus }}</td>
-          <td >
-            <button
-              class="mx-2 btn btn-outline-primary btn-sm"
-              (click)="showDocuments(user.key, user)"
-              >View Documents</button
-            >
-          </td>
-
-          <td class="text-center action-block">
-            <span
-              class="mx-2 btn btn-outline-primary btn-sm" (click)="editMyUsers(user.key, user, i)"
-              >Edit</span
-            >
-            <span
-              class="btn btn-outline-danger btn-sm"
-              (click)="deleteUsers(user)"
-              >Delete</span
-            >
-          </td>
         </tr>
       </tbody>
     </table>
@@ -303,7 +305,7 @@
     <span
     class="mx-2 btn btn-outline-primary btn-sm"
     (click)="updateForm()"
-    >Update and Close</span
+    >Update</span
   > 
   <span
     class="btn btn-outline-danger btn-sm"

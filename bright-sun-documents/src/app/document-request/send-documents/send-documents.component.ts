@@ -91,7 +91,8 @@ export class SendDocumentsComponent implements OnInit {
     this.fileNames = [];
   }
   submitUserData() {
-    if(!this.usersForm.invalid && this.enableAdd && this.fileNames !== []){
+    // if(!this.usersForm.invalid && this.enableAdd && this.fileNames !== []){
+      if(this.enableAdd){
       const storage = getStorage();
     this.userEmail = this.email?.value;
     for (var i = 0; i < this.file.length; i++) { 

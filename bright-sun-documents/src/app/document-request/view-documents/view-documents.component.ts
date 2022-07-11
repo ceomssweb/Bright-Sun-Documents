@@ -12,8 +12,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class ViewDocumentsComponent implements OnInit {
   @ViewChild('fileInput', { static: false })
-  // this InputVar is a reference to our input.
   InputVar!: ElementRef;
+  userList!: Users[];
   docSpinner:boolean = false;
   page: number = 1;
   cols!: Columns[];
@@ -46,36 +46,37 @@ export class ViewDocumentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataState();
-    this.userServices.userList = [];
     let s = this.userServices.GetUsersList();
     s.snapshotChanges().subscribe(data => {
+      this.userList = [];
       data.forEach(item => {
         let getItem: any = item.payload.toJSON(); 
         getItem['key'] = item.key;
         this.getID = item.key;
-        this.userServices.userList.push(getItem as Users);
+        this.userList.push(getItem as Users);
         this.fileNames.push(getItem.originalNames);
       });
     });
     this.cols = [
-      { id: 1, header: 'Full Name' },
-      { id: 2, header: 'Father Name' },
-      { id: 3, header: 'Email' },
-      { id: 4, header: 'Mobile Number' },
+      { id: 1, header: 'Actions' },
+      
+      { id: 2, header: 'Full Name' },
+      { id: 3, header: 'Added Documents' },
+      { id: 4, header: 'Father Name' },
+      { id: 5, header: 'Email' },
+      { id: 6, header: 'Mobile Number' },
 
-      { id: 5, header: 'Document Type' },
-      { id: 6, header: 'First Party Name' },
-      { id: 7, header: 'First Party Adress' },
-      { id: 8, header: 'First Party Age' },
-      { id: 9, header: 'First Party Gender' },
-
-      { id: 10, header: 'Relationship' },
-      { id: 11, header: 'Second Party Name' },
-      { id: 12, header: 'Second Party Adress' },
-      { id: 13, header: 'Second Party Age' },
-      { id: 14, header: 'Second Party Gender' },
-      { id: 15, header: 'Payment Status' },
-      { id: 16, header: 'Added Documents' },
+      { id: 7, header: 'Document Type' },
+      { id: 8, header: 'First Party Name' },
+      { id: 9, header: 'First Party Adress' },
+      { id: 10, header: 'First Party Age' },
+      { id: 11, header: 'First Party Gender' },
+      { id: 12, header: 'Relationship' },
+      { id: 13, header: 'Second Party Name' },
+      { id: 14, header: 'Second Party Adress' },
+      { id: 15, header: 'Second Party Age' },
+      { id: 16, header: 'Second Party Gender' },
+      { id: 17, header: 'Payment Status' }
   ];
     this.userEditFormData();
   }
@@ -207,8 +208,9 @@ export class ViewDocumentsComponent implements OnInit {
 
   
   updateForm() {
-    if(this.editUsersForm.valid){
+    // if(this.editUsersForm.valid){
     const storage = getStorage();
+    if(this.file.length > 0){
     for (var i = 0; i < this.file.length; i++) { 
       this.fileNames.push(this.file[i].name);
       const storageRef = ref(storage, 'users-documents/' + this.userServices.userPath + '/' + this.userEmail + '/' + this.file[i].name);
@@ -239,7 +241,6 @@ export class ViewDocumentsComponent implements OnInit {
         }
       )
       if(i == (this.file.length - 1)){
-        this.userServices.UpdateUsers(this.editUsersForm.value, this.fileNames);
         this.InputVar.nativeElement.value = "";
         this.widthVal = 0;
         this.widthContainer = false;
@@ -247,11 +248,18 @@ export class ViewDocumentsComponent implements OnInit {
             this.editUsersForm.controls['fullName'].value + ' updated successfully'
           );
       }
-    };
-    
-    }else{
-      alert("Pease fill all the fields in the form!")
     }
+  }else{
+    this.userServices.UpdateUsers(this.editUsersForm.value, this.fileNames);
+    this.toastr.success(
+      this.editUsersForm.controls['fullName'].value + ' updated successfully'
+    );
+  };
+
+    
+    // }else{
+    //   alert("Pease fill all the fields in the form!")
+    // }
   }
   ResetForm() {
     this.widthVal = 0;
@@ -290,8 +298,5 @@ export class ViewDocumentsComponent implements OnInit {
     this.showEditDialog = false;
     this.dialogEditHeader = "";
     this.ResetForm();
-  }
-  ngOnDestroy(){
-    this.userServices.userList = [];
   }
 }
