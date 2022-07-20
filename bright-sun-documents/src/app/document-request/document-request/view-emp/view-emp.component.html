@@ -18,12 +18,12 @@
                       <tr>
                         <th class="text-center">Sl/no.</th>
                         <th *ngFor="let items of cols" scope="col">{{items.header}}</th>
-                        <th class="text-center" scope="col">Actions</th>
+                        <!-- <th class="text-center" scope="col">Actions</th> -->
                       </tr>
                     </thead>
                     <tbody *ngIf="preLoader">
                       <tr>
-                        <td colspan="17">
+                        <td colspan="16">
                           <div class="no-data my-4 text-center">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
                           </div>
@@ -32,7 +32,7 @@
                     </tbody>
                     <tbody *ngIf="noData && !preLoader">
                       <tr>
-                        <td colspan="17">
+                        <td colspan="16">
                           <div class="no-data my-4 text-center">
                             <p class="nodata-msg">No users added yet!</p>
                             </div>
@@ -50,6 +50,14 @@
                         
                         <td class="text-center">{{ i + 1 }}</td>
                         <td>{{ user.fullName }}</td>
+                        <td >
+                          <button
+                            class="mx-2 btn btn-outline-primary btn-sm"
+                            (click)="showDocuments(user.key, user)"
+                            >View Documents</button
+                          >
+                        </td>
+                        <td class="text-center">{{ user.paymentStatus }}</td>
                         <td>{{ user.fatherName }}</td>
                         <td>{{ user.email }}</td>
                         <td class="text-center">{{ user.mobileNumber }}</td>
@@ -65,14 +73,8 @@
                         <td>{{ user.buyerAddress }}</td>
                         <td class="text-center">{{ user.buyerAge }}</td>
                         <td class="text-center">{{ user.selectedBuyGender }}</td>
-                        <td class="text-center">{{ user.paymentStatus }}</td>
-                        <td >
-                          <button
-                            class="mx-2 btn btn-outline-primary btn-sm"
-                            (click)="showDocuments(user.key, user)"
-                            >View Documents</button
-                          >
-                        </td>
+                        
+                        
               
                         <!-- <td class="text-center action-block">
                           <span
@@ -92,7 +94,7 @@
                 <div class="my-2">
                   <pagination-controls (pageChange)="page = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
                 </div>
-                
+
               </div>
              <p-dialog [(visible)]="showDocDialog" (onHide)="hideDocDialog()">
                 <ng-template pTemplate="header">

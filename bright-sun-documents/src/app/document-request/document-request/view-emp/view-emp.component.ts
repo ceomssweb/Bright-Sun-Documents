@@ -56,23 +56,24 @@ export class ViewEmpComponent implements OnInit {
     
     this.cols = [
       { id: 1, header: 'Full Name' },
-      { id: 2, header: 'Father Name' },
-      { id: 3, header: 'Email' },
-      { id: 4, header: 'Mobile Number' },
+      { id: 2, header: 'Added Documents' },
+      { id: 3, header: 'Payment Status' },
+      { id: 4, header: 'Father Name' },
+      { id: 5, header: 'Email' },
+      { id: 6, header: 'Mobile Number' },
 
-      { id: 5, header: 'Document Type' },
-      { id: 6, header: 'First Party Name' },
-      { id: 7, header: 'First Party Adress' },
-      { id: 8, header: 'First Party Age' },
-      { id: 9, header: 'First Party Gender' },
+      { id: 7, header: 'Document Type' },
+      { id: 8, header: 'First Party Name' },
+      { id: 9, header: 'First Party Adress' },
+      { id: 10, header: 'First Party Age' },
+      { id: 11, header: 'First Party Gender' },
 
-      { id: 10, header: 'Relationship' },
-      { id: 11, header: 'Second Party Name' },
-      { id: 12, header: 'Second Party Adress' },
-      { id: 13, header: 'Second Party Age' },
-      { id: 14, header: 'Second Party Gender' },
-      { id: 15, header: 'Payment Status' },
-      { id: 16, header: 'Added Documents' },
+      { id: 12, header: 'Relationship' },
+      { id: 13, header: 'Second Party Name' },
+      { id: 14, header: 'Second Party Adress' },
+      { id: 15, header: 'Second Party Age' },
+      { id: 16, header: 'Second Party Gender' },
+      
   ];
   }
   
