@@ -78,7 +78,7 @@ export class ViewEmpComponent implements OnInit {
   }
   
   dataState() {     
-    this.userServices.GetUsersList().valueChanges().subscribe(data => {
+    this.userServices.GetPerEmp(this.mailKey.key).valueChanges().subscribe(data => {
       this.preLoader = false;
       if(data.length <= 0){
         this.hideWhenNouserList = false;
@@ -93,7 +93,7 @@ export class ViewEmpComponent implements OnInit {
   showDocuments(key: any, user: any){
     this.docSpinner = true;
     this.showDocDialog = true;
-    this.dialogHeader = user.email;
+    this.dialogHeader = user.fullName;
     // Get the download URL
     this.getRowDoc = Object.values(user.originalNames);
     const storage = getStorage();

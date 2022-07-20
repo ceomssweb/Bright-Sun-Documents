@@ -120,7 +120,7 @@ export class ViewDocumentsComponent implements OnInit {
   showDocuments(key: any, user: any){
     this.docSpinner = true;
     this.showDocDialog = true;
-    this.dialogHeader = user.email;
+    this.dialogHeader = user.fullName;
     // Get the download URL
     this.getRowDoc = Object.values(user.originalNames);
     const storage = getStorage();
