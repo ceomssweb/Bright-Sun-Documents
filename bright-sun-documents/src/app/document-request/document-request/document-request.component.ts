@@ -93,7 +93,7 @@ export class DocumentRequestComponent implements OnInit {
   showEmpDetails(getUser:any){
     this.showEmpDialog = true;
     this.showEmpHeader = getUser.name;
-    this.empData = getUser.mail;
+    this.empData = getUser;
     this.viewEmpMail.emit(this.empData);
     this.viewEmpName.emit(this.showEmpHeader);
   }

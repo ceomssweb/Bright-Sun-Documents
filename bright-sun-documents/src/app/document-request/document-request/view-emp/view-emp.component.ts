@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireList } from '@angular/fire/compat/database';
 import { FormBuilder } from '@angular/forms';
+import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { ToastrService } from 'ngx-toastr';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
@@ -18,11 +19,16 @@ export class ViewEmpComponent implements OnInit {
   noData: boolean = false;
   hideWhenNouserList: boolean = false;
   docSpinner:boolean = false;
+  showDocDialog:boolean = false;
   cols!: Columns[];
   getID: any;
+  dialogHeader!: any;
+  getRowDoc: any[] = [];
   fileNames: any[] = [];
-  @Input() mailKey = '';
+  @Input() mailKey:any = '';
   @Input() nameKey = '';
+  getEmpItems!: Users[];
+  getActDoc: any[] = [];
 
   constructor(
     public authService: AuthService, 
@@ -31,19 +37,23 @@ export class ViewEmpComponent implements OnInit {
     public toastr: ToastrService
     ) { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void{
     this.dataState();
-    this.userServices.userList = [];
-    let s = this.userServices.GetEmpList();
+    this.getEmpItems = [];
+    let s = this.userServices.GetPerEmp(this.mailKey.key);
     s.snapshotChanges().subscribe(data => {
       data.forEach(item => {
         let getItem: any = item.payload.toJSON(); 
         getItem['key'] = item.key;
         this.getID = item.key;
-        this.userServices.userList.push(getItem as Users);
+        this.getEmpItems.push(getItem as Users);
         this.fileNames.push(getItem.originalNames);
       });
     });
+  }
+
+  ngOnInit(): void {
+    
     this.cols = [
       { id: 1, header: 'Full Name' },
       { id: 2, header: 'Father Name' },
@@ -77,6 +87,72 @@ export class ViewEmpComponent implements OnInit {
         this.noData = false;
       }
     })
+  }
+
+  showDocuments(key: any, user: any){
+    this.docSpinner = true;
+    this.showDocDialog = true;
+    this.dialogHeader = user.email;
+    // Get the download URL
+    this.getRowDoc = Object.values(user.originalNames);
+    const storage = getStorage();
+    for(let i = 0; i < this.getRowDoc.length; i++){
+      const storageRef = ref(storage, 'users-documents/' + this.mailKey.key + '/' + user.email + '/' + this.getRowDoc[i]);
+      getDownloadURL(storageRef)
+  .then((url) => {
+    this.getActDoc.push(url);
+    this.docSpinner = false;
+  })
+  .catch((error) => {
+    // A full list of error codes is available at
+    // https://firebase.google.com/docs/storage/web/handle-errors
+    switch (error.code) {
+      case 'storage/object-not-found':
+        // File doesn't exist
+        break;
+      case 'storage/unauthorized':
+        // User doesn't have permission to access the object
+        break;
+      case 'storage/canceled':
+        // User canceled the upload
+        break;
+
+      // ...
+
+      case 'storage/unknown':
+        // Unknown error occurred, inspect the server response
+        break;
+    }
+  });
+    }
+    
+// .catch((error) => {
+//   // A full list of error codes is available at
+//   // https://firebase.google.com/docs/storage/web/handle-errors
+//   switch (error.code) {
+//     case 'storage/object-not-found':
+//       // File doesn't exist
+//       break;
+//     case 'storage/unauthorized':
+//       // User doesn't have permission to access the object
+//       break;
+//     case 'storage/canceled':
+//       // User canceled the upload
+//       break;
+
+//     // ...
+
+//     case 'storage/unknown':
+//       // Unknown error occurred, inspect the server response
+//       break;
+//   }
+// });
+  }
+
+  hideDocDialog(){
+    this.showDocDialog = false;
+    this.dialogHeader = "";
+    this.getActDoc = [];
   }
 
 }

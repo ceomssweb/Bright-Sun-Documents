@@ -76,21 +76,27 @@
                                                                         | paginate: { itemsPerPage: 8, currentPage: page };
                                                                     let i = index
                                                                     "
-                                                                    [ngClass]="item == userService.adminUser ? 'admin-row' : ''"
+                                                                    [ngClass]="item.mail == userService.adminUser ? 'admin-row' : ''"
                                                                 >
                                                                     <td class="text-center">{{ i + 1 }}</td>
                                                                     <td>
-                                                                        <span *ngIf="item == userService.adminUser" class="mx-2 text-danger fw-bild">Admin</span>{{ item.name }}
+                                                                        <span *ngIf="item.mail == userService.adminUser" class="mx-2 text-danger fw-bild">Admin</span>{{ item.name }}
                                                                         
                                                                     </td>
                                                                     <td>
                                                                         <span>{{ item.mail }}</span>
                                                                     </td>
                                                                     <td>
-                                                                        <button
+
+                                                                        <button *ngIf="item.mail != userService.adminUser"
                                                                         class="mx-2 btn btn-outline-primary btn-sm"
                                                                         (click)="showEmpDetails(item)"
                                                                         >View Details</button
+                                                                        >
+                                                                        <button *ngIf="item.mail == userService.adminUser"
+                                                                        class="mx-2 btn btn-secondary btn-sm"
+                                                                        (click)="showView()"
+                                                                        >View/Edit Client</button
                                                                         >
                                                                     </td>
                                                                 </tr>
@@ -132,6 +138,11 @@
             <div class="row">
                 <div class="col-md-12 px-0">
                     <bsd-view-emp [mailKey]="empData" [nameKey]="showEmpHeader"></bsd-view-emp>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <button class="mx-2 btn btn-outline-secondary btn-sm" (click)="hideEmpDialog()">Close</button>                                                    >
                 </div>
             </div>
         </div>

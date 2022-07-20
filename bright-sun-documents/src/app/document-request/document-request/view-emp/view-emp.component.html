@@ -4,12 +4,12 @@
             <label class="fw-bold">Name :</label> <span class="mx-2">{{nameKey}}</span>
         </div>
         <div class="col-md-6 px-0 text-right">
-            <label class="fw-bold">e-mail :</label> <span class="mx-2">{{mailKey}}</span>
+            <label class="fw-bold">e-mail :</label> <span class="mx-2">{{mailKey.mail}}</span>
         </div>
     </div>
     <div class="row mx-0 mb-2">
         <div class="col-md-12 px-0">
-            <!-- <div class="mx-auto">
+            <div class="mx-auto">
                 <div class="table-responsive">
                   <table
                     class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg custom-table"
@@ -42,7 +42,7 @@
                     <tbody *ngIf="hideWhenNouserList">
                       <tr 
                         *ngFor="
-                          let user of userServices.userList
+                          let user of getEmpItems
                             | paginate: { itemsPerPage: 8, currentPage: page };
                           let i = index
                         "
@@ -74,7 +74,7 @@
                           >
                         </td>
               
-                        <td class="text-center action-block">
+                        <!-- <td class="text-center action-block">
                           <span
                             class="mx-2 btn btn-outline-primary btn-sm" (click)="editMyUsers(user.key, user, i)"
                             >Edit</span
@@ -83,8 +83,8 @@
                             class="btn btn-outline-danger btn-sm"
                             (click)="deleteUsers(user)"
                             >Delete</span
-                          >
-                        </td>
+                          > 
+                        </td>-->
                       </tr>
                     </tbody>
                   </table>
@@ -92,8 +92,9 @@
                 <div class="my-2">
                   <pagination-controls (pageChange)="page = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
                 </div>
+                
               </div>
-              <p-dialog [(visible)]="showDocDialog" (onHide)="hideDocDialog()">
+             <p-dialog [(visible)]="showDocDialog" (onHide)="hideDocDialog()">
                 <ng-template pTemplate="header">
                   <label>View Documents of {{dialogHeader}}</label>
                 </ng-template>
@@ -125,7 +126,7 @@
                 </ng-template>
               </p-dialog>
               
-              <p-dialog [(visible)]="showEditDialog" (onHide)="hideEditDialog()">
+              <!-- <p-dialog [(visible)]="showEditDialog" (onHide)="hideEditDialog()">
                 <ng-template pTemplate="header">
                   <label>Edit {{dialogEditHeader}}</label>
                 </ng-template>
