@@ -19,7 +19,7 @@ export class UsersDocuments {
   // Create Users
   userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
   adminUser: String = 'saravanan039@hotmail.com';
-  AddUsers(Users: Users, filename: any) {
+  AddUsers(Users: Users, filename: any, finalDocStatus: any) {
     this.MultiUsersRef.push({
       fullName: Users.fullName,
       fatherName: Users.fatherName,
@@ -36,7 +36,8 @@ export class UsersDocuments {
       buyerAge: Users.buyerAge,
       selectedBuyGender: Users.selectedBuyGender,
       originalNames: filename,
-      paymentStatus: Users.paymentStatus
+      paymentStatus: Users.paymentStatus,
+      finalDocStatus: finalDocStatus
     });
   }
   // Fetch Single Users Object
@@ -56,6 +57,12 @@ export class UsersDocuments {
   GetPerEmp(empRow:any){
     this.MultiUsersRef = this.db.list('Users-list/' + empRow + '/');
     return this.MultiUsersRef;
+  }
+  UploadDoc(empKey:any, user:any, filename: any){
+    this.UsersRef = this.db.object('Users-list/'+ empKey + '/' + user.key +'/');
+    this.UsersRef.update({
+      finalDocStatus: filename
+    });
   }
   // Update Users Object
   UpdateUsers(Users: Users, filename: any) {

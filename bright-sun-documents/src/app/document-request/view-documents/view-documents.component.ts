@@ -33,7 +33,7 @@ export class ViewDocumentsComponent implements OnInit {
   public editUsersForm!: FormGroup;
   getID: any;
   fileNames: any[] = [];
-  userEmail: string = '';
+  userPhone: string = '';
   widthContainer: boolean = false;
   widthVal: number = 0;
   getRowDoc: any[] = [];
@@ -62,21 +62,22 @@ export class ViewDocumentsComponent implements OnInit {
       
       { id: 2, header: 'Full Name' },
       { id: 3, header: 'Added Documents' },
-      { id: 4, header: 'Father Name' },
-      { id: 5, header: 'Email' },
-      { id: 6, header: 'Mobile Number' },
+      { id: 4, header: 'Final Document' },
+      { id: 5, header: 'Father Name' },
+      { id: 6, header: 'Email' },
+      { id: 7, header: 'Mobile Number' },
 
-      { id: 7, header: 'Document Type' },
-      { id: 8, header: 'First Party Name' },
-      { id: 9, header: 'First Party Adress' },
-      { id: 10, header: 'First Party Age' },
-      { id: 11, header: 'First Party Gender' },
-      { id: 12, header: 'Relationship' },
-      { id: 13, header: 'Second Party Name' },
-      { id: 14, header: 'Second Party Adress' },
-      { id: 15, header: 'Second Party Age' },
-      { id: 16, header: 'Second Party Gender' },
-      { id: 17, header: 'Payment Status' }
+      { id: 8, header: 'Document Type' },
+      { id: 9, header: 'First Party Name' },
+      { id: 10, header: 'First Party Adress' },
+      { id: 11, header: 'First Party Age' },
+      { id: 12, header: 'First Party Gender' },
+      { id: 13, header: 'Relationship' },
+      { id: 14, header: 'Second Party Name' },
+      { id: 15, header: 'Second Party Adress' },
+      { id: 16, header: 'Second Party Age' },
+      { id: 17, header: 'Second Party Gender' },
+      { id: 18, header: 'Payment Status' }
   ];
     this.userEditFormData();
   }
@@ -99,7 +100,7 @@ export class ViewDocumentsComponent implements OnInit {
       const storage = getStorage();
       this.getRealDocName = Object.values(user.originalNames);
       for (let i = 0; i < this.getRealDocName.length; i++) {
-        const storageRef = ref(storage, 'users-documents/' + this.userPath + '/' + user.email + '/' + this.getRealDocName[i]);
+        const storageRef = ref(storage, 'users-documents/' + this.userPath + '/' + user.userPhone + '/' + this.getRealDocName[i]);
         deleteObject(storageRef).then(() => {
         }).catch((error) => {
           this.toastr.error(user.fullName + ' Not deleted!');
@@ -125,7 +126,7 @@ export class ViewDocumentsComponent implements OnInit {
     this.getRowDoc = Object.values(user.originalNames);
     const storage = getStorage();
     for(let i = 0; i < this.getRowDoc.length; i++){
-      const storageRef = ref(storage, 'users-documents/' + this.userPath + '/' + user.email + '/' + this.getRowDoc[i]);
+      const storageRef = ref(storage, 'users-documents/' + this.userPath + '/' + user.mobileNumber + '/' + this.getRowDoc[i]);
       
       getDownloadURL(storageRef)
   .then((url) => {
@@ -154,28 +155,6 @@ export class ViewDocumentsComponent implements OnInit {
     }
   });
     }
-    
-// .catch((error) => {
-//   // A full list of error codes is available at
-//   // https://firebase.google.com/docs/storage/web/handle-errors
-//   switch (error.code) {
-//     case 'storage/object-not-found':
-//       // File doesn't exist
-//       break;
-//     case 'storage/unauthorized':
-//       // User doesn't have permission to access the object
-//       break;
-//     case 'storage/canceled':
-//       // User canceled the upload
-//       break;
-
-//     // ...
-
-//     case 'storage/unknown':
-//       // Unknown error occurred, inspect the server response
-//       break;
-//   }
-// });
   }
   hideDocDialog(){
     this.showDocDialog = false;
@@ -185,7 +164,7 @@ export class ViewDocumentsComponent implements OnInit {
   editMyUsers(id:any, user:any, index: number){
     //this.dialogEdit = Object.values(list);
     this.dialogEditHeader = user.email;
-    this.userEmail = user.email;
+    this.userPhone = user.mobileNumber;
     this.userServices
       .GetUsers(id)
       .valueChanges()
@@ -213,7 +192,7 @@ export class ViewDocumentsComponent implements OnInit {
     if(this.file.length > 0){
     for (var i = 0; i < this.file.length; i++) { 
       this.fileNames.push(this.file[i].name);
-      const storageRef = ref(storage, 'users-documents/' + this.userServices.userPath + '/' + this.userEmail + '/' + this.file[i].name);
+      const storageRef = ref(storage, 'users-documents/' + this.userServices.userPath + '/' + this.userPhone + '/' + this.file[i].name);
       const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
       uploadTask.on('state_changed',
         (snapshot) => {
@@ -291,7 +270,8 @@ export class ViewDocumentsComponent implements OnInit {
       buyerAge: ['', [Validators.required, Validators.minLength(1)]],
       selectedBuyGender: ['', [Validators.required, Validators.minLength(2)]],
       originalNames: [''],
-      paymentStatus: ['']
+      paymentStatus: [''],
+      finalDocStatus: ['']
     });
   }
   hideEditDialog(){

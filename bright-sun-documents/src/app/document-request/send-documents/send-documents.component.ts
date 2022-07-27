@@ -19,7 +19,8 @@ export class SendDocumentsComponent implements OnInit {
   getFilNames: String[] = [];
   fileNames: String[] = [];
   enableAdd: boolean = false;
-  userEmail: string = '';
+  userPhone: string = '';
+  finalDoc: string = 'Ready for Processing';
   constructor(
     public authService: AuthService,
     public userApi: UsersDocuments,
@@ -92,12 +93,13 @@ export class SendDocumentsComponent implements OnInit {
   }
   submitUserData() {
     // if(!this.usersForm.invalid && this.enableAdd && this.fileNames !== []){
-      if(this.enableAdd){
+      this.userPhone = this.mobileNumber?.value;
+      if(this.enableAdd && this.userPhone){
       const storage = getStorage();
-    this.userEmail = this.email?.value;
+    
     for (var i = 0; i < this.file.length; i++) { 
       this.fileNames.push(this.file[i].name);
-      const storageRef = ref(storage, 'users-documents/' + this.userApi.userPath + '/' + this.userEmail + '/' + this.file[i].name);
+      const storageRef = ref(storage, 'users-documents/' + this.userApi.userPath + '/' + this.userPhone + '/' + this.file[i].name);
       const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
       uploadTask.on('state_changed',
         (snapshot) => {
@@ -124,7 +126,7 @@ export class SendDocumentsComponent implements OnInit {
         }
       );
       if(i == (this.file.length - 1)){
-        this.userApi.AddUsers(this.usersForm.value, this.fileNames);
+        this.userApi.AddUsers(this.usersForm.value, this.fileNames, this.finalDoc);
         
         this.toastr.success(
           this.usersForm.controls['fullName'].value + ' successfully added!'
@@ -135,8 +137,16 @@ export class SendDocumentsComponent implements OnInit {
     }
       
     }else{
-      alert("Pease fill all the fields in the form!")
+      alert("Pease add Phone number and Documents in the form!")
     }
   }
 
 }
+function initial(value: any, fileNames: String[], initial: any) {
+  throw new Error('Function not implemented.');
+}
+
+function flase(value: any, fileNames: String[], flase: any) {
+  throw new Error('Function not implemented.');
+}
+

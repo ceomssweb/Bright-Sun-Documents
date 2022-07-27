@@ -17,13 +17,13 @@
                     <thead>
                       <tr>
                         <th class="text-center">Sl/no.</th>
-                        <th *ngFor="let items of cols" scope="col">{{items.header}}</th>
+                        <th class="text-center" *ngFor="let items of cols" scope="col">{{items.header}}</th>
                         <!-- <th class="text-center" scope="col">Actions</th> -->
                       </tr>
                     </thead>
                     <tbody *ngIf="preLoader">
                       <tr>
-                        <td colspan="16">
+                        <td colspan="17">
                           <div class="no-data my-4 text-center">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
                           </div>
@@ -32,7 +32,7 @@
                     </tbody>
                     <tbody *ngIf="noData && !preLoader">
                       <tr>
-                        <td colspan="16">
+                        <td colspan="17">
                           <div class="no-data my-4 text-center">
                             <p class="nodata-msg">No users added yet by {{nameKey}}!</p>
                             </div>
@@ -58,11 +58,37 @@
                           >
                         </td>
                         <td class="text-center">{{ user.paymentStatus }}</td>
-                        <td>{{ user.fatherName }}</td>
+                        <td class="output-column">
+                          <div *ngIf="user.finalDocStatus == 'Ready for Processing'" class="mb-2 text-center">
+                            <input
+                              type="file"
+                              class="form-control"
+                              #docFile
+                              (change)="chooseOutputFile($event)"
+                            />
+                            <div class="py-2" *ngIf="widthContainer">
+                              <p-progressBar [value]="widthVal"></p-progressBar>
+                            </div>
+                            <button
+                            class="my-2 btn btn-success"
+                            (click)="uploadFinalFile(user)"
+                            >Upload Final Document</button
+                          >
+                          </div>
+                          <div *ngIf="user.finalDocStatus != 'Ready for Processing'" class="mt-2 text-center">
+                           
+                          <a href="{{user.finalDocStatus}}" target="_blank"
+                            class="my-2 btn btn-primary btn-sm button-link"
+                            >Download</a
+                          >
+                          </div>
+                        </td>
+                        
+                        <td class="text-center">{{ user.selectedDoc }}</td>
                         <td>{{ user.email }}</td>
                         <td class="text-center">{{ user.mobileNumber }}</td>
               
-                        <td>{{ user.selectedDoc }}</td>
+                        <td>{{ user.fatherName }}</td>
                         <td>{{ user.currentOwnerName }}</td>
                         <td>{{ user.currentOwnerAddress }}</td>
                         <td class="text-center">{{ user.currentOwnerAge }}</td>

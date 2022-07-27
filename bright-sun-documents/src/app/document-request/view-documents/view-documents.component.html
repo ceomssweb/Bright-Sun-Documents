@@ -13,7 +13,7 @@
       </thead>
       <tbody *ngIf="preLoader">
         <tr>
-          <td colspan="17">
+          <td colspan="18">
             <div class="no-data my-4 text-center">
               <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
             </div>
@@ -22,7 +22,7 @@
       </tbody>
       <tbody *ngIf="noData && !preLoader">
         <tr>
-          <td colspan="17">
+          <td colspan="18">
             <div class="no-data my-4 text-center">
               <p class="nodata-msg">No users added yet!</p>
               <!-- <a routerLink="/register-userList" class="btn btn-success"> Add userList </a> -->
@@ -60,6 +60,8 @@
               >View Documents</button
             >
           </td>
+
+          <td>{{ user.finalDocStatus }}</td>
 
          
           <td>{{ user.fatherName }}</td>
@@ -265,6 +267,10 @@
                           <option value="cheque Recieved">cheque Recieved</option>
                           <option value="cheque Returned/Bounced">cheque Returned/Bounced</option>
                           </select>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                          <label>Final Document</label>
+                          <input type="text" formControlName="finalDocStatus" class="form-control" pInputText required/>
                         </div>
                         </div>
                       <div class="row">

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireList } from '@angular/fire/compat/database';
 import { FormBuilder } from '@angular/forms';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { ToastrService } from 'ngx-toastr';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
@@ -17,6 +17,8 @@ export class ViewEmpComponent implements OnInit {
   page = 1;
   preLoader: boolean = false;
   noData: boolean = false;
+  widthContainer:boolean = false;
+  widthVal:number = 0;
   hideWhenNouserList: boolean = false;
   docSpinner:boolean = false;
   showDocDialog:boolean = false;
@@ -24,11 +26,12 @@ export class ViewEmpComponent implements OnInit {
   getID: any;
   dialogHeader!: any;
   getRowDoc: any[] = [];
-  fileNames: any[] = [];
+  uploadedFile: any[] = [];
   @Input() mailKey:any = '';
   @Input() nameKey = '';
   getEmpItems!: Users[];
   getActDoc: any[] = [];
+  file: any = [];
 
   constructor(
     public authService: AuthService, 
@@ -47,7 +50,6 @@ export class ViewEmpComponent implements OnInit {
         getItem['key'] = item.key;
         this.getID = item.key;
         this.getEmpItems.push(getItem as Users);
-        this.fileNames.push(getItem.originalNames);
       });
     });
   }
@@ -58,21 +60,22 @@ export class ViewEmpComponent implements OnInit {
       { id: 1, header: 'Full Name' },
       { id: 2, header: 'Added Documents' },
       { id: 3, header: 'Payment Status' },
-      { id: 4, header: 'Father Name' },
-      { id: 5, header: 'Email' },
-      { id: 6, header: 'Mobile Number' },
+      { id: 4, header: 'Final Document' },
+      { id: 5, header: 'Document Type' },
+      { id: 6, header: 'Email' },
+      { id: 7, header: 'Mobile Number' },
 
-      { id: 7, header: 'Document Type' },
-      { id: 8, header: 'First Party Name' },
-      { id: 9, header: 'First Party Adress' },
-      { id: 10, header: 'First Party Age' },
-      { id: 11, header: 'First Party Gender' },
+      { id: 8, header: 'Father Name' },
+      { id: 9, header: 'First Party Name' },
+      { id: 10, header: 'First Party Adress' },
+      { id: 11, header: 'First Party Age' },
+      { id: 12, header: 'First Party Gender' },
 
-      { id: 12, header: 'Relationship' },
-      { id: 13, header: 'Second Party Name' },
-      { id: 14, header: 'Second Party Adress' },
-      { id: 15, header: 'Second Party Age' },
-      { id: 16, header: 'Second Party Gender' },
+      { id: 13, header: 'Relationship' },
+      { id: 14, header: 'Second Party Name' },
+      { id: 15, header: 'Second Party Adress' },
+      { id: 16, header: 'Second Party Age' },
+      { id: 17, header: 'Second Party Gender' },
       
   ];
   }
@@ -90,6 +93,67 @@ export class ViewEmpComponent implements OnInit {
     })
   }
 
+  chooseOutputFile(event:any){
+    for (var i = 0; i < event.target.files.length; i++) { 
+      this.file.push(event.target.files[i]);
+    }
+  }
+
+  uploadFinalFile(user: any){
+      // if(this.editUsersForm.valid){
+      const storage = getStorage();
+      if(this.file.length > 0){
+      for (var i = 0; i < this.file.length; i++) { 
+        this.uploadedFile = this.file[i].name;
+        const storageRef = ref(storage, 'final-document/' + this.mailKey.key + '/' + user.key + '/' + this.file[i].name);
+        const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
+        uploadTask.on('state_changed',
+          (snapshot) => {
+             this.widthContainer=true;
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+             this.widthVal = progress;
+          },
+          (error) => {
+            console.log(error.message);
+            switch (error.code) {
+              case 'storage/unauthorized':
+                break;
+              case 'storage/canceled':
+                break;
+              case 'storage/unknown':
+                break;
+            }
+          },
+          () => {
+            
+          this.userServices.UploadDoc(this.mailKey.key, user, this.uploadedFile);
+          this.toastr.success(
+             'File Uploaded successfully'
+          );
+          
+          //   getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
+              
+          // });
+            // this.enableUpdate = true;
+            this.widthContainer=false;
+          }
+        )
+        
+      }
+    }else{
+      // this.userServices.UpdateUsers(this.editUsersForm.value, this.fileNames);
+      // this.toastr.success(
+      //   this.editUsersForm.controls['fullName'].value + ' updated successfully'
+      // );
+    };
+  
+      
+      // }else{
+      //   alert("Pease fill all the fields in the form!")
+      // }
+    
+  }
+
   showDocuments(key: any, user: any){
     this.docSpinner = true;
     this.showDocDialog = true;
@@ -98,7 +162,7 @@ export class ViewEmpComponent implements OnInit {
     this.getRowDoc = Object.values(user.originalNames);
     const storage = getStorage();
     for(let i = 0; i < this.getRowDoc.length; i++){
-      const storageRef = ref(storage, 'users-documents/' + this.mailKey.key + '/' + user.email + '/' + this.getRowDoc[i]);
+      const storageRef = ref(storage, 'users-documents/' + this.mailKey.key + '/' + user.mobileNumber + '/' + this.getRowDoc[i]);
       getDownloadURL(storageRef)
   .then((url) => {
     this.getActDoc.push(url);

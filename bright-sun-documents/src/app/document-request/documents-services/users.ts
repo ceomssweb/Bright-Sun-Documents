@@ -15,7 +15,8 @@ export interface Users {
     buyerAge: Number,
     selectedBuyGender: String,
     originalNames: String,
-    paymentStatus: String
+    paymentStatus: String,
+    finalDocStatus: String
  }
 
  export interface Columns {
