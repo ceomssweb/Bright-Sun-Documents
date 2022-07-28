@@ -78,8 +78,12 @@
                           <div *ngIf="user.finalDocStatus != 'Ready for Processing'" class="mt-2 text-center">
                            
                           <a href="{{user.finalDocStatus}}" target="_blank"
-                            class="my-2 btn btn-primary btn-sm button-link"
-                            >Download</a
+                            class="m-2 btn btn-primary btn-sm button-link"
+                            >Download</a>
+                          <button
+                            class="my-2 btn btn-success"
+                            (click)="deleteFinal(user)"
+                            >Delete</button
                           >
                           </div>
                         </td>

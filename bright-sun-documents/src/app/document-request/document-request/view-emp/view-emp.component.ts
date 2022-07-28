@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireList } from '@angular/fire/compat/database';
 import { FormBuilder } from '@angular/forms';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { deleteObject, getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { ToastrService } from 'ngx-toastr';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
@@ -15,6 +15,7 @@ import { Columns, Users } from '../../documents-services/users';
 })
 export class ViewEmpComponent implements OnInit {
   page = 1;
+  reset = 'Ready for Processing';
   preLoader: boolean = false;
   noData: boolean = false;
   widthContainer:boolean = false;
@@ -26,12 +27,12 @@ export class ViewEmpComponent implements OnInit {
   getID: any;
   dialogHeader!: any;
   getRowDoc: any[] = [];
-  uploadedFile: any[] = [];
   @Input() mailKey:any = '';
   @Input() nameKey = '';
   getEmpItems!: Users[];
   getActDoc: any[] = [];
   file: any = [];
+  downloadData:any =[];
 
   constructor(
     public authService: AuthService, 
@@ -104,8 +105,9 @@ export class ViewEmpComponent implements OnInit {
       const storage = getStorage();
       if(this.file.length > 0){
       for (var i = 0; i < this.file.length; i++) { 
-        this.uploadedFile = this.file[i].name;
+        
         const storageRef = ref(storage, 'final-document/' + this.mailKey.key + '/' + user.key + '/' + this.file[i].name);
+        this.downloadData.push(this.file[i].name);
         const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
         uploadTask.on('state_changed',
           (snapshot) => {
@@ -125,17 +127,19 @@ export class ViewEmpComponent implements OnInit {
             }
           },
           () => {
-            
-          this.userServices.UploadDoc(this.mailKey.key, user, this.uploadedFile);
-          this.toastr.success(
-             'File Uploaded successfully'
-          );
+            getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
+              this.downloadData.push(_downloadURL);
+              this.userServices.UploadDoc(this.mailKey.key, user, this.downloadData);
+             });
+          
+          
           
           //   getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
               
           // });
             // this.enableUpdate = true;
             this.widthContainer=false;
+            this.file = [];
           }
         )
         
@@ -219,5 +223,15 @@ export class ViewEmpComponent implements OnInit {
     this.dialogHeader = "";
     this.getActDoc = [];
   }
-
+  deleteFinal(data:any){
+    
+    const storage = getStorage();
+    const storageRef = ref(storage, 'final-document/' + this.mailKey.key + '/' + data.key +'/' + data.finalDocStatus[0]);
+   
+        deleteObject(storageRef).then(() => {
+          this.userServices.UploadDoc(this.mailKey.key, data, this.reset);
+        }).catch((error) => {
+          this.toastr.error('File Not deleted!');
+        });
+  }
 }

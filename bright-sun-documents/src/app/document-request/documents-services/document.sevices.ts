@@ -6,6 +6,7 @@ import {
   AngularFireObject,
 } from '@angular/fire/compat/database';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class UsersDocuments {
   UsersRef!: AngularFireObject<any>;
   userList!: Users[];
   
-  constructor(private db: AngularFireDatabase, public ath: AuthService) {}
+  constructor(private db: AngularFireDatabase, public ath: AuthService, public toastr: ToastrService) {}
   // Create Users
   userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
   adminUser: String = 'saravanan039@hotmail.com';
@@ -63,6 +64,9 @@ export class UsersDocuments {
     this.UsersRef.update({
       finalDocStatus: filename
     });
+    this.toastr.success(
+      'File Uploaded successfully'
+   );
   }
   // Update Users Object
   UpdateUsers(Users: Users, filename: any) {
