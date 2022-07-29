@@ -61,7 +61,40 @@
             >
           </td>
 
-          <td>{{ user.finalDocStatus }}</td>
+          <td [ngClass]="authService.userData.email == userServices.adminUser ? 'admin-column' : ''">
+            <div *ngIf="user.finalDocStatus == 'Ready for Processing' && authService.userData.email != userServices.adminUser" class="mt-2 text-center">
+              {{ user.finalDocStatus }}
+            </div>
+              <div *ngIf="user.finalDocStatus == 'Ready for Processing' && authService.userData.email == userServices.adminUser" class="mb-2 text-center">
+                <input
+                  type="file"
+                  class="form-control"
+                  #docFile
+                  (change)="chooseOutputFile($event)"
+                />
+                <div class="py-2" *ngIf="widthContainer1">
+                  <p-progressBar [value]="widthVal1"></p-progressBar>
+                </div>
+                <button
+                class="my-2 btn btn-success"
+                (click)="uploadFinalFile(user)"
+                >Upload Final Document</button
+              >
+              </div>
+            
+
+            <div *ngIf="user.finalDocStatus != 'Ready for Processing'" class="mt-2 text-center">
+                           
+              <a href="{{user.finalDocStatus[1]}}" target="_blank"
+                class="m-2 btn btn-primary btn-sm button-link"
+                >Download</a>
+                <button *ngIf="authService.userData.email == userServices.adminUser"
+                            class="my-2 btn btn-success"
+                            (click)="deleteFinal(user)"
+                            >Delete</button
+                          >
+                </div>
+          </td>
 
          
           <td>{{ user.fatherName }}</td>
@@ -168,7 +201,7 @@
                           pInputText
                           formControlName="mobileNumber"
                           class="form-control"
-                          required
+                          [readonly]="true"
                         />
                         <!-- errors-->
                       </div>

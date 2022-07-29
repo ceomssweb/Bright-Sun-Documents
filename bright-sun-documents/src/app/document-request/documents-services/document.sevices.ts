@@ -65,7 +65,7 @@ export class UsersDocuments {
       finalDocStatus: filename
     });
     this.toastr.success(
-      'File Uploaded successfully'
+      'Process completed successfully'
    );
   }
   // Update Users Object
@@ -74,7 +74,6 @@ export class UsersDocuments {
       fullName: Users.fullName,
       fatherName: Users.fatherName,
       email: Users.email,
-      mobileNumber: Users.mobileNumber,
       selectedDoc: Users.selectedDoc,
       currentOwnerName: Users.currentOwnerName,
       currentOwnerAddress: Users.currentOwnerAddress,

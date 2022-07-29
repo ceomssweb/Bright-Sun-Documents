@@ -137,16 +137,9 @@ export class SendDocumentsComponent implements OnInit {
     }
       
     }else{
-      alert("Pease add Phone number and Documents in the form!")
+      alert("Please add Phone/Mobile number");
     }
   }
 
-}
-function initial(value: any, fileNames: String[], initial: any) {
-  throw new Error('Function not implemented.');
-}
-
-function flase(value: any, fileNames: String[], flase: any) {
-  throw new Error('Function not implemented.');
 }
 

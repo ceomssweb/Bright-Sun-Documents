@@ -4,6 +4,7 @@ import { Columns, Users } from '../documents-services/users';
 import { ToastrService } from 'ngx-toastr';
 import { getStorage, ref, deleteObject, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/shared/services-firebase/auth.service';
 
 @Component({
   selector: 'bsd-view-documents',
@@ -27,18 +28,28 @@ export class ViewDocumentsComponent implements OnInit {
   showDocDialog: boolean = false;
   showEditDialog: boolean = false;
   file: any = [];
+  uploadfile: any = [];
   userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
   getRealDocName!: string[];
   dialogEdit!: any[];
   public editUsersForm!: FormGroup;
   getID: any;
   fileNames: any[] = [];
+  rowFileName: any[] = [];
   userPhone: string = '';
   widthContainer: boolean = false;
+  widthContainer1: boolean = false;
   widthVal: number = 0;
+  widthVal1: number = 0;
   getRowDoc: any[] = [];
   getActDoc: any[] = [];
+  downloadData: any[] = [];
+  reset = 'Ready for Processing';
+  userDelet:boolean = false;
+  getUniNumber!: any;
+
   constructor(
+    public authService: AuthService, 
     public userServices: UsersDocuments, 
     public fb: FormBuilder,
     public toastr: ToastrService
@@ -95,12 +106,12 @@ export class ViewDocumentsComponent implements OnInit {
   }
   deleteUsers(user: any) {
     
-    if (window.confirm('Are sure you want to delete this student ?')) { 
+    if (window.confirm('Are sure you want to delete this User ?')) { 
       
       const storage = getStorage();
       this.getRealDocName = Object.values(user.originalNames);
       for (let i = 0; i < this.getRealDocName.length; i++) {
-        const storageRef = ref(storage, 'users-documents/' + this.userPath + '/' + user.userPhone + '/' + this.getRealDocName[i]);
+        const storageRef = ref(storage, 'users-documents/' + this.userPath + '/' + user.mobileNumber + '/' + this.getRealDocName[i]);
         deleteObject(storageRef).then(() => {
         }).catch((error) => {
           this.toastr.error(user.fullName + ' Not deleted!');
@@ -110,12 +121,10 @@ export class ViewDocumentsComponent implements OnInit {
           this.toastr.success(user.fullName + ' successfully deleted!');
         }
       };
-      
-        // const childRef = ref.
-        // Delete the file
-        
-        
-      
+      if(user.finalDocStatus != "Ready for Processing"){
+        this.userDelet = true;
+        this.deleteFinal(user);
+      }
     }
   }
   showDocuments(key: any, user: any){
@@ -171,7 +180,9 @@ export class ViewDocumentsComponent implements OnInit {
       .subscribe((data) => {
         if(data != null){
           this.editUsersForm.setValue(data);
-          this.fileNames = Object.values(this.fileNames[index]);
+          this.getUniNumber = data.mobileNumber;
+          this.editUsersForm.controls['mobileNumber'].disable();
+          this.rowFileName = Object.values(this.fileNames[index]);
         }
         
       });
@@ -187,11 +198,11 @@ export class ViewDocumentsComponent implements OnInit {
 
   
   updateForm() {
-    // if(this.editUsersForm.valid){
+    if(this.getUniNumber == this.editUsersForm.controls['mobileNumber'].value){
     const storage = getStorage();
     if(this.file.length > 0){
     for (var i = 0; i < this.file.length; i++) { 
-      this.fileNames.push(this.file[i].name);
+      this.rowFileName.push(this.file[i].name);
       const storageRef = ref(storage, 'users-documents/' + this.userServices.userPath + '/' + this.userPhone + '/' + this.file[i].name);
       const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
       uploadTask.on('state_changed',
@@ -223,22 +234,24 @@ export class ViewDocumentsComponent implements OnInit {
         this.InputVar.nativeElement.value = "";
         this.widthVal = 0;
         this.widthContainer = false;
+        this.userServices.UpdateUsers(this.editUsersForm.value, this.rowFileName);
           this.toastr.success(
             this.editUsersForm.controls['fullName'].value + ' updated successfully'
           );
       }
     }
   }else{
-    this.userServices.UpdateUsers(this.editUsersForm.value, this.fileNames);
+    this.userServices.UpdateUsers(this.editUsersForm.value, this.rowFileName);
     this.toastr.success(
       this.editUsersForm.controls['fullName'].value + ' updated successfully'
     );
   };
+  
 
     
-    // }else{
-    //   alert("Pease fill all the fields in the form!")
-    // }
+     }else{
+      alert("Do not change existing Phone/Mobile number. Please add new record/user!")
+     }
   }
   ResetForm() {
     this.widthVal = 0;
@@ -278,5 +291,86 @@ export class ViewDocumentsComponent implements OnInit {
     this.showEditDialog = false;
     this.dialogEditHeader = "";
     this.ResetForm();
+  }
+
+  chooseOutputFile(event:any){
+    this.uploadfile = [];
+    for (var i = 0; i < event.target.files.length; i++) { 
+      this.uploadfile.push(event.target.files[i]);
+    }
+  }
+
+  uploadFinalFile(user: any){
+      // if(this.editUsersForm.valid){
+      this.downloadData = [];
+      const storage = getStorage();
+      if(this.uploadfile.length > 0){
+      for (var i = 0; i < this.uploadfile.length; i++) { 
+        
+        const storageRef = ref(storage, 'final-document/' + this.userServices.userPath + '/' + user.key + '/' + this.uploadfile[i].name);
+        this.downloadData.push(this.uploadfile[i].name);
+        const uploadTask = uploadBytesResumable(storageRef, this.uploadfile[i]);
+        uploadTask.on('state_changed',
+          (snapshot) => {
+             this.widthContainer1=true;
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+             this.widthVal1 = progress;
+          },
+          (error) => {
+            console.log(error.message);
+            switch (error.code) {
+              case 'storage/unauthorized':
+                break;
+              case 'storage/canceled':
+                break;
+              case 'storage/unknown':
+                break;
+            }
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
+              this.downloadData.push(_downloadURL);
+              this.userServices.UploadDoc(this.userServices.userPath, user, this.downloadData);
+             });
+          
+          
+          
+          //   getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
+              
+          // });
+            // this.enableUpdate = true;
+            this.widthContainer1=false;
+            this.uploadfile = [];
+          }
+        )
+        
+      }
+    }else{
+      // this.userServices.UpdateUsers(this.editUsersForm.value, this.fileNames);
+      // this.toastr.success(
+      //   this.editUsersForm.controls['fullName'].value + ' updated successfully'
+      // );
+    };
+  
+      
+      // }else{
+      //   alert("Pease fill all the fields in the form!")
+      // }
+    
+  }
+
+  deleteFinal(data:any){
+    const storage = getStorage();
+    const storageRef = ref(storage, 'final-document/' + this.userServices.userPath + '/' + data.key +'/' + data.finalDocStatus[0]);
+   
+        deleteObject(storageRef).then(() => {
+          if(!this.userDelet){
+            this.userServices.UploadDoc(this.userServices.userPath, data, this.reset);
+          }else{
+            this.userDelet = false;
+          }
+        }).catch((error) => {
+          this.toastr.error('File Not deleted!');
+        });
   }
 }

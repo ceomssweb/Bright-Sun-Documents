@@ -43,11 +43,11 @@ export class ViewEmpComponent implements OnInit {
 
   ngOnChanges(): void{
     this.dataState();
-    this.getEmpItems = [];
     let s = this.userServices.GetPerEmp(this.mailKey.key);
     s.snapshotChanges().subscribe(data => {
+      this.getEmpItems = [];
       data.forEach(item => {
-        let getItem: any = item.payload.toJSON(); 
+        let getItem: any = item.payload.toJSON();
         getItem['key'] = item.key;
         this.getID = item.key;
         this.getEmpItems.push(getItem as Users);
@@ -95,6 +95,7 @@ export class ViewEmpComponent implements OnInit {
   }
 
   chooseOutputFile(event:any){
+    this.file = [];
     for (var i = 0; i < event.target.files.length; i++) { 
       this.file.push(event.target.files[i]);
     }
@@ -144,17 +145,7 @@ export class ViewEmpComponent implements OnInit {
         )
         
       }
-    }else{
-      // this.userServices.UpdateUsers(this.editUsersForm.value, this.fileNames);
-      // this.toastr.success(
-      //   this.editUsersForm.controls['fullName'].value + ' updated successfully'
-      // );
     };
-  
-      
-      // }else{
-      //   alert("Pease fill all the fields in the form!")
-      // }
     
   }
 
@@ -223,6 +214,7 @@ export class ViewEmpComponent implements OnInit {
     this.dialogHeader = "";
     this.getActDoc = [];
   }
+  
   deleteFinal(data:any){
     
     const storage = getStorage();
