@@ -104,6 +104,7 @@ export class ViewEmpComponent implements OnInit {
   uploadFinalFile(user: any){
       // if(this.editUsersForm.valid){
       const storage = getStorage();
+      this.downloadData = [];
       if(this.file.length > 0){
       for (var i = 0; i < this.file.length; i++) { 
         

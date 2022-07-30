@@ -297,6 +297,7 @@ export class ViewDocumentsComponent implements OnInit {
     this.uploadfile = [];
     for (var i = 0; i < event.target.files.length; i++) { 
       this.uploadfile.push(event.target.files[i]);
+      debugger;
     }
   }
 

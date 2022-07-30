@@ -194,7 +194,9 @@
                             </div>
                           </div>
                           <div class="py-2" *ngIf="widthContainer">
-                            <p-progressBar [value]="widthVal"></p-progressBar>
+                            <label *ngIf="widthVal != 100">Uploading files...</label>
+                            <label *ngIf="widthVal == 100">Files are uploaded...</label>
+                            <p-progressBar *ngIf="widthVal != 100" [value]="widthVal" ></p-progressBar>
                           </div>
                         </div>
                       </div>

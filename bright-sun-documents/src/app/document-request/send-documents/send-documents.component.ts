@@ -21,6 +21,9 @@ export class SendDocumentsComponent implements OnInit {
   enableAdd: boolean = false;
   userPhone: string = '';
   finalDoc: string = 'Ready for Processing';
+  progress: number = 0;
+
+
   constructor(
     public authService: AuthService,
     public userApi: UsersDocuments,
@@ -104,8 +107,8 @@ export class SendDocumentsComponent implements OnInit {
       uploadTask.on('state_changed',
         (snapshot) => {
           this.widthContainer=true;
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.widthVal = progress;
+          this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.widthVal = this.progress;
         },
         (error) => {
           console.log(error.message);
@@ -121,25 +124,29 @@ export class SendDocumentsComponent implements OnInit {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
            this.getFilNames.push(_downloadURL);
+           
           });
           
         }
       );
+      
       if(i == (this.file.length - 1)){
         this.userApi.AddUsers(this.usersForm.value, this.fileNames, this.finalDoc);
         
         this.toastr.success(
           this.usersForm.controls['fullName'].value + ' successfully added!'
         );
-
         this.ResetForm();
+        
       }
     }
+    
       
     }else{
       alert("Please add Phone/Mobile number");
     }
   }
+
 
 }
 
