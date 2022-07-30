@@ -129,7 +129,13 @@
     <div class="row">
       <div class="col-md-3" *ngFor="let item of getActDoc">
         <div class="p-2 border doc-images mb-2 mr-2 text-center" >
-          <img src="{{item}}" alt="{{item}}" title="{{item}}"/>
+          <div *ngIf="item.includes('.pdf')">
+            <img class="view-file" src="/assets/images/pdf-file.png" alt="{{item}}" title="{{item}}"/>
+          </div>
+          <div *ngIf="!item.includes('.pdf')">
+            <img src="{{item}}" alt="{{item}}" title="{{item}}"/>
+          </div>
+          
           <div id="{{item}}" class="download-doc  w-100 py-2">
             <a href="{{item}}" target="_blank"
               class="my-2 btn btn-primary btn-sm button-link"
