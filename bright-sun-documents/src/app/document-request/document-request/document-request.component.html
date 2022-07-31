@@ -17,23 +17,6 @@
                                 <div *ngIf="authService.userData as user" class="row">
                                     <div class="col-md-12">
                                         <div class="row">
-                                            <div class="col-md-4 profile-picture mb-2 border">
-                                                <div class="img-container d-block border my-3">
-                                                    <span *ngIf="user.photoURL">
-                                                        <img src="{{user.photoURL}}" alt="Profile Picture"/>
-                                                    </span>
-                                                    <span *ngIf="!user.photoURL">
-                                                        <img src="/assets/images/no-image.png" alt="No Picture"/>
-                                                    </span>
-                                                </div>
-                                                <div class=""my-2>
-                                                    <label class="bold-label">Profile Name :</label><label class="mx-1">{{(user.displayName)}}</label>
-                                                </div>
-                                                <div>
-                                                    <label class="bold-label">Email :</label><label class="mx-1">{{(user.email)}}</label>
-                                                </div>
-                                            </div>
-                                            
                                             <div class="col-md-8" *ngIf="user.email == userService.adminUser">
                                                 <div class="row">
                                                     <div class="col-md-12">
@@ -110,6 +93,25 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+                                            <div class="col-md-4 profile-picture mb-2 border">
+                                                <div class="img-container d-block border my-3">
+                                                    <span *ngIf="user.photoURL">
+                                                        <img src="{{user.photoURL}}" alt="Profile Picture"/>
+                                                    </span>
+                                                    <span *ngIf="!user.photoURL">
+                                                        <img src="/assets/images/no-image.png" alt="No Picture"/>
+                                                    </span>
+                                                </div>
+                                                <div class=""my-2>
+                                                    <label class="bold-label">Profile Name :</label><label class="mx-1">{{(user.displayName)}}</label>
+                                                </div>
+                                                <div>
+                                                    <label class="bold-label">Email :</label><label class="mx-1">{{(user.email)}}</label>
+                                                </div>
+                                            </div>
+                                            
+                                            
                                         </div>
                                     </div>
                                 </div>

@@ -44,7 +44,10 @@ export class DocumentRequestComponent implements OnInit {
       this.getEmp = [];
       data.forEach(item => {
         let getItem: any = item.payload.toJSON(); 
-        this.getEmp.push(getItem);
+        if(getItem.mail != this.userService.adminUser){
+          this.getEmp.push(getItem);
+        }
+        
       });
     });
   }

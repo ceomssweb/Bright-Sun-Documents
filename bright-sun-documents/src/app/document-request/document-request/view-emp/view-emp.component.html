@@ -66,9 +66,10 @@
                               #docFile
                               (change)="chooseOutputFile($event)"
                             />
-                            <div class="py-2" *ngIf="widthContainer">
+                            <!-- commented due to all rows shows progress in table -->
+                            <!-- <div class="py-2" *ngIf="widthContainer">
                               <p-progressBar [value]="widthVal"></p-progressBar>
-                            </div>
+                            </div> -->
                             <button
                             class="my-2 btn btn-success"
                             (click)="uploadFinalFile(user)"
