@@ -18,6 +18,7 @@ export class DocumentRequestComponent implements OnInit {
   sendDocShow: boolean = false;
   viewDocShow: boolean = false;
   showDetails: boolean = true;
+  showSettings: boolean = false;
   sendReport: boolean = false;
   items!: MenuItem[];
   userEmail: string = JSON.parse(localStorage.getItem('user')!).email;
@@ -32,10 +33,11 @@ export class DocumentRequestComponent implements OnInit {
 
   ngOnInit(): void {
     this.items = [
-      {label: 'My Profile', icon: 'pi pi-fw pi-home', command: () => this.showUserDetails(),},
-      {label: 'Add Client', icon: 'pi pi-fw pi-plus', command: () => this.showAddNew(),},
+      {label: 'My Profile', icon: 'pi pi-fw pi-id-card', command: () => this.showUserDetails(),},
+      {label: 'Add Client', icon: 'pi pi-fw pi-user-plus', command: () => this.showAddNew(),},
       {label: 'View/Edit Client', icon: 'pi pi-fw pi-eye', command: () => this.showView(),},
-      {label: 'Report', icon: 'pi pi-fw pi-bolt', command: () => this.showReport(),}
+      {label: 'Report', icon: 'pi pi-fw pi-chart-bar', command: () => this.showReport(),},
+      {label: 'Settings', icon: 'pi pi-fw pi-cog', command: () => this.showSetting(),}
     ];
     this.dataState();
     if(this.userEmail == this.userService.adminUser){
@@ -65,11 +67,20 @@ export class DocumentRequestComponent implements OnInit {
       }
     })
   }
+  showSetting(){
+    this.sendDocShow = false;
+    this.viewDocShow = false;
+    this.showDetails = false;
+    this.sendReport = false;
+    this.showSettings = true;
+    this.title="Settings"
+  }
   showUserDetails(){
     this.sendDocShow = false;
     this.viewDocShow = false;
     this.showDetails = true;
     this.sendReport = false;
+    this.showSettings = false;
     this.title="Welcome to Bright Sun Documents"
   }
   showAddNew(){
@@ -77,6 +88,7 @@ export class DocumentRequestComponent implements OnInit {
     this.viewDocShow = false;
     this.showDetails = false;
     this.sendReport = false;
+    this.showSettings = false;
     this.title="Enter Client Details to send Documents"
   }
   showView(){
@@ -84,6 +96,7 @@ export class DocumentRequestComponent implements OnInit {
     this.viewDocShow = true;
     this.showDetails = false;
     this.sendReport = false;
+    this.showSettings = false;
     this.title="View/Edit Client"
   }
   showReport(){
@@ -91,6 +104,7 @@ export class DocumentRequestComponent implements OnInit {
     this.viewDocShow = false;
     this.showDetails = false;
     this.sendReport = true;
+    this.showSettings = false;
     this.title="Overall Report of available Clients"
   }
   showEmpDetails(getUser:any){

@@ -9,7 +9,7 @@
     <div class="navbar-collapse justify-content-md-end" [ngClass]="showNav === false ? 'collapse': ''" id="navbarNav">
       <ul class="navbar-nav mx-2">
         <li class="nav-item active">
-          <a class="nav-link" [routerLink]="['home-page']">Home</a>
+          <a class="nav-link" [routerLink]="['/document-request']">Home</a>
         </li>
         <li class="no-link" *ngIf="authService.isLoggedIn == true">
           <span *ngIf="authService.userData as user">

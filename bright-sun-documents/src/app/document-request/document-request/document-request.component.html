@@ -104,10 +104,10 @@
                                                     </span>
                                                 </div>
                                                 <div class=""my-2>
-                                                    <label class="bold-label">Profile Name :</label><label class="mx-1">{{(user.displayName)}}</label>
+                                                    <label class="bold-label">Name: </label><label class="mx-1">{{(user.displayName)}}</label>
                                                 </div>
                                                 <div>
-                                                    <label class="bold-label">Email :</label><label class="mx-1">{{(user.email)}}</label>
+                                                    <label class="bold-label">Email: </label><label class="mx-1">{{(user.email)}}</label>
                                                 </div>
                                             </div>
                                             
@@ -115,16 +115,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                </div>
-                                <div class="col-md-12" *ngIf="sendDocShow">
-                                    <bsd-send-documents></bsd-send-documents>
-                                </div>
-                                <div class="col-md-12" *ngIf="viewDocShow">
-                                    <bsd-view-documents></bsd-view-documents>
-                                </div>
-                                <div class="col-md-12" *ngIf="sendReport">
-                                    <bsd-report-documents></bsd-report-documents>
-                                </div>
+                            </div>
+                            <div class="col-md-12" *ngIf="sendDocShow">
+                                <bsd-send-documents></bsd-send-documents>
+                            </div>
+                            <div class="col-md-12" *ngIf="viewDocShow">
+                                <bsd-view-documents></bsd-view-documents>
+                            </div>
+                            <div class="col-md-12" *ngIf="sendReport">
+                                <bsd-report-documents></bsd-report-documents>
+                            </div>
+                            <div class="col-md-12" *ngIf="showSettings">
+                                <bsd-settings></bsd-settings>
+                            </div>
+                                
                         </div>
                     </div>
             </div>

@@ -19,6 +19,7 @@ import {ToastModule} from 'primeng/toast';
 import { ReportDocumentsComponent } from './report-documents/report-documents.component';
 import {ChartModule} from 'primeng/chart';
 import { ViewEmpComponent } from './document-request/view-emp/view-emp.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ViewEmpComponent } from './document-request/view-emp/view-emp.component
     SendDocumentsComponent,
     ViewDocumentsComponent,
     ReportDocumentsComponent,
+    SettingsComponent,
     ViewEmpComponent
   ],
   imports: [

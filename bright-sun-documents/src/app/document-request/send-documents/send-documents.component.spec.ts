@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SendDocumentsComponent } from './send-documents.component';
 
-describe('UsersDocumentsComponent', () => {
+describe('SendDocumentsComponent', () => {
   let component: SendDocumentsComponent;
   let fixture: ComponentFixture<SendDocumentsComponent>;
 
