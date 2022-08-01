@@ -25,6 +25,15 @@ h1,h2,h3,h4,h5{
   line-height: initial !important;
   color: $primary-color;
 }
+.green-mat{
+  background-color: rgb(224, 245, 224);
+  border-radius: 5px;
+}
+textarea{
+  resize: none;
+  overflow-y: auto;
+  height: 54px;
+}
 .footer-container {
   h1,h2,h3,h4,h5{
     color: $footer-default;
