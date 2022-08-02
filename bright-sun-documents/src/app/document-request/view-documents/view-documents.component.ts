@@ -361,6 +361,7 @@ export class ViewDocumentsComponent implements OnInit {
   }
 
   deleteFinal(data:any){
+    if (window.confirm('Are sure you want to delete this Final Document ?')) { 
     const storage = getStorage();
     const storageRef = ref(storage, 'final-document/' + this.userServices.userPath + '/' + data.key +'/' + data.finalDocStatus[0]);
    
@@ -374,4 +375,5 @@ export class ViewDocumentsComponent implements OnInit {
           this.toastr.error('File Not deleted!');
         });
   }
+}
 }

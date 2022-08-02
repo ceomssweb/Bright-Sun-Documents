@@ -217,7 +217,7 @@ export class ViewEmpComponent implements OnInit {
   }
   
   deleteFinal(data:any){
-    
+    if (window.confirm('Are sure you want to delete the Final Document ?')) { 
     const storage = getStorage();
     const storageRef = ref(storage, 'final-document/' + this.mailKey.key + '/' + data.key +'/' + data.finalDocStatus[0]);
    
@@ -227,4 +227,5 @@ export class ViewEmpComponent implements OnInit {
           this.toastr.error('File Not deleted!');
         });
   }
+}
 }
