@@ -5,75 +5,76 @@
       <div class="col-md-12">
         <ng-container *ngIf="authService.userData as user">
           <div class="row">
-            <div class="col-md-12">
+              <div class="col-md-6">
               <h3>Payment Chart</h3>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
+              <div class="col-md-6">
+                <h3>Payment Details</h3>
+              </div>
+            </div>
+            <div class="row">
+            <div class="col-md-6">
               <p-chart type="pie" [data]="chartData" [options]="chartOptions"  [style]="{'width': '10%', 'height':'10%'}"></p-chart>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <h3>Payment Details</h3>
-            </div>
-          </div>
-          <div class="mx-auto">
-            <div class="table-responsive">
-              <table
-                class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg custom-table"
-              >
-                <thead>
-                  <tr>
-                    <th class="text-center">Sl/no.</th>
-                    <th scope="col">Client Name</th>
-                    <th scope="col">Email</th>
-                    <th class="text-center" scope="col">Payment Status</th>
-                    <!-- <th scope="col">Remarks</th> -->
-                  </tr>
-                </thead>
-                <tbody *ngIf="preLoader">
-                  <tr>
-                    <td colspan="5">
-                      <div class="no-data my-4 text-center">
-                        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody *ngIf="noData && !preLoader">
-                  <tr>
-                    <td colspan="5">
-                      <div class="no-data my-4 text-center">
-                        <p class="nodata-msg">No users added yet!</p>
-                        <!-- <a routerLink="/register-userList" class="btn btn-success"> Add userList </a> -->
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody *ngIf="hideWhenNouserList">
-                  <tr 
-                    *ngFor="
-                      let user of userServices.userList
-                        | paginate: { itemsPerPage: 8, currentPage: page };
-                      let i = index
-                    "
+            <div class="col-md-6">
+              <div class="mx-auto">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg custom-table"
                   >
-                    <!-- <th scope="row">{{ user.email }}</th> -->
-                    <td class="text-center">{{ i + 1 }}</td>
-                    <td>{{ user.fullName }}</td>
-                    <td>{{ user.email }}</td>
-                    <td class="text-center">{{ user.paymentStatus }}</td>
-                    <!-- <td>{{ user.buyerName }}</td> -->
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="my-2">
-              <pagination-controls (pageChange)="page = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
+                    <thead>
+                      <tr>
+                        <th class="text-center">Sl/no.</th>
+                        <th scope="col">Client Name</th>
+                        <th scope="col">Email</th>
+                        <th class="text-center" scope="col">Payment Status</th>
+                        <!-- <th scope="col">Remarks</th> -->
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="preLoader">
+                      <tr>
+                        <td colspan="5">
+                          <div class="no-data my-4 text-center">
+                            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody *ngIf="noData && !preLoader">
+                      <tr>
+                        <td colspan="5">
+                          <div class="no-data my-4 text-center">
+                            <p class="nodata-msg">No users added yet!</p>
+                            <!-- <a routerLink="/register-userList" class="btn btn-success"> Add userList </a> -->
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody *ngIf="hideWhenNouserList">
+                      <tr 
+                        *ngFor="
+                          let user of userServices.userList
+                            | paginate: { itemsPerPage: 8, currentPage: page };
+                          let i = index
+                        "
+                      >
+                        <!-- <th scope="row">{{ user.email }}</th> -->
+                        <td class="text-center">{{ i + 1 }}</td>
+                        <td>{{ user.fullName }}</td>
+                        <td>{{ user.email }}</td>
+                        <td class="text-center">{{ user.paymentStatus }}</td>
+                        <!-- <td>{{ user.buyerName }}</td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="my-2">
+                  <pagination-controls (pageChange)="page = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
+                </div>
+              </div>
             </div>
           </div>
+          
         </ng-container>
       </div>
     </div>

@@ -95,18 +95,18 @@
                                             </div>
                                             
                                             <div class="col-md-4 profile-picture mb-2 border">
-                                                <div class="img-container d-block border my-3">
-                                                    <span *ngIf="user.photoURL">
+                                                <div class="img-container d-block my-4">
+                                                    <div class="text-center" *ngIf="user.photoURL">
                                                         <img src="{{user.photoURL}}" alt="Profile Picture"/>
-                                                    </span>
-                                                    <span *ngIf="!user.photoURL">
+                                                    </div>
+                                                    <div class="text-center" *ngIf="!user.photoURL">
                                                         <img src="/assets/images/no-image.png" alt="No Picture"/>
-                                                    </span>
+                                                    </div>
                                                 </div>
-                                                <div class=""my-2>
+                                                <div class="my-2">
                                                     <label class="bold-label">Name: </label><label class="mx-1">{{(user.displayName)}}</label>
                                                 </div>
-                                                <div>
+                                                <div class="mb-3"> 
                                                     <label class="bold-label">Email: </label><label class="mx-1">{{(user.email)}}</label>
                                                 </div>
                                             </div>

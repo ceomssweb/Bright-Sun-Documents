@@ -20,6 +20,39 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
   overflow-y: auto;
 }
 
+
+table{
+  box-shadow: 0 1px 8px;
+}
+
+thead{
+  background: $primary-color;
+  color: white;
+  border: 2px solid $primary-color;
+  th{
+      font-weight: normal !important;
+  }
+}
+tbody{
+  vertical-align: middle;
+  
+  border: 1px solid $border-color;
+  
+  tr:hover{
+    background-color:rgb(229, 249, 250);
+    cursor: pointer;
+  }
+}
+tr{
+  vertical-align: middle;
+}
+
+.pi-spin{
+  color:$primary-color;
+}
+.hide{
+  display: none;
+}
 h1,h2,h3,h4,h5{
   margin-bottom: 0.3rem !important;
   line-height: initial !important;
@@ -50,6 +83,8 @@ h2{
 
 h3{
   font-size: 16px !important;
+  color: $primary-color;
+  font-weight: 700 !important;
 }
 
 h4{
@@ -125,4 +160,21 @@ p.decorated{
   padding-bottom: 0.3rem;
   margin-bottom: 1rem;
   border-bottom: 0.1rem solid $primary-color;
+}
+
+.ngx-pagination .current{
+  background-color: $primary-color !important;
+}
+
+.btn-primary{
+  border: 1px solid $primary-color !important;
+  background-color: $primary-color !important;
+}
+.btn-outline-primary{
+  border: 1px solid $primary-color !important;
+  color: $primary-color !important;
+}
+.btn-outline-primary:hover{
+  background-color: $primary-color !important;
+  color: white !important;
 }

@@ -22,17 +22,13 @@
     color: #fff;
 }
 .profile-picture{
-    height: 350px;
+    height: 30%;
     overflow-y: auto;
     .img-container{
-        border-radius: 100%;
         overflow: hidden;
-        width: 10rem;
-        height: 10rem;
-        margin: auto;
+        width: 100%;
         img{
-            width: 12rem;
-            margin-left: -1rem;
+           box-shadow: 0 128px 8px; 
         }
     }
 }
