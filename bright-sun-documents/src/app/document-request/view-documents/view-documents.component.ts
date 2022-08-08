@@ -3,7 +3,7 @@ import { UsersDocuments } from '../documents-services/document.sevices';
 import { Columns, Users } from '../documents-services/users';
 import { ToastrService } from 'ngx-toastr';
 import { getStorage, ref, deleteObject, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
 
 @Component({
@@ -32,7 +32,7 @@ export class ViewDocumentsComponent implements OnInit {
   userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
   getRealDocName!: string[];
   dialogEdit!: any[];
-  public editUsersForm!: FormGroup;
+  public editUsersForm!: UntypedFormGroup;
   getID: any;
   fileNames: any[] = [];
   rowFileName: any[] = [];
@@ -51,7 +51,7 @@ export class ViewDocumentsComponent implements OnInit {
   constructor(
     public authService: AuthService, 
     public userServices: UsersDocuments, 
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     public toastr: ToastrService
     ) { }
 

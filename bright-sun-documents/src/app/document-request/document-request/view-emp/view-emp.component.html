@@ -12,7 +12,7 @@
             <div class="mx-auto">
                 <div class="table-responsive">
                   <table
-                    class="table table-bordered table-responsive-sm table-responsive-md table-responsive-lg custom-table"
+                    class="table table-bordered custom-table"
                   >
                     <thead>
                       <tr>
@@ -23,7 +23,7 @@
                     </thead>
                     <tbody *ngIf="preLoader">
                       <tr>
-                        <td colspan="17">
+                        <td colspan="19">
                           <div class="no-data my-4 text-center">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
                           </div>
@@ -32,7 +32,7 @@
                     </tbody>
                     <tbody *ngIf="noData && !preLoader">
                       <tr>
-                        <td colspan="17">
+                        <td colspan="19">
                           <div class="no-data my-4 text-center">
                             <p class="nodata-msg">No users added yet by {{nameKey}}!</p>
                             </div>

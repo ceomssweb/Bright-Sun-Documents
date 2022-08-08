@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy} from '@angular/core';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
 import { UsersDocuments } from '../documents-services/document.sevices';
 import { Columns, Users } from '../documents-services/users';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "@angular/fire/storage";
 
@@ -27,7 +27,7 @@ export class ReportDocumentsComponent implements OnInit {
     public authService: AuthService,
     public userServices: UsersDocuments,
     public userApi: UsersDocuments,
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     public toastr: ToastrService
 
   ) {

@@ -109,5 +109,7 @@
       }
     }
   },
-  "defaultProject": "bright-sun-documents"
+  "cli": {
+    "analytics": "d80ad40c-6aa4-4b06-95c8-573a36108b3d"
+  }
 }

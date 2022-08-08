@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireList } from '@angular/fire/compat/database';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { deleteObject, getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { ToastrService } from 'ngx-toastr';
 import { MenuItem } from 'primeng/api';
@@ -37,7 +37,7 @@ export class ViewEmpComponent implements OnInit {
   constructor(
     public authService: AuthService, 
     public userServices: UsersDocuments,
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     public toastr: ToastrService
     ) { }
 

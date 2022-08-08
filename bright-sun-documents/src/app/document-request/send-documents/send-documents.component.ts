@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
 import { UsersDocuments } from '../documents-services/document.sevices';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "@angular/fire/storage";
 
@@ -12,7 +12,7 @@ import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "@angular/
 })
 export class SendDocumentsComponent implements OnInit {
 
-  public usersForm!: FormGroup;
+  public usersForm!: UntypedFormGroup;
   file: any = [];
   widthContainer: boolean = false;
   widthVal: number = 0;
@@ -27,7 +27,7 @@ export class SendDocumentsComponent implements OnInit {
   constructor(
     public authService: AuthService,
     public userApi: UsersDocuments,
-    public fb: FormBuilder,
+    public fb: UntypedFormBuilder,
     public toastr: ToastrService,
 
   ) {

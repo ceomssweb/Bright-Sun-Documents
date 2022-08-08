@@ -20,9 +20,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
   overflow-y: auto;
 }
 
+.box-shadow-images{
+  box-shadow: 0 128px 8px 0 #ccc; 
+}
+
+.box-shadow{
+  box-shadow: 0 4px 8px 0 #ccc; 
+}
 
 table{
-  box-shadow: 0 1px 8px;
+  box-shadow: 0 4px 8px 0 #ccc;
 }
 
 thead{

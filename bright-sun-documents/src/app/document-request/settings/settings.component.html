@@ -4,10 +4,38 @@
     <div class="row">
       <div class="col-md-12">
         <ng-container *ngIf="authService.userData as user">
-          <div class="row">
-            <div class="col-md-12">
-              <label>To Change/Reset your Password:</label>
-              <a class="nav-link d-inline mx-2" [routerLink]="['/forgot-password']">Change Password</a>
+          <div class="row mb-2">
+            <div class="col-md-12 border box-shadow py-3">
+              <div class="row">
+                <div class="col-md-12">
+                  <h3>User Setting</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <label>1. To Change/Reset your Password:</label>
+                </div>
+                <div class="col-md-6">
+                  <a class="nav-link d-inline mx-2" [routerLink]="['/forgot-password']">Change Password</a>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-12 border box-shadow py-3">
+              <div class="row">
+                <div class="col-md-12">
+                  <h3>Admin Setting</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <label>2. Remove/Terminate Employee:</label>
+                </div>
+                  <div class="col-md-6">
+                  <a class="nav-link d-inline mx-2">Click here</a>
+                </div>
+              </div>
             </div>
           </div>
         </ng-container>
