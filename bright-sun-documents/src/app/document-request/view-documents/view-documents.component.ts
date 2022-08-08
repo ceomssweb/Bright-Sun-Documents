@@ -114,7 +114,7 @@ export class ViewDocumentsComponent implements OnInit {
         const storageRef = ref(storage, 'users-documents/' + this.userPath + '/' + user.mobileNumber + '/' + this.getRealDocName[i]);
         deleteObject(storageRef).then(() => {
         }).catch((error) => {
-          this.toastr.error(user.fullName + ' Not deleted!');
+          //this.toastr.error(user.fullName + ' Not deleted!');
         });
         if(i == this.getRealDocName.length - 1){
           this.userServices.DeleteUsers(user.key);
@@ -372,7 +372,9 @@ export class ViewDocumentsComponent implements OnInit {
             this.userDelet = false;
           }
         }).catch((error) => {
+          if(!this.userDelet){
           this.toastr.error('File Not deleted!');
+          }
         });
   }
 }

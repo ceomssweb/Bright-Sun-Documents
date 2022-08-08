@@ -4,6 +4,7 @@ import { UsersDocuments } from '../documents-services/document.sevices';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ref, uploadBytesResumable, getDownloadURL, getStorage } from "@angular/fire/storage";
+import { Users } from '../documents-services/users';
 
 @Component({
   selector: 'bsd-send-documents',
@@ -22,7 +23,7 @@ export class SendDocumentsComponent implements OnInit {
   userPhone: string = '';
   finalDoc: string = 'Ready for Processing';
   progress: number = 0;
-
+  getAllUserPhone: string[] = ["124", "123"];
 
   constructor(
     public authService: AuthService,
@@ -34,9 +35,23 @@ export class SendDocumentsComponent implements OnInit {
 
   }
 
+
+ngOnChanges(): void{
+      let s = this.userApi.GetUsersList();
+        s.snapshotChanges().subscribe(data => {
+          this.getAllUserPhone = [];
+          data.forEach(item => {
+            let getItem: any = item.payload.toJSON(); 
+            getItem['key'] = item.key;
+            this.getAllUserPhone.push(getItem.mobileNumber);
+          });
+        });
+}
+
   ngOnInit(): void {
     this.userApi.GetUsersList();
     this.userFormData();
+    this.ngOnChanges();
   }
 
   chooseFile(event: any) {
@@ -94,52 +109,57 @@ export class SendDocumentsComponent implements OnInit {
     this.widthContainer = false;
     this.fileNames = [];
   }
+
   submitUserData() {
     // if(!this.usersForm.invalid && this.enableAdd && this.fileNames !== []){
       this.userPhone = this.mobileNumber?.value;
       if(this.enableAdd && this.userPhone){
-      const storage = getStorage();
-    
-    for (var i = 0; i < this.file.length; i++) { 
-      this.fileNames.push(this.file[i].name);
-      const storageRef = ref(storage, 'users-documents/' + this.userApi.userPath + '/' + this.userPhone + '/' + this.file[i].name);
-      const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
-      uploadTask.on('state_changed',
-        (snapshot) => {
-          this.widthContainer=true;
-          this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.widthVal = this.progress;
-        },
-        (error) => {
-          console.log(error.message);
-          switch (error.code) {
-            case 'storage/unauthorized':
-              break;
-            case 'storage/canceled':
-              break;
-            case 'storage/unknown':
-              break;
+        if(!this.getAllUserPhone.includes(this.mobileNumber?.value)){
+          const storage = getStorage();
+          for (var i = 0; i < this.file.length; i++) { 
+            this.fileNames.push(this.file[i].name);
+            const storageRef = ref(storage, 'users-documents/' + this.userApi.userPath + '/' + this.userPhone + '/' + this.file[i].name);
+            const uploadTask = uploadBytesResumable(storageRef, this.file[i]);
+            uploadTask.on('state_changed',
+              (snapshot) => {
+                this.widthContainer=true;
+                this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                this.widthVal = this.progress;
+              },
+              (error) => {
+                console.log(error.message);
+                switch (error.code) {
+                  case 'storage/unauthorized':
+                    break;
+                  case 'storage/canceled':
+                    break;
+                  case 'storage/unknown':
+                    break;
+                }
+              },
+              () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
+                 this.getFilNames.push(_downloadURL);
+                 
+                });
+                
+              }
+            );
+            
+            if(i == (this.file.length - 1)){
+              this.userApi.AddUsers(this.usersForm.value, this.fileNames, this.finalDoc);
+              
+              this.toastr.success(
+                this.usersForm.controls['fullName'].value + ' successfully added!'
+              );
+              this.ResetForm();
+              
+            }
           }
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
-           this.getFilNames.push(_downloadURL);
-           
-          });
-          
+        }else{
+          alert("Phone number already existing in the record! Please add alternate phone number!")
         }
-      );
       
-      if(i == (this.file.length - 1)){
-        this.userApi.AddUsers(this.usersForm.value, this.fileNames, this.finalDoc);
-        
-        this.toastr.success(
-          this.usersForm.controls['fullName'].value + ' successfully added!'
-        );
-        this.ResetForm();
-        
-      }
-    }
     
       
     }else{
