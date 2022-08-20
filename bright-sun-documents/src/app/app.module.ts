@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { initializeApp } from "firebase/app";
+import { getFunctions  } from "firebase/functions";
 import { getAnalytics } from "firebase/analytics";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
@@ -36,6 +37,7 @@ export const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const storage = getStorage(app);
+const functions = getFunctions(app);
 @NgModule({
   declarations: [
     AppComponent
