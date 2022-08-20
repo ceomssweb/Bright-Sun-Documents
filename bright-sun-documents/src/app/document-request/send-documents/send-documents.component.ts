@@ -48,19 +48,6 @@ ngOnChanges(): void{
         });
 }
 
-
-ngOnChanges(): void{
-      let s = this.userApi.GetUsersList();
-        s.snapshotChanges().subscribe(data => {
-          this.getAllUserPhone = [];
-          data.forEach(item => {
-            let getItem: any = item.payload.toJSON(); 
-            getItem['key'] = item.key;
-            this.getAllUserPhone.push(getItem.mobileNumber);
-          });
-        });
-}
-
   ngOnInit(): void {
     this.userApi.GetUsersList();
     this.userFormData();
