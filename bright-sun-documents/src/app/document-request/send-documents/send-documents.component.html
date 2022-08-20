@@ -1,35 +1,44 @@
 <div class="container-fluid">
   <div class="w-100">
-    <div class="my-2 border-bottom">
-        <h2>Request for Documents to be Prepared</h2>
-    </div>
     <!-- Show user data when logged in -->
-    <div class="row body-content-height">
+    <div class="row">
       <div class="col-md-12">
         <ng-container *ngIf="authService.userData as user">
+          <form [formGroup]="usersForm" novalidate>
+            <!-- <form [formGroup]="usersForm" (ngSubmit)="submitUserData()" novalidate></form> -->
           <div class="row">
             <div class="col-md-8">
-              <form [formGroup]="usersForm" (ngSubmit)="submitUserData()" novalidate>
                 <div class="row">
                   <div class="col-sm-12">
                     <h3 class="my-2">Client Info:</h3>
                     <div class="row">
-                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
-                        <label>Full name</label>
+                      <div class="col-lg-6 col-xl-3 col-sm-12 mb-2">
+                        <label>Full name <span class="text-danger">*</span></label>
                         <input
                           type="text"
                           formControlName="fullName"
-                          class="form-control"
+                          class="form-control green-mat"
                           pInputText
                           required
                         />
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                      <div class="col-lg-6 col-xl-3 col-sm-12 mb-2">
+                        <label>Mobile number <span class="text-danger">*</span></label>
+                        <input
+                          type="text"
+                          pInputText
+                          formControlName="mobileNumber"
+                          class="form-control green-mat"
+                          required
+                        />
+                        <!-- errors-->
+                      </div>
+                      <div class="col-lg-6 col-xl-3 col-sm-12 mb-2">
                         <label>Father name</label>
                         <input type="text" formControlName="fatherName" class="form-control" pInputText required/>
                       </div>
                     
-                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
+                      <div class="col-lg-6 col-xl-3 col-sm-12 mb-2">
                         <label>Email</label>
                         <input
                           type="email"
@@ -39,17 +48,7 @@
                           required
                         />
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 mb-2">
-                        <label>Mobile number</label>
-                        <input
-                          type="text"
-                          pInputText
-                          formControlName="mobileNumber"
-                          class="form-control"
-                          required
-                        />
-                        <!-- errors-->
-                      </div>
+                      
                     </div>
                     <div class="row">
                       <div class="col-md-12">
@@ -57,99 +56,154 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                      <div class="col-lg-6 col-xl-3 col-sm-12 my-2">
                         <label>Document Type</label>
-                        <p-dropdown [options]="documents" [(ngModel)]="selectedDoc" optionLabel="name" id="selectedDoc" formControlName="selectedDoc"></p-dropdown>
-                      </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Current Owner Name</label>
+                        <select name="selectedDoc" required id="selectedDoc" formControlName="selectedDoc"
+                        class="form-select"
+                        >
+                          <option value="Buiding sales deed">Buiding sales deed</option>
+                          <option value="Land sales deed">Land sales deed</option>
+                          <option value="Plot Sales deed">Plot Sales deed</option>
+                          <option value="Commertial Buiding sales deed">Commertial Buiding sales deed</option>
+                          <option value="Settlement deed">Settlement deed</option>
+                          <option value="Rental Aggrements">Rental Aggrements</option>
+                          <option value="Partition deed">Partition deed</option>
+                        </select>
+                       </div>
+                      <div class="col-lg-6 col-xl-3 col-sm-12 my-2">
+                        <label>Seller Name</label>
                         <input type="text" formControlName="currentOwnerName" class="form-control" pInputText required/>
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Owner Address</label>
-                        <input type="textarea" formControlName="currentOwnerAddress" class="form-control" pInputText required/>
+                      <div class="col-lg-6 col-xl-3 col-sm-12 my-2">
+                        <label>Seller Address</label>
+                        <textarea type="text" formControlName="currentOwnerAddress" rows="3" class="form-control" pInputText required></textarea>
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Owner Age</label>
+                      <div class="col-lg-6 col-xl-3 col-sm-12 my-2">
+                        <label>Seller Age</label>
                         <input type="text" formControlName="currentOwnerAge" class="form-control" pInputText required/>
                       </div>
-                      <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                        <label>Owner Gender</label>
-                        <p-dropdown [options]="gender" [(ngModel)]="selectedGender" optionLabel="name" id="selectedGender" formControlName="selectedGender"></p-dropdown>
-                      </div>
+                      <div class="col-lg-6 col-xl-3 col-sm-12 my-2">
+                        <label>Seller Gender</label>
+                        <select name="currentOwnergender" required id="currentOwnergender" formControlName="currentOwnergender"
+                        class="form-select"
+                        >
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Others">Others</option>
+                        </select>
+                        </div>
                       <!-- buyer details -->
-                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
-                            <label>Buyer Relationship to Owner</label>
-                            <p-dropdown [options]="buyerRelation" [(ngModel)]="selectBuyerRelation" optionLabel="name" id="selectBuyerRelation" formControlName="selectBuyerRelation"></p-dropdown>
+                          <div class="col-lg-6 col-xl-3 col-sm-12 my-2">
+                            <label>Buyer/Seller Relation</label>
+                            <select name="selectBuyerRelation" required id="selectBuyerRelation" formControlName="selectBuyerRelation"
+                            class="form-select"
+                            >
+                              <option value="Father">Father</option>
+                              <option value="Mother">Mother</option>
+                              <option value="Husband">Husband</option>
+                              <option value="Wife">Wife</option>
+                              <option value="Brother">Brother</option>
+                              <option value="Sister">Sister</option>
+                              <option value="GrandFather">Grand Father</option>
+                              <option value="GrandMother">Grand Mother</option>
+                              <option value="Father">No Relation</option>
+                            </select>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                          <div class="col-lg-6 col-xl-3 col-sm-12 my-2">
                             <label>Buyer Name</label>
                             <input type="text" formControlName="buyerName" class="form-control" pInputText required/>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                          <div class="col-lg-6 col-xl-3 col-sm-12 my-2">
                             <label>Buyer Address</label>
-                            <input type="textarea" formControlName="buyerAddress" class="form-control" pInputText required/>
+                            <textarea type="text" formControlName="buyerAddress" rows="3" class="form-control" pInputText required></textarea>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                          <div class="col-lg-6 col-xl-3 col-sm-12 my-2">
                             <label>Buyer Age</label>
-                            <input type="textarea" formControlName="buyerAge" class="form-control" pInputText required/>
+                            <input type="text" formControlName="buyerAge" class="form-control" pInputText required/>
                           </div>
-                          <div class="col-lg-3 col-md-6 col-sm-12 my-2">
+                          <div class="col-lg-6 col-xl-3 col-sm-12 my-2">
                             <label>Buyer gender</label>
-                            <p-dropdown [options]="gender" [(ngModel)]="selectedGender" optionLabel="name" id="selectedBuyGender" formControlName="selectedBuyGender"></p-dropdown>
+                            <select name="selectedBuyGender" required id="selectedBuyGender" formControlName="selectedBuyGender"
+                            class="form-select"
+                            >
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                              <option value="Others">Others</option>
+                            </select>
                           </div>
                         </div>
-                        
                       </div>
                     </div>
-                    
-              </form>
-            </div>
-            <div class="col-md-4">
-              <div class="row">
-                <div class="col-md-12 border">
-                  <h3 class="my-2">Upload Requied Documents</h3>
-                  <!-- <input required type="file" id="uploadFiles" name="uploadFiles" multiple>
-                  <input type="button"
-                  class="btn btn-primary mx-2"
-                  (click)="uploadFiles()" Value="Upload"> -->
-                  <div class="row my-2">
-                    <div class="col-md-8">
-                      <input class="form-control" type="file" 
-                              (change)="chooseFile($event)" multiple>
-                              
+                   </div> 
 
-                      <button (click)="addData()" 
-                          class="btn btn-success">
-                          Upload
-                      </button>
+                    <div class="col-md-4 green-mat">
+                      <div class="row">
+                        <div class="col-md-12 my-2">
+                          <label>Payment Status</label>
+                          <select name="paymentStatus" required id="paymentStatus" formControlName="paymentStatus"
+                          class="form-select"
+                          >
+                          <option value="Pending">Pending</option>
+                          <option value="Done">Done</option>
+                          <option value="Partial">Partial</option>
+                          <option value="cheque Recieved">cheque Recieved</option>
+                          <option value="cheque Returned/Bounced">cheque Returned/Bounced</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 border">
+                          <h3 class="my-2">Upload Requied Documents <span class="text-danger">*</span></h3>
+                          <!-- <input required type="file" id="uploadFiles" name="uploadFiles" multiple>
+                          <input type="button"
+                          class="btn btn-primary mx-2"
+                          (click)="uploadFiles()" Value="Upload"> -->
+                          <div class="row my-2">
+                            <div class="col-md-12">
+                              <input #fileInput class="form-control mb-2" type="file" 
+                                  (change)="chooseFile($event)" multiple formControlName="selectedDocuments">
+                            
+                              <!-- <button (click)="addData()" 
+                                  class="btn btn-success w-100">
+                                  Upload
+                              </button> -->
+                            </div>
+                            <div class="text-end my-2">
+                              <button
+                                type="button"
+                                class="btn btn-secondary mx-2"
+                                (click)="ResetForm()"
+                              >
+                                Reset
+                              </button>
+                              <!-- <button
+                                type="submit"
+                                class="btn btn-primary"
+                                [disabled]="!usersForm.valid || !enableAdd"
+                                (click)="submitUserData()"
+                              >
+                                Add Client
+                              </button> -->
+                              <button
+                                type="submit"
+                                class="btn btn-success"
+                                [disabled]="!enableAdd"
+                                (click)="submitUserData()"
+                              >
+                                Add Client
+                              </button>
+                            </div>
+                          </div>
+                          <div class="py-2" *ngIf="widthContainer">
+                            <label *ngIf="widthVal != 100">Uploading files...</label>
+                            <label *ngIf="widthVal == 100">Files are uploaded...</label>
+                            <p-progressBar *ngIf="widthVal != 100" [value]="widthVal" ></p-progressBar>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="border border-success p-2" *ngIf="widthVal != 0">
-                    <div class="progress-bar bg-info" [ngStyle]="{'width.%': widthVal}"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-12">
-              <div class="pull-right my-2">
-                <button
-                  type="button"
-                  class="btn btn-secondary mx-2"
-                  (click)="ResetForm()"
-                >
-                  Reset
-                </button>
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  [disabled]="!usersForm.valid"
-                >
-                  Add Client
-                </button>
-              </div>
-            </div>
-          </div>
+                    </div>
+              </form>
         </ng-container>
       </div>
     </div>

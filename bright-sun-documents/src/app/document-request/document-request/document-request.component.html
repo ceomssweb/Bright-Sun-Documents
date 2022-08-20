@@ -1,3 +1,160 @@
 <bsd-header></bsd-header>
-<bsd-send-documents></bsd-send-documents>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12 py-2">
+                    <h2>{{title}}</h2>
+                </div>
+            </div>
+            <div class="row py-2 body-content-height">
+                    <div class="left-side">
+                        <p-menu class="menu-left" [model]="items"></p-menu>
+                    </div>
+                    <div class="right-side">
+                        <div class="row">
+                            <div class="col-md-12" *ngIf="showDetails">
+                                <div *ngIf="authService.userData as user" class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-8" *ngIf="user.email == userService.adminUser">
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-2">
+                                                        <h3>Employees Details</h3>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="mx-auto">
+                                                            <div class="table-responsive">
+                                                            <table
+                                                                class="table table-bordered custom-table"
+                                                            >
+                                                                <thead>
+                                                                <tr>
+                                                                    <th class="text-center" scope="col">Sl/no.</th>
+                                                                    <th scope="col">Name</th>
+                                                                    <th scope="col">Email</th>
+                                                                    <th scope="col">Actions</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody *ngIf="preLoader">
+                                                                <tr>
+                                                                    <td colspan="4">
+                                                                    <div class="no-data my-4 text-center">
+                                                                        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                                                                    </div>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                                <tbody *ngIf="noData && !preLoader">
+                                                                <tr>
+                                                                    <td colspan="4">
+                                                                    <div class="no-data my-4 text-center">
+                                                                        <p class="nodata-msg">No users added yet!</p>
+                                                                        <!-- <a routerLink="/register-userList" class="btn btn-success"> Add userList </a> -->
+                                                                    </div>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                                <tbody *ngIf="hideWhenNouserList">
+                                                                <tr 
+                                                                    *ngFor=" 
+                                                                    let item of getEmp
+                                                                        | paginate: { itemsPerPage: 8, currentPage: page };
+                                                                    let i = index
+                                                                    "
+                                                                    [ngClass]="item.mail == userService.adminUser ? 'admin-row' : ''"
+                                                                >
+                                                                    <td class="text-center">{{ i + 1 }}</td>
+                                                                    <td>
+                                                                        <span *ngIf="item.mail == userService.adminUser" class="mx-2 text-danger fw-bild">Admin</span>{{ item.name }}
+                                                                        
+                                                                    </td>
+                                                                    <td>
+                                                                        <span>{{ item.mail }}</span>
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <button *ngIf="item.mail != userService.adminUser"
+                                                                        class="mx-2 btn btn-outline-primary btn-sm"
+                                                                        (click)="showEmpDetails(item)"
+                                                                        >View Details</button
+                                                                        >
+                                                                        <button *ngIf="item.mail == userService.adminUser"
+                                                                        class="mx-2 btn btn-secondary btn-sm"
+                                                                        (click)="showView()"
+                                                                        >View/Edit Client</button
+                                                                        >
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            </div>
+                                                            <div class="my-2">
+                                                            <pagination-controls (pageChange)="page = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-4 profile-picture mb-2 border">
+                                                <div class="img-container d-block my-4">
+                                                    <div class="text-center" *ngIf="user.photoURL">
+                                                        <img src="{{user.photoURL}}" alt="Profile Picture"/>
+                                                    </div>
+                                                    <div class="text-center" *ngIf="!user.photoURL">
+                                                        <img src="/assets/images/no-image.png" alt="No Picture"/>
+                                                    </div>
+                                                </div>
+                                                <div class="my-2">
+                                                    <label class="bold-label">Name: </label><label class="mx-1">{{(user.displayName)}}</label>
+                                                </div>
+                                                <div class="mb-3"> 
+                                                    <label class="bold-label">Email: </label><label class="mx-1">{{(user.email)}}</label>
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12" *ngIf="sendDocShow">
+                                <bsd-send-documents></bsd-send-documents>
+                            </div>
+                            <div class="col-md-12" *ngIf="viewDocShow">
+                                <bsd-view-documents></bsd-view-documents>
+                            </div>
+                            <div class="col-md-12" *ngIf="sendReport">
+                                <bsd-report-documents></bsd-report-documents>
+                            </div>
+                            <div class="col-md-12" *ngIf="showSettings">
+                                <bsd-settings></bsd-settings>
+                            </div>
+                                
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p-dialog [(visible)]="showEmpDialog" (onHide)="hideEmpDialog()">
+    <ng-template pTemplate="header">
+      <label>View Details of {{showEmpHeader}}</label>
+    </ng-template>
+    <div class="edit-emp-dialog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 px-0">
+                    <bsd-view-emp [mailKey]="empData" [nameKey]="showEmpHeader"></bsd-view-emp>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12 text-end">
+                    <button class="my-2 btn btn-outline-primary btn-sm" (click)="hideEmpDialog()">Close</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
 <bsd-footer></bsd-footer>

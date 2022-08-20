@@ -15,10 +15,64 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
   overflow-y: auto;
 }
 
+.body-content-height-nohead{
+  height: calc(100vh - 149px);
+  overflow-y: auto;
+}
+
+.box-shadow-images{
+  box-shadow: 0 128px 8px 0 #ccc; 
+}
+
+.box-shadow{
+  box-shadow: 0 4px 8px 0 #ccc; 
+}
+
+table{
+  box-shadow: 0 4px 8px 0 #ccc;
+}
+
+thead{
+  background: $primary-color;
+  color: white;
+  border: 2px solid $primary-color;
+  th{
+      font-weight: normal !important;
+  }
+}
+tbody{
+  vertical-align: middle;
+  
+  border: 1px solid $border-color;
+  
+  tr:hover{
+    background-color:rgb(229, 249, 250);
+    cursor: pointer;
+  }
+}
+tr{
+  vertical-align: middle;
+}
+
+.pi-spin{
+  color:$primary-color;
+}
+.hide{
+  display: none;
+}
 h1,h2,h3,h4,h5{
   margin-bottom: 0.3rem !important;
   line-height: initial !important;
   color: $primary-color;
+}
+.green-mat{
+  background-color: rgb(224, 245, 224);
+  border-radius: 5px;
+}
+textarea{
+  resize: none;
+  overflow-y: auto;
+  height: 54px;
 }
 .footer-container {
   h1,h2,h3,h4,h5{
@@ -36,6 +90,8 @@ h2{
 
 h3{
   font-size: 16px !important;
+  color: $primary-color;
+  font-weight: 700 !important;
 }
 
 h4{
@@ -64,6 +120,18 @@ a,
   padding: 0.5rem;
   &:hover, &:active{
     color: initial !important;
+  }
+}
+
+.bold-label{
+  font-weight: 900;
+}
+
+
+.button-link{
+  color: white !important; 
+  &:hover{
+    color: whitesmoke !important;
   }
 }
 
@@ -99,4 +167,21 @@ p.decorated{
   padding-bottom: 0.3rem;
   margin-bottom: 1rem;
   border-bottom: 0.1rem solid $primary-color;
+}
+
+.ngx-pagination .current{
+  background-color: $primary-color !important;
+}
+
+.btn-primary{
+  border: 1px solid $primary-color !important;
+  background-color: $primary-color !important;
+}
+.btn-outline-primary{
+  border: 1px solid $primary-color !important;
+  color: $primary-color !important;
+}
+.btn-outline-primary:hover{
+  background-color: $primary-color !important;
+  color: white !important;
 }

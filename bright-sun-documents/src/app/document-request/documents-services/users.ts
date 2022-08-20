@@ -1,5 +1,5 @@
 export interface Users {
-    $key: String;
+    key: String;
     fullName: String;
     fatherName: String;
     email: String
@@ -14,5 +14,12 @@ export interface Users {
     buyerAddress: String;
     buyerAge: Number,
     selectedBuyGender: String,
-    uploadFiles: File,
+    originalNames: String,
+    paymentStatus: String,
+    finalDocStatus: String
+ }
+
+ export interface Columns {
+    id: number;
+    header: String;
  }

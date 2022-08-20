@@ -7,17 +7,26 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import {
+  AngularFireDatabase,
+  AngularFireList,
+  AngularFireObject,
+} from '@angular/fire/compat/database';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   userData: any; // Save logged in user data
-  
+  static user: any;
+  empRef!: AngularFireList<any>;
   constructor(
+    private db: AngularFireDatabase,
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
     public ngZone: NgZone // NgZone service to remove outside scope warning
+    
   ) {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
@@ -31,26 +40,71 @@ export class AuthService {
         JSON.parse(localStorage.getItem('user')!);
       }
     });
+    
   }
+  
   // Sign in with email/password
   SignIn(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.ngZone.run(() => {
+        setTimeout(() => {
           this.router.navigate(['document-request']);
-        });
+        }, 10);
         this.SetUserData(result.user);
       })
       .catch((error) => {
         window.alert(error.message);
       });
   }
+
+  GetEmpList() {
+    this.empRef = this.db.list('Emp-list/');
+    return this.empRef;
+  }
+
   // Sign up with email/password
-  SignUp(email: string, password: string) {
+  SignUp(email: string, password: string, username: string, picture: any) {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
+      .then((result:any) => {
+        var getId = result.user.uid;
+        this.empRef.push({mail: email, name: username, key: getId});
+        result.user.updateProfile({
+          displayName: username
+      }).then((out: any) => {
+        var userEmail = out.email;
+        const storage = getStorage();
+        var storageRef = ref(storage, 'profile-picture/'+ userEmail + '/' + picture[0].name);
+        const uploadTask = uploadBytesResumable(storageRef, picture[0]);
+        uploadTask.on('state_changed',
+        (snapshot) => {
+        },
+        (error) => {
+          console.log(error.message);
+          switch (error.code) {
+            case 'storage/unauthorized':
+              break;
+            case 'storage/canceled':
+              break;
+            case 'storage/unknown':
+              break;
+          }
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((_downloadURL) => {
+            result.user.updateProfile({
+            photoURL: _downloadURL
+          })
+          });
+
+          
+        }
+      );
+      })
+      .catch((error: any) => {
+        window.alert(error.message);
+      });       
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
         this.SendVerificationMail();
@@ -83,6 +137,7 @@ export class AuthService {
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user')!);
     return user !== null && user.emailVerified !== false ? true : false;
+    //return user !== null
   }
   // Sign in with Google
   GoogleAuth() {
@@ -128,7 +183,8 @@ export class AuthService {
   SignOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
-      this.router.navigate(['home-page']);
+      window.location.reload();
+      // this.router.navigate(['home-page']);
     });
   }
 }

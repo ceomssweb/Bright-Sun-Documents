@@ -1,0 +1,164 @@
+<div class="w-100">
+    <div class="row mx-0 mb-2">
+        <div class="col-md-6 px-0">
+            <label class="fw-bold">Name :</label> <span class="mx-2">{{nameKey}}</span>
+        </div>
+        <div class="col-md-6 px-0 text-end">
+            <label class="fw-bold">e-mail :</label> <span class="mx-2">{{mailKey.mail}}</span>
+        </div>
+    </div>
+    <div class="row mx-0 mb-2">
+        <div class="col-md-12 px-0">
+            <div class="mx-auto">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered custom-table"
+                  >
+                    <thead>
+                      <tr>
+                        <th class="text-center">Sl/no.</th>
+                        <th class="text-center" *ngFor="let items of cols" scope="col">{{items.header}}</th>
+                        <!-- <th class="text-center" scope="col">Actions</th> -->
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="preLoader">
+                      <tr>
+                        <td colspan="19">
+                          <div class="no-data my-4 text-center">
+                            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody *ngIf="noData && !preLoader">
+                      <tr>
+                        <td colspan="19">
+                          <div class="no-data my-4 text-center">
+                            <p class="nodata-msg">No users added yet by {{nameKey}}!</p>
+                            </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody *ngIf="hideWhenNouserList">
+                      <tr 
+                        *ngFor="
+                          let user of getEmpItems
+                            | paginate: { itemsPerPage: 8, currentPage: page };
+                          let i = index
+                        "
+                      >
+                        
+                        <td class="text-center">{{ i + 1 }}</td>
+                        <td>{{ user.fullName }}</td>
+                        <td >
+                          <button
+                            class="mx-2 btn btn-outline-primary btn-sm"
+                            (click)="showDocuments(user.key, user)"
+                            >View Documents</button
+                          >
+                        </td>
+                        <td class="text-center">{{ user.paymentStatus }}</td>
+                        <td class="output-column">
+                          <div *ngIf="user.finalDocStatus == 'Ready for Processing'" class="mb-2 text-center">
+                            <input
+                              type="file"
+                              class="form-control"
+                              #docFile
+                              (change)="chooseOutputFile($event)"
+                            />
+                            <!-- commented due to all rows shows progress in table -->
+                            <!-- <div class="py-2" *ngIf="widthContainer">
+                              <p-progressBar [value]="widthVal"></p-progressBar>
+                            </div> -->
+                            <button
+                            class="my-2 btn btn-success"
+                            (click)="uploadFinalFile(user)"
+                            >Upload Final Document</button
+                          >
+                          </div>
+                          <div *ngIf="user.finalDocStatus != 'Ready for Processing'" class="mt-2 text-center">
+                           
+                          <a href="{{user.finalDocStatus[1]}}" target="_blank"
+                            class="m-2 p-2 btn btn-primary btn-sm button-link"
+                            >Download</a>
+                          <button
+                            class="my-2 btn btn-outline-danger"
+                            (click)="deleteFinal(user)"
+                            >Delete</button
+                          >
+                          </div>
+                        </td>
+                        
+                        <td class="text-center">{{ user.selectedDoc }}</td>
+                        <td>{{ user.email }}</td>
+                        <td class="text-center">{{ user.mobileNumber }}</td>
+              
+                        <td>{{ user.fatherName }}</td>
+                        <td>{{ user.currentOwnerName }}</td>
+                        <td>{{ user.currentOwnerAddress }}</td>
+                        <td class="text-center">{{ user.currentOwnerAge }}</td>
+              
+                        <td class="text-center">{{ user.currentOwnergender }}</td>
+                        <td>{{ user.selectBuyerRelation }}</td>
+                        <td>{{ user.buyerName }}</td>
+                        <td>{{ user.buyerAddress }}</td>
+                        <td class="text-center">{{ user.buyerAge }}</td>
+                        <td class="text-center">{{ user.selectedBuyGender }}</td>
+                        
+                        
+              
+                        <!-- <td class="text-center action-block">
+                          <span
+                            class="mx-2 btn btn-outline-primary btn-sm" (click)="editMyUsers(user.key, user, i)"
+                            >Edit</span
+                          >
+                          <span
+                            class="btn btn-outline-danger btn-sm"
+                            (click)="deleteUsers(user)"
+                            >Delete</span
+                          > 
+                        </td>-->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="my-2">
+                  <pagination-controls (pageChange)="page = $event" class="w-100 text-center" *ngIf="!noData"></pagination-controls>
+                </div>
+
+              </div>
+             <p-dialog [(visible)]="showDocDialog" (onHide)="hideDocDialog()">
+                <ng-template pTemplate="header">
+                  <label>View Documents of {{dialogHeader}}</label>
+                </ng-template>
+                <div class="container-fluid doc-show-dialog">
+                  <div class="row">
+                    <div class="col-md-3" *ngFor="let item of getActDoc">
+                      <div class="p-2 border doc-images mb-2 mr-2 text-center" >
+                        <img src="{{item}}" alt="{{item}}" title="{{item}}"/>
+                        <div id="{{item}}" class="download-doc  w-100 py-2">
+                          <a href="{{item}}" target="_blank"
+                            class="my-2 btn btn-primary btn-sm button-link"
+                            >Download</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="doc-spin" *ngIf="docSpinner">
+                      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                    </div>
+                  </div>
+                </div>
+                <ng-template pTemplate="footer">
+                 
+                <span
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="hideDocDialog()"
+                  >Close</span
+                >
+                </ng-template>
+              </p-dialog>
+              
+           </div>
+    </div>
+</div>

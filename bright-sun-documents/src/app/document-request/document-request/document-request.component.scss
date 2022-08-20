@@ -1,0 +1,39 @@
+.left-side{
+    width: 195px;
+    float: left;
+}
+
+.right-side{
+    width: calc(100% - 195px);
+    float: right;
+}
+.edit-emp-dialog{
+    width: 80vw;
+    height: 60vh;
+    overflow-y: auto;
+}
+::ng-deep{
+    .menu-left {
+        .p-menu{
+            width: 185px !important;
+        }
+    }
+    .p-dialog-mask{
+        background: #00000050 !important;
+    }
+}
+.admin-row{
+    background-color: #9fa39e;
+    color: #fff;
+}
+.profile-picture{
+    height: 30%;
+    overflow-y: auto;
+    .img-container{
+        overflow: hidden;
+        width: 100%;
+        img{
+           box-shadow: 0 128px 8px 0 #ccc; 
+        }
+    }
+}

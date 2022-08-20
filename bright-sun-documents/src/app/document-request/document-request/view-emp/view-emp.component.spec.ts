@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SendDocumentsComponent } from './send-documents.component';
+import { ViewEmpComponent } from './view-emp.component';
 
-describe('SendDocumentsComponent', () => {
-  let component: SendDocumentsComponent;
-  let fixture: ComponentFixture<SendDocumentsComponent>;
+describe('ViewEmpComponent', () => {
+  let component: ViewEmpComponent;
+  let fixture: ComponentFixture<ViewEmpComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SendDocumentsComponent ]
+      declarations: [ ViewEmpComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SendDocumentsComponent);
+    fixture = TestBed.createComponent(ViewEmpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { AuthService } from '../services-firebase/auth.service';
 
 @Component({
@@ -9,9 +8,15 @@ import { AuthService } from '../services-firebase/auth.service';
 })
 export class SignUpComponent implements OnInit {
 
+  file: any;
   constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
+    this.authService.GetEmpList();
+  }
+
+  chooseFile(event: any){
+      this.file = event.target.files;
   }
 
 }

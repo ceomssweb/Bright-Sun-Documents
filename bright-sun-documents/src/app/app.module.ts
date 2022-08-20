@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { initializeApp } from "firebase/app";
+import { getFunctions  } from "firebase/functions";
 import { getAnalytics } from "firebase/analytics";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
@@ -26,6 +27,7 @@ import { getStorage } from 'firebase/storage';
 export const firebaseConfig = {
   apiKey: "AIzaSyDhl6vjZyG5bDB5MQJ8BSnWi5oUu8gxAXE",
   authDomain: "bright-sun-documents.firebaseapp.com",
+  databaseURL: "https://bright-sun-documents-default-rtdb.firebaseio.com",
   projectId: "bright-sun-documents",
   storageBucket: "bright-sun-documents.appspot.com",
   messagingSenderId: "555788329592",
@@ -35,9 +37,10 @@ export const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const storage = getStorage(app);
+const functions = getFunctions(app);
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,

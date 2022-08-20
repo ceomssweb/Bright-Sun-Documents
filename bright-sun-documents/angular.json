@@ -34,8 +34,7 @@
               "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss"
-            ],
-            "scripts": []
+            ]
           },
           "configurations": {
             "production": {
@@ -74,10 +73,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "bright-sun-documents:build:production"
+              "browserTarget": "bright-sun-documents:build:production",
+              "proxyConfig": "src/proxy.conf.json"
             },
             "development": {
-              "browserTarget": "bright-sun-documents:build:development"
+              "browserTarget": "bright-sun-documents:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
@@ -104,12 +105,13 @@
               "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss"
-            ],
-            "scripts": []
+            ]
           }
         }
       }
     }
   },
-  "defaultProject": "bright-sun-documents"
+  "cli": {
+    "analytics": "d80ad40c-6aa4-4b06-95c8-573a36108b3d"
+  }
 }

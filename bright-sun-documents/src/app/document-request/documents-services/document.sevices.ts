@@ -6,6 +6,7 @@ import {
   AngularFireObject,
 } from '@angular/fire/compat/database';
 import { AuthService } from 'src/app/shared/services-firebase/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -13,13 +14,15 @@ import { AuthService } from 'src/app/shared/services-firebase/auth.service';
 export class UsersDocuments {
   MultiUsersRef!: AngularFireList<any>;
   UsersRef!: AngularFireObject<any>;
-  servicePro!: string;
+  userList!: Users[];
   
-  constructor(private db: AngularFireDatabase, public ath: AuthService) {}
+  constructor(private db: AngularFireDatabase, public ath: AuthService, public toastr: ToastrService) {}
   // Create Users
-  AddUsers(Users: Users) {
+  userPath: string = JSON.parse(localStorage.getItem('user')!).uid;
+  adminUser: String = 'saravanan039@hotmail.com';
+  AddUsers(Users: Users, filename: any, finalDocStatus: any) {
     this.MultiUsersRef.push({
-      firstName: Users.fullName,
+      fullName: Users.fullName,
       fatherName: Users.fatherName,
       email: Users.email,
       mobileNumber: Users.mobileNumber,
@@ -33,26 +36,44 @@ export class UsersDocuments {
       buyerAddress: Users.buyerAddress,
       buyerAge: Users.buyerAge,
       selectedBuyGender: Users.selectedBuyGender,
-      uploadFiles: Users.uploadFiles,
+      originalNames: filename,
+      paymentStatus: Users.paymentStatus,
+      finalDocStatus: finalDocStatus
     });
   }
   // Fetch Single Users Object
-  GetUsers(id: string, getSP: string) {
-    this.UsersRef = this.db.object('Users-list/'+ getSP +'/' + id);
+  GetUsers(id: string) {
+    this.UsersRef = this.db.object('Users-list/'+ this.userPath +'/' + id);
     return this.UsersRef;
   }
   // Fetch Users List
-  GetUsersList(getSP: string) {
-    this.MultiUsersRef = this.db.list('Users-list/'+ getSP +'/');
+  GetUsersList() {
+    this.MultiUsersRef = this.db.list('Users-list/' + this.userPath);
     return this.MultiUsersRef;
   }
-  // Update Users Object
-  UpdateUsers(Users: Users) {
+  GetEmpList(){
+    this.MultiUsersRef = this.db.list('Users-list/' + this.userPath);
+    return this.MultiUsersRef;
+  }
+  GetPerEmp(empRow:any){
+    this.MultiUsersRef = this.db.list('Users-list/' + empRow + '/');
+    return this.MultiUsersRef;
+  }
+  UploadDoc(empKey:any, user:any, filename: any){
+    this.UsersRef = this.db.object('Users-list/'+ empKey + '/' + user.key +'/');
     this.UsersRef.update({
-      firstName: Users.fullName,
+      finalDocStatus: filename
+    });
+    this.toastr.success(
+      'Process completed successfully'
+   );
+  }
+  // Update Users Object
+  UpdateUsers(Users: Users, filename: any) {
+    this.UsersRef.update({
+      fullName: Users.fullName,
       fatherName: Users.fatherName,
       email: Users.email,
-      mobileNumber: Users.mobileNumber,
       selectedDoc: Users.selectedDoc,
       currentOwnerName: Users.currentOwnerName,
       currentOwnerAddress: Users.currentOwnerAddress,
@@ -63,12 +84,13 @@ export class UsersDocuments {
       buyerAddress: Users.buyerAddress,
       buyerAge: Users.buyerAge,
       selectedBuyGender: Users.selectedBuyGender,
-      uploadFiles: Users.uploadFiles,
+      originalNames: filename,
+      paymentStatus: Users.paymentStatus
     });
   }
   // Delete Users Object
-  DeleteUsers(id: string, getSP: string) {
-    this.UsersRef = this.db.object('Users-list/'+ getSP +'/' + id);
+  DeleteUsers(id: string) {
+    this.UsersRef = this.db.object('Users-list/'+ this.userPath +'/' + id);
     this.UsersRef.remove();
   }
 }

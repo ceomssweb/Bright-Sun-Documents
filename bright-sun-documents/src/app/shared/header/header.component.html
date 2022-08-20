@@ -9,21 +9,25 @@
     <div class="navbar-collapse justify-content-md-end" [ngClass]="showNav === false ? 'collapse': ''" id="navbarNav">
       <ul class="navbar-nav mx-2">
         <li class="nav-item active">
-          <a class="nav-link" [routerLink]="['home-page']">Home</a>
+          <a class="nav-link" [routerLink]="['/document-request']">Home</a>
         </li>
         <li class="no-link" *ngIf="authService.isLoggedIn == true">
           <span *ngIf="authService.userData as user">
-          <span class="mx-1">Hello: <strong>{{(user.displayName) ? user.displayName : 'User'}}</strong></span>
+          <span class="mx-1">Welcome: {{(user.displayName) ? user.displayName : 'User'}}</span>
 
           <!-- <p>User ID: <strong>{{user.uid}}</strong></p> -->
-          <span class="mx-1">Email: <strong id="spMail" name="spMail" #spMail>{{user.email}}</strong></span>
+          <!-- <span class="mx-1">Email: <strong id="spMail" name="spMail" #spMail>{{user.email}}</strong></span> -->
           <!-- <p>Email Verified: <strong>{{user.emailVerified}}</strong></p> -->
           <span class="mx-1 nav-item img-thumbnail rounded-circle"><img
               src="{{(user.photoURL) ? user.photoURL : '/assets/images/no-image.png'}}" alt="{{user.displayName}}">
           </span>
-          <span (click)="authService.SignOut()">
-            <a class="mx-1">Sign Out</a>
+          <span>
+            <a class="mx-1" title="Tech Support"><i class="pi pi-comments text-warning"></i></a>
           </span>
+          <span (click)="authService.SignOut()">
+            <a class="mx-1 text-danger">Sign Out <i class="pi pi-sign-out mx-1"></i></a>
+          </span>
+          
         </span>
         </li>
       </ul>

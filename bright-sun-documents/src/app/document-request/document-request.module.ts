@@ -7,13 +7,28 @@ import { DocumentRequestComponent } from './document-request/document-request.co
 import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {DropdownModule} from 'primeng/dropdown';
-import {InputTextModule} from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { ViewDocumentsComponent } from './view-documents/view-documents.component';
+import { MenuModule } from 'primeng/menu';
+import {TableModule} from 'primeng/table';
+import { NgxPaginationModule } from 'ngx-pagination';
+import {DialogModule} from 'primeng/dialog';
+import {ProgressBarModule} from 'primeng/progressbar';
+import {ToastModule} from 'primeng/toast';
+import { ReportDocumentsComponent } from './report-documents/report-documents.component';
+import {ChartModule} from 'primeng/chart';
+import { ViewEmpComponent } from './document-request/view-emp/view-emp.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
     DocumentRequestComponent,
-    SendDocumentsComponent
+    SendDocumentsComponent,
+    ViewDocumentsComponent,
+    ReportDocumentsComponent,
+    SettingsComponent,
+    ViewEmpComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +39,14 @@ import {InputTextModule} from 'primeng/inputtext';
     ReactiveFormsModule,
     FormsModule,
     DropdownModule,
-    InputTextModule
+    InputTextModule,
+    MenuModule,
+    TableModule,
+    NgxPaginationModule,
+    DialogModule,
+    ProgressBarModule,
+    ToastModule,
+    ChartModule
   ]
 })
 export class DocumentRequestModule { }
