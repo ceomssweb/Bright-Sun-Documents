@@ -1,0 +1,82 @@
+.translate-container {
+  padding: 15px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.upload-area {
+  border: 2px dashed #adb5bd;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  background: #f8f9fa;
+  transition: border-color 0.3s;
+
+  &:hover {
+    border-color: cadetblue;
+  }
+}
+
+.upload-label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+.upload-icon {
+  font-size: 3rem;
+  color: cadetblue;
+}
+
+.manual-textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-size: 1rem;
+}
+
+.swap-btn-col {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+}
+
+.result-card {
+  height: 100%;
+
+  .card-header {
+    background: cadetblue;
+    color: #fff;
+  }
+
+  .card-body {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+}
+
+.result-text {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: inherit;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.btn-group {
+  .btn {
+    border-radius: 0;
+
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+}

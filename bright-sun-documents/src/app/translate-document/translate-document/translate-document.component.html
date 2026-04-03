@@ -1,0 +1,127 @@
+<bsd-header></bsd-header>
+<div class="container-fluid translate-container">
+  <div class="row">
+    <div class="col-md-12 py-3">
+      <h2><i class="pi pi-language"></i> Document Translator</h2>
+      <p class="text-muted">Upload a PDF or type text to translate between languages</p>
+    </div>
+  </div>
+
+  <!-- Input Mode Toggle -->
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="btn-group">
+        <button class="btn" [ngClass]="inputMode === 'pdf' ? 'btn-primary' : 'btn-outline-primary'"
+                (click)="inputMode = 'pdf'; clearAll()">
+          <i class="pi pi-file-pdf"></i> Upload PDF
+        </button>
+        <button class="btn" [ngClass]="inputMode === 'manual' ? 'btn-primary' : 'btn-outline-primary'"
+                (click)="inputMode = 'manual'; clearAll()">
+          <i class="pi pi-pencil"></i> Type Text
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Language Selection -->
+  <div class="row mb-3 align-items-center">
+    <div class="col-md-5">
+      <label class="form-label fw-bold">Source Language</label>
+      <select class="form-select" [(ngModel)]="sourceLang">
+        <option *ngFor="let lang of languages" [value]="lang.code">{{ lang.name }}</option>
+      </select>
+    </div>
+    <div class="col-md-2 text-center swap-btn-col">
+      <button class="btn btn-outline-secondary btn-sm" (click)="swapLanguages()" title="Swap languages">
+        <i class="pi pi-arrows-h"></i>
+      </button>
+    </div>
+    <div class="col-md-5">
+      <label class="form-label fw-bold">Target Language</label>
+      <select class="form-select" [(ngModel)]="targetLang">
+        <option *ngFor="let lang of languages" [value]="lang.code">{{ lang.name }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- PDF Upload Section -->
+  <div class="row mb-3" *ngIf="inputMode === 'pdf'">
+    <div class="col-md-12">
+      <div class="upload-area">
+        <input type="file" id="pdfUpload" accept=".pdf" (change)="onFileSelect($event)" class="d-none">
+        <label for="pdfUpload" class="upload-label">
+          <i class="pi pi-cloud-upload upload-icon"></i>
+          <span *ngIf="!fileName">Click to upload a PDF file</span>
+          <span *ngIf="fileName">{{ fileName }}</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manual Text Input -->
+  <div class="row mb-3" *ngIf="inputMode === 'manual'">
+    <div class="col-md-12">
+      <textarea class="form-control manual-textarea" rows="6"
+                [(ngModel)]="manualText"
+                placeholder="Type or paste text here to translate..."></textarea>
+    </div>
+  </div>
+
+  <!-- Loading / Error -->
+  <div class="row mb-3" *ngIf="isExtracting">
+    <div class="col-md-12 text-center">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <p>Extracting text from PDF...</p>
+    </div>
+  </div>
+
+  <div class="row mb-2" *ngIf="errorMessage">
+    <div class="col-md-12">
+      <div class="alert alert-danger">{{ errorMessage }}</div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <button class="btn btn-success me-2"
+              (click)="translateContent()"
+              [disabled]="isTranslating || isExtracting || (!extractedText && !manualText)">
+        <i class="pi pi-spin pi-spinner" *ngIf="isTranslating"></i>
+        <i class="pi pi-globe" *ngIf="!isTranslating"></i>
+        {{ isTranslating ? 'Translating...' : 'Translate' }}
+      </button>
+      <button class="btn btn-outline-secondary me-2" (click)="clearAll()">
+        <i class="pi pi-refresh"></i> Clear
+      </button>
+      <button class="btn btn-outline-info" *ngIf="translatedText" (click)="copyTranslatedText()">
+        <i class="pi pi-copy"></i> Copy Translation
+      </button>
+    </div>
+  </div>
+
+  <!-- Results: Side by Side -->
+  <div class="row" *ngIf="extractedText || translatedText">
+    <div class="col-md-6 mb-3" *ngIf="inputMode === 'pdf' && extractedText">
+      <div class="card result-card">
+        <div class="card-header">
+          <strong>Extracted Text ({{ getLanguageName(sourceLang) }})</strong>
+        </div>
+        <div class="card-body">
+          <pre class="result-text">{{ extractedText }}</pre>
+        </div>
+      </div>
+    </div>
+    <div [ngClass]="inputMode === 'pdf' && extractedText ? 'col-md-6' : 'col-md-12'" class="mb-3" *ngIf="translatedText">
+      <div class="card result-card">
+        <div class="card-header">
+          <strong>Translated Text ({{ getLanguageName(targetLang) }})</strong>
+        </div>
+        <div class="card-body">
+          <pre class="result-text">{{ translatedText }}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<bsd-footer></bsd-footer>

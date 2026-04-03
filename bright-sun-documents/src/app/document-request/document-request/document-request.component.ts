@@ -37,7 +37,8 @@ export class DocumentRequestComponent implements OnInit {
       {label: 'Add Client', icon: 'pi pi-fw pi-user-plus', command: () => this.showAddNew(),},
       {label: 'View/Edit Client', icon: 'pi pi-fw pi-eye', command: () => this.showView(),},
       {label: 'Report', icon: 'pi pi-fw pi-chart-bar', command: () => this.showReport(),},
-      {label: 'Settings', icon: 'pi pi-fw pi-cog', command: () => this.showSetting(),}
+      {label: 'Settings', icon: 'pi pi-fw pi-cog', command: () => this.showSetting(),},
+      {label: 'Translate Document', icon: 'pi pi-fw pi-language', routerLink: '/translate-document'}
     ];
     this.dataState();
     if(this.userEmail == this.userService.adminUser){

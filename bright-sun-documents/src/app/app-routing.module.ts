@@ -25,6 +25,14 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'translate-document',
+    loadChildren: () =>
+      import('./translate-document/translate-document.module').then(
+        (m) => m.TranslateDocumentModule
+      ),
+    canActivate: [AuthGuard]
+  },
   { path: 'register-user', component: SignUpComponent },
   { path: 'verify-email-address', component: VerifyEmailComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
