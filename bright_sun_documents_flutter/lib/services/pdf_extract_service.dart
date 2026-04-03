@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'gemini_service.dart';
 
 class PdfPageText {
   final int pageNumber;
@@ -17,12 +18,14 @@ class PdfExtractResult {
   final int totalPages;
   final int pagesWithText;
   final String? error;
+  final bool usedAiOcr;
 
   const PdfExtractResult({
     required this.pages,
     required this.totalPages,
     required this.pagesWithText,
     this.error,
+    this.usedAiOcr = false,
   });
 
   bool get hasText => pagesWithText > 0;
@@ -31,7 +34,15 @@ class PdfExtractResult {
 }
 
 class PdfExtractService {
-  Future<PdfExtractResult> extractPagesFromBytes(Uint8List bytes) async {
+  final GeminiService _geminiService = GeminiService();
+
+  /// Extract text from PDF. First tries syncfusion text extraction,
+  /// then falls back to Gemini AI OCR for scanned documents.
+  Future<PdfExtractResult> extractPagesFromBytes(Uint8List bytes, {bool forceAiOcr = false}) async {
+    if (forceAiOcr) {
+      return _extractWithAiOcr(bytes);
+    }
+
     try {
       final PdfDocument document = PdfDocument(inputBytes: bytes);
       final pages = <PdfPageText>[];
@@ -56,13 +67,16 @@ class PdfExtractService {
       final pagesWithText = pages.where((p) => p.isNotEmpty).length;
 
       if (pagesWithText == 0) {
+        // No text found — automatically try AI OCR
+        if (_geminiService.isConfigured) {
+          return _extractWithAiOcr(bytes);
+        }
         return PdfExtractResult(
           pages: pages,
           totalPages: totalPages,
           pagesWithText: 0,
-          error: 'No text could be extracted from this PDF. '
-              'The document may contain scanned images instead of selectable text. '
-              'Try using the "Type Text" mode to manually enter the content.',
+          error: 'This PDF contains scanned images. '
+              'Configure your Gemini AI API key in Settings to enable AI-powered text extraction (OCR).',
         );
       }
 
@@ -72,13 +86,74 @@ class PdfExtractService {
         pagesWithText: pagesWithText,
       );
     } catch (e) {
+      // If syncfusion fails, try AI OCR as last resort
+      if (_geminiService.isConfigured) {
+        return _extractWithAiOcr(bytes);
+      }
       return PdfExtractResult(
         pages: [],
         totalPages: 0,
         pagesWithText: 0,
-        error: 'Failed to read the PDF file. The file may be corrupted or password-protected.',
+        error: 'Failed to read the PDF file. Configure Gemini AI in Settings for scanned document support.',
       );
     }
+  }
+
+  /// Extract text from image files
+  Future<PdfExtractResult> extractTextFromImage(Uint8List imageBytes, String mimeType) async {
+    if (!_geminiService.isConfigured) {
+      return PdfExtractResult(
+        pages: [],
+        totalPages: 0,
+        pagesWithText: 0,
+        error: 'Configure your Gemini AI API key in Settings to extract text from images.',
+      );
+    }
+
+    final result = await _geminiService.extractTextFromImage(imageBytes, mimeType);
+    if (result.hasError) {
+      return PdfExtractResult(
+        pages: [],
+        totalPages: 0,
+        pagesWithText: 0,
+        error: result.error,
+      );
+    }
+
+    final pages = result.pages
+        .map((p) => PdfPageText(pageNumber: p.pageNumber, text: p.text, sentences: p.sentences))
+        .toList();
+
+    return PdfExtractResult(
+      pages: pages,
+      totalPages: pages.length,
+      pagesWithText: pages.where((p) => p.isNotEmpty).length,
+      usedAiOcr: true,
+    );
+  }
+
+  Future<PdfExtractResult> _extractWithAiOcr(Uint8List bytes) async {
+    final result = await _geminiService.extractTextFromPdf(bytes);
+
+    if (result.hasError) {
+      return PdfExtractResult(
+        pages: [],
+        totalPages: 0,
+        pagesWithText: 0,
+        error: result.error,
+      );
+    }
+
+    final pages = result.pages
+        .map((p) => PdfPageText(pageNumber: p.pageNumber, text: p.text, sentences: p.sentences))
+        .toList();
+
+    return PdfExtractResult(
+      pages: pages,
+      totalPages: pages.length,
+      pagesWithText: pages.where((p) => p.isNotEmpty).length,
+      usedAiOcr: true,
+    );
   }
 
   static List<String> _splitSentences(String text) {
@@ -89,7 +164,6 @@ class PdfExtractService {
         .map((s) => s.trim())
         .where((s) => s.isNotEmpty)
         .toList();
-    // If no sentence boundaries found, split by newlines
     if (raw.length <= 1 && text.contains('\n')) {
       return text
           .split('\n')

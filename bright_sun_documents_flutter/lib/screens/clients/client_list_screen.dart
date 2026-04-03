@@ -21,11 +21,12 @@ class _ClientListScreenState extends State<ClientListScreen> {
   String _filterPayment = '';
   int _page = 0;
   static const int _pageSize = 10;
+  dynamic _subscription;
 
   @override
   void initState() {
     super.initState();
-    widget.docService.getUsersListRef().onValue.listen((event) {
+    _subscription = widget.docService.getUsersListRef().onValue.listen((event) {
       final data = event.snapshot.value;
       final users = <ClientUser>[];
       if (data != null && data is Map) {
@@ -35,6 +36,12 @@ class _ClientListScreenState extends State<ClientListScreen> {
       }
       if (mounted) setState(() { _users = users; _loading = false; });
     });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 
   List<ClientUser> get _filtered {

@@ -218,6 +218,7 @@ class _OverviewTabState extends State<_OverviewTab> {
   int _completedCount = 0;
   bool _loading = true;
   final List<Map<String, String>> _recentClients = [];
+  dynamic _subscription;
 
   @override
   void initState() {
@@ -225,8 +226,14 @@ class _OverviewTabState extends State<_OverviewTab> {
     _loadStats();
   }
 
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+
   void _loadStats() {
-    widget.docService.getUsersListRef().onValue.listen((event) {
+    _subscription = widget.docService.getUsersListRef().onValue.listen((event) {
       final data = event.snapshot.value;
       int total = 0, paid = 0, pending = 0, completed = 0;
       final recent = <Map<String, String>>[];

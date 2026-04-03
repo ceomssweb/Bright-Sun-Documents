@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
+import '../../services/gemini_service.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
 
@@ -15,14 +16,58 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final _passwordFormKey = GlobalKey<FormState>();
   final _newPasswordCtrl = TextEditingController();
   final _confirmPasswordCtrl = TextEditingController();
+  final _apiKeyCtrl = TextEditingController();
   bool _changingPassword = false;
   bool _obscureNew = true;
   bool _obscureConfirm = true;
+  bool _obscureApiKey = true;
+  bool _savingApiKey = false;
+  bool _aiConfigured = false;
+  final _geminiService = GeminiService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadApiKey();
+  }
+
+  Future<void> _loadApiKey() async {
+    await _geminiService.initialize();
+    final key = await _geminiService.getApiKey();
+    if (mounted) {
+      setState(() {
+        _aiConfigured = _geminiService.isConfigured;
+        if (key != null && key.isNotEmpty) {
+          _apiKeyCtrl.text = key;
+        }
+      });
+    }
+  }
+
+  Future<void> _saveApiKey() async {
+    final key = _apiKeyCtrl.text.trim();
+    if (key.isEmpty) {
+      await _geminiService.clearApiKey();
+      if (mounted) setState(() => _aiConfigured = false);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('API key cleared'), backgroundColor: AppTheme.info));
+      return;
+    }
+    setState(() => _savingApiKey = true);
+    final ok = await _geminiService.setApiKey(key);
+    if (mounted) {
+      setState(() { _savingApiKey = false; _aiConfigured = ok; });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(ok ? 'Gemini AI configured successfully!' : 'Invalid API key. Please check and try again.'),
+        backgroundColor: ok ? AppTheme.success : AppTheme.error,
+      ));
+    }
+  }
 
   @override
   void dispose() {
     _newPasswordCtrl.dispose();
     _confirmPasswordCtrl.dispose();
+    _apiKeyCtrl.dispose();
     super.dispose();
   }
 
@@ -183,6 +228,79 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           const SizedBox(height: 24),
 
+          // AI Configuration card
+          _SettingsCard(
+            width: double.infinity,
+            title: 'AI Configuration (Gemini)',
+            icon: Icons.auto_awesome,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      _aiConfigured ? Icons.check_circle : Icons.warning_amber_rounded,
+                      size: 16,
+                      color: _aiConfigured ? AppTheme.success : AppTheme.warning,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      _aiConfigured ? 'AI is active — OCR & translation powered by Gemini' : 'Add your API key to enable AI OCR & translation',
+                      style: TextStyle(fontSize: 12, color: _aiConfigured ? AppTheme.success : Colors.grey.shade600, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _apiKeyCtrl,
+                  obscureText: _obscureApiKey,
+                  decoration: InputDecoration(
+                    labelText: 'Gemini API Key',
+                    hintText: 'Enter your Google AI Studio API key',
+                    prefixIcon: const Icon(Icons.key, size: 18),
+                    suffixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(_obscureApiKey ? Icons.visibility_off : Icons.visibility, size: 18),
+                          onPressed: () => setState(() => _obscureApiKey = !_obscureApiKey),
+                        ),
+                        if (_apiKeyCtrl.text.isNotEmpty)
+                          IconButton(
+                            icon: const Icon(Icons.clear, size: 18),
+                            onPressed: () async {
+                              _apiKeyCtrl.clear();
+                              await _geminiService.clearApiKey();
+                              setState(() => _aiConfigured = false);
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Get a free API key from Google AI Studio: https://aistudio.google.com/apikey',
+                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: _savingApiKey ? null : _saveApiKey,
+                    icon: _savingApiKey
+                        ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                        : const Icon(Icons.save, size: 18),
+                    label: Text(_savingApiKey ? 'Validating...' : 'Save API Key'),
+                    style: FilledButton.styleFrom(backgroundColor: Colors.deepPurple),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
           // App info card
           _SettingsCard(
             width: double.infinity,
@@ -192,7 +310,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _infoRow('App', 'Bright Sun Documents'),
-                _infoRow('Version', '2.0.0'),
+                _infoRow('Version', '2.1.0'),
                 _infoRow('Platform', 'Flutter Web'),
                 _infoRow('Purpose', 'Document Writing & Translation Platform'),
                 const SizedBox(height: 12),

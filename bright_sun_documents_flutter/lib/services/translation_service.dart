@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'gemini_service.dart';
+
+enum TranslationEngine { geminiAi, myMemory }
 
 class Language {
   final String code;
@@ -13,6 +16,7 @@ class TranslationResult {
   final String targetLanguage;
   final bool success;
   final String? error;
+  final TranslationEngine? engine;
 
   const TranslationResult({
     required this.translatedText,
@@ -20,13 +24,16 @@ class TranslationResult {
     required this.targetLanguage,
     this.success = true,
     this.error,
+    this.engine,
   });
 }
 
 class TranslationService {
   static const String _apiUrl = 'https://api.mymemory.translated.net/get';
+  final GeminiService _geminiService = GeminiService();
 
   static const List<Language> supportedLanguages = [
+    Language(code: 'auto', name: 'Auto-Detect'),
     Language(code: 'ta', name: 'Tamil'),
     Language(code: 'en', name: 'English'),
     Language(code: 'hi', name: 'Hindi'),
@@ -47,9 +54,35 @@ class TranslationService {
     Language(code: 'pt', name: 'Portuguese'),
     Language(code: 'ru', name: 'Russian'),
     Language(code: 'it', name: 'Italian'),
+    Language(code: 'ms', name: 'Malay'),
+    Language(code: 'th', name: 'Thai'),
+    Language(code: 'vi', name: 'Vietnamese'),
+    Language(code: 'id', name: 'Indonesian'),
+    Language(code: 'nl', name: 'Dutch'),
+    Language(code: 'pl', name: 'Polish'),
+    Language(code: 'sv', name: 'Swedish'),
+    Language(code: 'tr', name: 'Turkish'),
   ];
 
-  Future<TranslationResult> translateText(String text, String sourceLang, String targetLang) async {
+  /// Source languages include Auto-Detect. Target languages exclude it.
+  static List<Language> get sourceLanguages => supportedLanguages;
+  static List<Language> get targetLanguages =>
+      supportedLanguages.where((l) => l.code != 'auto').toList();
+
+  bool get isAiAvailable => _geminiService.isConfigured;
+
+  /// Detect language using Gemini AI
+  Future<LanguageDetectResult> detectLanguage(String text) async {
+    return _geminiService.detectLanguage(text);
+  }
+
+  /// Translate text — uses Gemini AI as primary, MyMemory as fallback
+  Future<TranslationResult> translateText(
+    String text,
+    String sourceLang,
+    String targetLang, {
+    TranslationEngine preferredEngine = TranslationEngine.geminiAi,
+  }) async {
     if (text.trim().isEmpty) {
       return TranslationResult(
         translatedText: '',
@@ -58,7 +91,7 @@ class TranslationService {
       );
     }
 
-    if (sourceLang == targetLang) {
+    if (sourceLang == targetLang && sourceLang != 'auto') {
       return TranslationResult(
         translatedText: '',
         sourceLanguage: sourceLang,
@@ -68,6 +101,49 @@ class TranslationService {
       );
     }
 
+    // Resolve auto-detect if needed
+    String resolvedSource = sourceLang;
+    if (sourceLang == 'auto') {
+      if (_geminiService.isConfigured) {
+        final detect = await _geminiService.detectLanguage(text);
+        if (detect.isDetected) {
+          resolvedSource = detect.code;
+          if (resolvedSource == targetLang) {
+            return TranslationResult(
+              translatedText: '',
+              sourceLanguage: resolvedSource,
+              targetLanguage: targetLang,
+              success: false,
+              error: 'Detected language ($resolvedSource) is same as target.',
+            );
+          }
+        }
+      }
+    }
+
+    // Get language names for Gemini
+    final srcName = _langName(resolvedSource);
+    final tgtName = _langName(targetLang);
+
+    // Try Gemini AI first (if available and preferred)
+    if (preferredEngine == TranslationEngine.geminiAi && _geminiService.isConfigured) {
+      final aiResult = await _geminiService.translate(text, srcName, tgtName);
+      if (aiResult.success) {
+        return TranslationResult(
+          translatedText: aiResult.translatedText,
+          sourceLanguage: resolvedSource,
+          targetLanguage: targetLang,
+          engine: TranslationEngine.geminiAi,
+        );
+      }
+      // AI failed — fall back to MyMemory
+    }
+
+    // Fallback to MyMemory
+    return _translateWithMyMemory(text, resolvedSource, targetLang);
+  }
+
+  Future<TranslationResult> _translateWithMyMemory(String text, String sourceLang, String targetLang) async {
     try {
       final chunks = _splitTextIntoChunks(text, 450);
       final translatedChunks = <String>[];
@@ -81,6 +157,7 @@ class TranslationService {
             targetLanguage: targetLang,
             success: false,
             error: 'Translation partially failed. Some text may not be translated.',
+            engine: TranslationEngine.myMemory,
           );
         }
         translatedChunks.add(translated);
@@ -90,6 +167,7 @@ class TranslationService {
         translatedText: translatedChunks.join(' '),
         sourceLanguage: sourceLang,
         targetLanguage: targetLang,
+        engine: TranslationEngine.myMemory,
       );
     } catch (e) {
       return TranslationResult(
@@ -97,7 +175,7 @@ class TranslationService {
         sourceLanguage: sourceLang,
         targetLanguage: targetLang,
         success: false,
-        error: 'Translation failed. Please check your internet connection and try again.',
+        error: 'Translation failed. Please check your internet connection.',
       );
     }
   }
@@ -121,6 +199,11 @@ class TranslationService {
     } catch (e) {
       return null;
     }
+  }
+
+  String _langName(String code) {
+    final found = supportedLanguages.where((l) => l.code == code);
+    return found.isNotEmpty ? found.first.name : code;
   }
 
   List<String> _splitTextIntoChunks(String text, int maxLength) {

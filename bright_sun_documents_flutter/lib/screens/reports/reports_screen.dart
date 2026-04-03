@@ -16,11 +16,12 @@ class ReportsScreen extends StatefulWidget {
 class _ReportsScreenState extends State<ReportsScreen> {
   List<ClientUser> _users = [];
   bool _loading = true;
+  dynamic _subscription;
 
   @override
   void initState() {
     super.initState();
-    widget.docService.getUsersListRef().onValue.listen((event) {
+    _subscription = widget.docService.getUsersListRef().onValue.listen((event) {
       final data = event.snapshot.value;
       final users = <ClientUser>[];
       if (data != null && data is Map) {
@@ -30,6 +31,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
       }
       if (mounted) setState(() { _users = users; _loading = false; });
     });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 
   Map<String, int> _countBy(String Function(ClientUser) selector) {
