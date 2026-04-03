@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "555788329592",
+    "firebase_url": "https://bright-sun-documents-default-rtdb.firebaseio.com",
+    "project_id": "bright-sun-documents",
+    "storage_bucket": "bright-sun-documents.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555788329592:android:8d003dae4969cede47838d",
+        "android_client_info": {
+          "package_name": "com.brightsundocuments.bright_sun_documents_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555788329592-ha3hkk1iauthnmv0ht3va727753vu2j0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCfxIM-R1CDPRYzxG7Iwnj8tvR1GmvWIA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555788329592-ha3hkk1iauthnmv0ht3va727753vu2j0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

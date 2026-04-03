@@ -1,17 +1,1 @@
-{
-  "hosting": {
-    "site": "bright-sun-documents",
-    "public": "build/web",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
+{"hosting":{"site":"bright-sun-documents","public":"build/web","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]},"flutter":{"platforms":{"android":{"default":{"projectId":"bright-sun-documents","appId":"1:555788329592:android:8d003dae4969cede47838d","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"bright-sun-documents","configurations":{"android":"1:555788329592:android:8d003dae4969cede47838d","ios":"1:555788329592:ios:293f4ebf989ab7e147838d","web":"1:555788329592:web:cb18b4f046d6f19947838d"}}}}}}
