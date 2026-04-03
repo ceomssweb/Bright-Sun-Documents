@@ -108,191 +108,197 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SectionHeader(title: 'Settings'),
           const SizedBox(height: 12),
 
-          Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            children: [
-              // Profile card
-              _SettingsCard(
-                width: isWide ? 420 : double.infinity,
-                title: 'Profile',
-                icon: Icons.person,
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 36,
-                      backgroundColor: AppTheme.primary.withValues(alpha: 0.1),
-                      child: Text(
-                        (user?.displayName ?? user?.email ?? '?')[0].toUpperCase(),
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppTheme.primary),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(user?.displayName ?? 'User', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 4),
-                    Text(user?.email ?? '', style: TextStyle(fontSize: 13, color: Colors.grey.shade600)),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          user?.emailVerified == true ? Icons.verified : Icons.warning_amber_rounded,
-                          size: 16,
-                          color: user?.emailVerified == true ? AppTheme.success : AppTheme.warning,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          user?.emailVerified == true ? 'Email Verified' : 'Email Not Verified',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: user?.emailVerified == true ? AppTheme.success : AppTheme.warning,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (widget.authService.isAdmin) ...[
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: AppTheme.info.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Text('Admin', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppTheme.info)),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-
-              // Change password card
-              _SettingsCard(
-                width: isWide ? 420 : double.infinity,
-                title: 'Change Password',
-                icon: Icons.lock_outline,
-                child: Form(
-                  key: _passwordFormKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: _newPasswordCtrl,
-                        obscureText: _obscureNew,
-                        decoration: InputDecoration(
-                          labelText: 'New Password',
-                          prefixIcon: const Icon(Icons.lock, size: 18),
-                          suffixIcon: IconButton(
-                            icon: Icon(_obscureNew ? Icons.visibility_off : Icons.visibility, size: 18),
-                            onPressed: () => setState(() => _obscureNew = !_obscureNew),
-                          ),
-                        ),
-                        validator: (v) {
-                          if (v == null || v.length < 6) return 'Minimum 6 characters';
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      TextFormField(
-                        controller: _confirmPasswordCtrl,
-                        obscureText: _obscureConfirm,
-                        decoration: InputDecoration(
-                          labelText: 'Confirm Password',
-                          prefixIcon: const Icon(Icons.lock_outline, size: 18),
-                          suffixIcon: IconButton(
-                            icon: Icon(_obscureConfirm ? Icons.visibility_off : Icons.visibility, size: 18),
-                            onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
-                          ),
-                        ),
-                        validator: (v) {
-                          if (v != _newPasswordCtrl.text) return 'Passwords do not match';
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        child: FilledButton.icon(
-                          onPressed: _changingPassword ? null : _changePassword,
-                          icon: _changingPassword
-                              ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                              : const Icon(Icons.check, size: 18),
-                          label: Text(_changingPassword ? 'Updating...' : 'Update Password'),
-                        ),
-                      ),
-                    ],
+          // Profile card
+          _SettingsCard(
+            width: isWide ? 500 : double.infinity,
+            title: 'Profile',
+            icon: Icons.person,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 36,
+                  backgroundColor: AppTheme.primary.withValues(alpha: 0.1),
+                  child: Text(
+                    (user?.displayName ?? user?.email ?? '?')[0].toUpperCase(),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppTheme.primary),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                Text(user?.displayName ?? 'User', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 4),
+                Text(user?.email ?? '', style: TextStyle(fontSize: 13, color: Colors.grey.shade600)),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      user?.emailVerified == true ? Icons.verified : Icons.warning_amber_rounded,
+                      size: 16,
+                      color: user?.emailVerified == true ? AppTheme.success : AppTheme.warning,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      user?.emailVerified == true ? 'Email Verified' : 'Email Not Verified',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: user?.emailVerified == true ? AppTheme.success : AppTheme.warning,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                if (widget.authService.isAdmin) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: AppTheme.info.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Text('Admin', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppTheme.info)),
+                  ),
+                ],
+              ],
+            ),
           ),
 
           const SizedBox(height: 24),
 
-          // AI Configuration card
-          _SettingsCard(
-            width: double.infinity,
-            title: 'AI Configuration (Gemini)',
-            icon: Icons.auto_awesome,
+          // Account & Security submenu
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: Colors.grey.shade200),
+            ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Icon(
-                      _aiConfigured ? Icons.check_circle : Icons.warning_amber_rounded,
-                      size: 16,
-                      color: _aiConfigured ? AppTheme.success : AppTheme.warning,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      _aiConfigured ? 'AI is active — OCR & translation powered by Gemini' : 'Add your API key to enable AI OCR & translation',
-                      style: TextStyle(fontSize: 12, color: _aiConfigured ? AppTheme.success : Colors.grey.shade600, fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _apiKeyCtrl,
-                  obscureText: _obscureApiKey,
-                  decoration: InputDecoration(
-                    labelText: 'Gemini API Key',
-                    hintText: 'Enter your Google AI Studio API key',
-                    prefixIcon: const Icon(Icons.key, size: 18),
-                    suffixIcon: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(_obscureApiKey ? Icons.visibility_off : Icons.visibility, size: 18),
-                          onPressed: () => setState(() => _obscureApiKey = !_obscureApiKey),
+                // Change Password expandable
+                Theme(
+                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
+                    leading: const Icon(Icons.lock_outline, size: 20, color: AppTheme.primary),
+                    title: const Text('Change Password', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                    subtitle: const Text('Update your account password', style: TextStyle(fontSize: 12)),
+                    childrenPadding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    children: [
+                      Form(
+                        key: _passwordFormKey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _newPasswordCtrl,
+                              obscureText: _obscureNew,
+                              decoration: InputDecoration(
+                                labelText: 'New Password',
+                                prefixIcon: const Icon(Icons.lock, size: 18),
+                                suffixIcon: IconButton(
+                                  icon: Icon(_obscureNew ? Icons.visibility_off : Icons.visibility, size: 18),
+                                  onPressed: () => setState(() => _obscureNew = !_obscureNew),
+                                ),
+                              ),
+                              validator: (v) {
+                                if (v == null || v.length < 6) return 'Minimum 6 characters';
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            TextFormField(
+                              controller: _confirmPasswordCtrl,
+                              obscureText: _obscureConfirm,
+                              decoration: InputDecoration(
+                                labelText: 'Confirm Password',
+                                prefixIcon: const Icon(Icons.lock_outline, size: 18),
+                                suffixIcon: IconButton(
+                                  icon: Icon(_obscureConfirm ? Icons.visibility_off : Icons.visibility, size: 18),
+                                  onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
+                                ),
+                              ),
+                              validator: (v) {
+                                if (v != _newPasswordCtrl.text) return 'Passwords do not match';
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width: double.infinity,
+                              child: FilledButton.icon(
+                                onPressed: _changingPassword ? null : _changePassword,
+                                icon: _changingPassword
+                                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                                    : const Icon(Icons.check, size: 18),
+                                label: Text(_changingPassword ? 'Updating...' : 'Update Password'),
+                              ),
+                            ),
+                          ],
                         ),
-                        if (_apiKeyCtrl.text.isNotEmpty)
-                          IconButton(
-                            icon: const Icon(Icons.clear, size: 18),
-                            onPressed: () async {
-                              _apiKeyCtrl.clear();
-                              await _geminiService.clearApiKey();
-                              setState(() => _aiConfigured = false);
-                            },
-                          ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  'Get a free API key from Google AI Studio: https://aistudio.google.com/apikey',
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton.icon(
-                    onPressed: _savingApiKey ? null : _saveApiKey,
-                    icon: _savingApiKey
-                        ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                        : const Icon(Icons.save, size: 18),
-                    label: Text(_savingApiKey ? 'Validating...' : 'Save API Key'),
-                    style: FilledButton.styleFrom(backgroundColor: Colors.deepPurple),
+                Divider(height: 1, color: Colors.grey.shade200),
+                // AI Configuration expandable
+                Theme(
+                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
+                    leading: const Icon(Icons.auto_awesome, size: 20, color: AppTheme.primary),
+                    title: const Text('AI Configuration (Gemini)', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+                    subtitle: Text(
+                      _aiConfigured ? 'AI is active' : 'Configure your API key',
+                      style: TextStyle(fontSize: 12, color: _aiConfigured ? AppTheme.success : Colors.grey.shade600),
+                    ),
+                    trailing: Icon(
+                      _aiConfigured ? Icons.check_circle : Icons.warning_amber_rounded,
+                      size: 18,
+                      color: _aiConfigured ? AppTheme.success : AppTheme.warning,
+                    ),
+                    childrenPadding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    children: [
+                      TextField(
+                        controller: _apiKeyCtrl,
+                        obscureText: _obscureApiKey,
+                        decoration: InputDecoration(
+                          labelText: 'Gemini API Key',
+                          hintText: 'Enter your Google AI Studio API key',
+                          prefixIcon: const Icon(Icons.key, size: 18),
+                          suffixIcon: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(_obscureApiKey ? Icons.visibility_off : Icons.visibility, size: 18),
+                                onPressed: () => setState(() => _obscureApiKey = !_obscureApiKey),
+                              ),
+                              if (_apiKeyCtrl.text.isNotEmpty)
+                                IconButton(
+                                  icon: const Icon(Icons.clear, size: 18),
+                                  onPressed: () async {
+                                    _apiKeyCtrl.clear();
+                                    await _geminiService.clearApiKey();
+                                    setState(() => _aiConfigured = false);
+                                  },
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Get a free API key from Google AI Studio: https://aistudio.google.com/apikey',
+                        style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: FilledButton.icon(
+                          onPressed: _savingApiKey ? null : _saveApiKey,
+                          icon: _savingApiKey
+                              ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                              : const Icon(Icons.save, size: 18),
+                          label: Text(_savingApiKey ? 'Saving...' : 'Save API Key'),
+                          style: FilledButton.styleFrom(backgroundColor: Colors.deepPurple),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -310,7 +316,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _infoRow('App', 'Bright Sun Documents'),
-                _infoRow('Version', '2.1.0'),
+                _infoRow('Version', '2.2.0'),
                 _infoRow('Platform', 'Flutter Web'),
                 _infoRow('Purpose', 'Document Writing & Translation Platform'),
                 const SizedBox(height: 12),

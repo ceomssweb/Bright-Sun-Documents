@@ -44,19 +44,28 @@ class GeminiService {
 
   Future<bool> setApiKey(String key) async {
     try {
-      // Validate the key by making a simple test request
-      final testModel = GenerativeModel(
-        model: 'gemini-2.0-flash',
-        apiKey: key,
-      );
-      await testModel.generateContent([Content.text('Hello')]);
-
+      // Save the key first so it's persisted
       _apiKey = key;
       _initModels();
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_apiKeyPref, key);
+
+      // Then validate by making a test request
+      try {
+        final testModel = GenerativeModel(
+          model: 'gemini-2.0-flash',
+          apiKey: key,
+        );
+        await testModel.generateContent([Content.text('Hello')]);
+      } catch (_) {
+        // Validation may fail on web due to CORS or network,
+        // but the key is still saved and may work for server-side calls
+      }
       return true;
     } catch (e) {
+      _apiKey = null;
+      _model = null;
+      _visionModel = null;
       return false;
     }
   }

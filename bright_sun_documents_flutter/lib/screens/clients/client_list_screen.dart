@@ -16,6 +16,7 @@ class ClientListScreen extends StatefulWidget {
 class _ClientListScreenState extends State<ClientListScreen> {
   List<ClientUser> _users = [];
   bool _loading = true;
+  String? _error;
   String _search = '';
   String _filterDoc = '';
   String _filterPayment = '';
@@ -26,16 +27,30 @@ class _ClientListScreenState extends State<ClientListScreen> {
   @override
   void initState() {
     super.initState();
-    _subscription = widget.docService.getUsersListRef().onValue.listen((event) {
-      final data = event.snapshot.value;
-      final users = <ClientUser>[];
-      if (data != null && data is Map) {
-        data.forEach((key, value) {
-          if (value is Map) users.add(ClientUser.fromMap(value, key: key.toString()));
-        });
-      }
-      if (mounted) setState(() { _users = users; _loading = false; });
-    });
+    _loadData();
+  }
+
+  void _loadData() {
+    try {
+      _subscription?.cancel();
+      _subscription = widget.docService.getUsersListRef().onValue.listen(
+        (event) {
+          final data = event.snapshot.value;
+          final users = <ClientUser>[];
+          if (data != null && data is Map) {
+            data.forEach((key, value) {
+              if (value is Map) users.add(ClientUser.fromMap(value, key: key.toString()));
+            });
+          }
+          if (mounted) setState(() { _users = users; _loading = false; _error = null; });
+        },
+        onError: (error) {
+          if (mounted) setState(() { _error = 'Failed to load clients: $error'; _loading = false; });
+        },
+      );
+    } catch (e) {
+      if (mounted) setState(() { _error = 'Database connection error: $e'; _loading = false; });
+    }
   }
 
   @override
@@ -138,6 +153,25 @@ class _ClientListScreenState extends State<ClientListScreen> {
           // Table
           if (_loading)
             const Expanded(child: Center(child: CircularProgressIndicator()))
+          else if (_error != null)
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.error_outline, color: AppTheme.error, size: 48),
+                    const SizedBox(height: 12),
+                    Text(_error!, style: const TextStyle(color: AppTheme.error), textAlign: TextAlign.center),
+                    const SizedBox(height: 12),
+                    FilledButton.icon(
+                      onPressed: () { setState(() { _loading = true; _error = null; }); _loadData(); },
+                      icon: const Icon(Icons.refresh, size: 18),
+                      label: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
+            )
           else if (_users.isEmpty)
             Expanded(
               child: EmptyState(

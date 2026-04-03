@@ -124,22 +124,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildContent(AuthService auth) {
-    switch (_selectedIndex) {
-      case 0:
-        return _OverviewTab(auth: auth, docService: _docService);
-      case 1:
-        return AddClientScreen(docService: _docService);
-      case 2:
-        return ClientListScreen(docService: _docService);
-      case 3:
-        return ReportsScreen(docService: _docService);
-      case 4:
-        return SettingsScreen(authService: auth);
-      case 5:
-        return const EmployeeListScreen();
-      default:
-        return _OverviewTab(auth: auth, docService: _docService);
-    }
+    return IndexedStack(
+      index: _selectedIndex.clamp(0, 5),
+      children: [
+        _OverviewTab(auth: auth, docService: _docService),
+        AddClientScreen(docService: _docService),
+        ClientListScreen(docService: _docService),
+        ReportsScreen(docService: _docService),
+        SettingsScreen(authService: auth),
+        const EmployeeListScreen(),
+      ],
+    );
   }
 }
 
@@ -217,6 +212,7 @@ class _OverviewTabState extends State<_OverviewTab> {
   int _pendingCount = 0;
   int _completedCount = 0;
   bool _loading = true;
+  String? _error;
   final List<Map<String, String>> _recentClients = [];
   dynamic _subscription;
 
@@ -233,44 +229,64 @@ class _OverviewTabState extends State<_OverviewTab> {
   }
 
   void _loadStats() {
-    _subscription = widget.docService.getUsersListRef().onValue.listen((event) {
-      final data = event.snapshot.value;
-      int total = 0, paid = 0, pending = 0, completed = 0;
-      final recent = <Map<String, String>>[];
+    try {
+      _subscription = widget.docService.getUsersListRef().onValue.listen(
+        (event) {
+          final data = event.snapshot.value;
+          int total = 0, paid = 0, pending = 0, completed = 0;
+          final recent = <Map<String, String>>[];
 
-      if (data != null && data is Map) {
-        data.forEach((key, value) {
-          if (value is Map) {
-            total++;
-            final ps = value['paymentStatus']?.toString().toLowerCase() ?? '';
-            if (ps == 'paid') paid++;
-            if (ps == 'pending' || ps == 'partial' || ps == 'not paid') pending++;
-            final ds = value['finalDocStatus']?.toString().toLowerCase() ?? '';
-            if (ds == 'completed' || ds == 'delivered') completed++;
-            if (recent.length < 5) {
-              recent.add({
-                'name': value['fullName']?.toString() ?? '',
-                'doc': value['selectedDoc']?.toString() ?? '',
-                'status': value['finalDocStatus']?.toString() ?? '',
-                'payment': value['paymentStatus']?.toString() ?? '',
-              });
-            }
+          if (data != null && data is Map) {
+            data.forEach((key, value) {
+              if (value is Map) {
+                total++;
+                final ps = value['paymentStatus']?.toString().toLowerCase() ?? '';
+                if (ps == 'paid') paid++;
+                if (ps == 'pending' || ps == 'partial' || ps == 'not paid') pending++;
+                final ds = value['finalDocStatus']?.toString().toLowerCase() ?? '';
+                if (ds == 'completed' || ds == 'delivered') completed++;
+                if (recent.length < 5) {
+                  recent.add({
+                    'name': value['fullName']?.toString() ?? '',
+                    'doc': value['selectedDoc']?.toString() ?? '',
+                    'status': value['finalDocStatus']?.toString() ?? '',
+                    'payment': value['paymentStatus']?.toString() ?? '',
+                  });
+                }
+              }
+            });
           }
-        });
-      }
 
+          if (mounted) {
+            setState(() {
+              _totalClients = total;
+              _paidCount = paid;
+              _pendingCount = pending;
+              _completedCount = completed;
+              _recentClients.clear();
+              _recentClients.addAll(recent);
+              _loading = false;
+              _error = null;
+            });
+          }
+        },
+        onError: (error) {
+          if (mounted) {
+            setState(() {
+              _error = 'Failed to load data: $error';
+              _loading = false;
+            });
+          }
+        },
+      );
+    } catch (e) {
       if (mounted) {
         setState(() {
-          _totalClients = total;
-          _paidCount = paid;
-          _pendingCount = pending;
-          _completedCount = completed;
-          _recentClients.clear();
-          _recentClients.addAll(recent);
+          _error = 'Database connection error: $e';
           _loading = false;
         });
       }
-    });
+    }
   }
 
   @override
@@ -297,6 +313,25 @@ class _OverviewTabState extends State<_OverviewTab> {
           // Stats
           if (_loading)
             const Center(child: Padding(padding: EdgeInsets.all(40), child: CircularProgressIndicator()))
+          else if (_error != null)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(40),
+                child: Column(
+                  children: [
+                    const Icon(Icons.error_outline, color: AppTheme.error, size: 48),
+                    const SizedBox(height: 12),
+                    Text(_error!, style: const TextStyle(color: AppTheme.error), textAlign: TextAlign.center),
+                    const SizedBox(height: 12),
+                    FilledButton.icon(
+                      onPressed: () { setState(() { _loading = true; _error = null; }); _loadStats(); },
+                      icon: const Icon(Icons.refresh, size: 18),
+                      label: const Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
+            )
           else ...[
             GridView.count(
               crossAxisCount: isWide ? 4 : 2,

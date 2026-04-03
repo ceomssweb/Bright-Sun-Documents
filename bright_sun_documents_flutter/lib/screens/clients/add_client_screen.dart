@@ -57,21 +57,19 @@ class _AddClientScreenState extends State<AddClientScreen> {
       _showMsg('Please fill in all required fields.', isError: true);
       return;
     }
-    if (_files.isEmpty) {
-      _showMsg('Please upload at least one document.', isError: true);
-      return;
-    }
 
     setState(() { _uploading = true; _progress = 0; });
 
     try {
       final fileNames = <String>[];
-      for (var i = 0; i < _files.length; i++) {
-        final file = _files[i];
-        if (file.bytes != null) {
-          await widget.docService.uploadFile(file.bytes!, file.name, _mobileNumber.text);
-          fileNames.add(file.name);
-          setState(() => _progress = (i + 1) / _files.length);
+      if (_files.isNotEmpty) {
+        for (var i = 0; i < _files.length; i++) {
+          final file = _files[i];
+          if (file.bytes != null) {
+            await widget.docService.uploadFile(file.bytes!, file.name, _mobileNumber.text);
+            fileNames.add(file.name);
+            setState(() => _progress = (i + 1) / _files.length);
+          }
         }
       }
 

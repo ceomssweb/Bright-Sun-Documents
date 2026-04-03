@@ -2,7 +2,7 @@ name: bright_sun_documents_flutter
 description: "Bright Sun Documents - Professional Document Writing & Translation Platform"
 publish_to: 'none'
 
-version: 2.1.0+1
+version: 2.2.0+1
 
 environment:
   sdk: ^3.10.8

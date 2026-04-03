@@ -16,21 +16,36 @@ class ReportsScreen extends StatefulWidget {
 class _ReportsScreenState extends State<ReportsScreen> {
   List<ClientUser> _users = [];
   bool _loading = true;
+  String? _error;
   dynamic _subscription;
 
   @override
   void initState() {
     super.initState();
-    _subscription = widget.docService.getUsersListRef().onValue.listen((event) {
-      final data = event.snapshot.value;
-      final users = <ClientUser>[];
-      if (data != null && data is Map) {
-        data.forEach((key, value) {
-          if (value is Map) users.add(ClientUser.fromMap(value, key: key.toString()));
-        });
-      }
-      if (mounted) setState(() { _users = users; _loading = false; });
-    });
+    _loadData();
+  }
+
+  void _loadData() {
+    try {
+      _subscription?.cancel();
+      _subscription = widget.docService.getUsersListRef().onValue.listen(
+        (event) {
+          final data = event.snapshot.value;
+          final users = <ClientUser>[];
+          if (data != null && data is Map) {
+            data.forEach((key, value) {
+              if (value is Map) users.add(ClientUser.fromMap(value, key: key.toString()));
+            });
+          }
+          if (mounted) setState(() { _users = users; _loading = false; _error = null; });
+        },
+        onError: (error) {
+          if (mounted) setState(() { _error = 'Failed to load data: $error'; _loading = false; });
+        },
+      );
+    } catch (e) {
+      if (mounted) setState(() { _error = 'Database connection error: $e'; _loading = false; });
+    }
   }
 
   @override
@@ -64,6 +79,25 @@ class _ReportsScreenState extends State<ReportsScreen> {
   @override
   Widget build(BuildContext context) {
     if (_loading) return const Center(child: CircularProgressIndicator());
+
+    if (_error != null) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, color: AppTheme.error, size: 48),
+            const SizedBox(height: 12),
+            Text(_error!, style: const TextStyle(color: AppTheme.error), textAlign: TextAlign.center),
+            const SizedBox(height: 12),
+            FilledButton.icon(
+              onPressed: () { setState(() { _loading = true; _error = null; }); _loadData(); },
+              icon: const Icon(Icons.refresh, size: 18),
+              label: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
 
     final paymentCounts = _countBy((u) => u.paymentStatus);
     final docTypeCounts = _countBy((u) => u.selectedDoc);
