@@ -6,50 +6,97 @@ class PdfPageText {
   final String text;
   final List<String> sentences;
 
-  PdfPageText({
-    required this.pageNumber,
-    required this.text,
-    required this.sentences,
+  const PdfPageText({required this.pageNumber, required this.text, required this.sentences});
+
+  bool get isEmpty => text.trim().isEmpty;
+  bool get isNotEmpty => text.trim().isNotEmpty;
+}
+
+class PdfExtractResult {
+  final List<PdfPageText> pages;
+  final int totalPages;
+  final int pagesWithText;
+  final String? error;
+
+  const PdfExtractResult({
+    required this.pages,
+    required this.totalPages,
+    required this.pagesWithText,
+    this.error,
   });
+
+  bool get hasText => pagesWithText > 0;
+  bool get hasError => error != null;
+  String get allText => pages.where((p) => p.isNotEmpty).map((p) => p.text).join('\n\n');
 }
 
 class PdfExtractService {
-  /// Extract text from each page, returning a list of [PdfPageText].
-  Future<List<PdfPageText>> extractPagesFromBytes(Uint8List bytes) async {
-    final PdfDocument document = PdfDocument(inputBytes: bytes);
-    final pages = <PdfPageText>[];
-    for (int i = 0; i < document.pages.count; i++) {
-      final String pageText = PdfTextExtractor(document)
-          .extractText(startPageIndex: i, endPageIndex: i);
-      final sentences = _splitSentences(pageText);
-      pages.add(PdfPageText(
-        pageNumber: i + 1,
-        text: pageText,
-        sentences: sentences,
-      ));
+  Future<PdfExtractResult> extractPagesFromBytes(Uint8List bytes) async {
+    try {
+      final PdfDocument document = PdfDocument(inputBytes: bytes);
+      final pages = <PdfPageText>[];
+      final totalPages = document.pages.count;
+
+      for (int i = 0; i < totalPages; i++) {
+        String pageText = '';
+        try {
+          pageText = PdfTextExtractor(document).extractText(startPageIndex: i, endPageIndex: i);
+        } catch (_) {
+          // Page may have no extractable text
+        }
+        pages.add(PdfPageText(
+          pageNumber: i + 1,
+          text: pageText.trim(),
+          sentences: _splitSentences(pageText),
+        ));
+      }
+
+      document.dispose();
+
+      final pagesWithText = pages.where((p) => p.isNotEmpty).length;
+
+      if (pagesWithText == 0) {
+        return PdfExtractResult(
+          pages: pages,
+          totalPages: totalPages,
+          pagesWithText: 0,
+          error: 'No text could be extracted from this PDF. '
+              'The document may contain scanned images instead of selectable text. '
+              'Try using the "Type Text" mode to manually enter the content.',
+        );
+      }
+
+      return PdfExtractResult(
+        pages: pages,
+        totalPages: totalPages,
+        pagesWithText: pagesWithText,
+      );
+    } catch (e) {
+      return PdfExtractResult(
+        pages: [],
+        totalPages: 0,
+        pagesWithText: 0,
+        error: 'Failed to read the PDF file. The file may be corrupted or password-protected.',
+      );
     }
-    document.dispose();
-    return pages;
   }
 
-  /// Legacy method - returns all text concatenated.
-  Future<String> extractTextFromBytes(Uint8List bytes) async {
-    final pages = await extractPagesFromBytes(bytes);
-    return pages
-        .map((p) => '--- Page ${p.pageNumber} ---\n${p.text}')
-        .join('\n\n');
-  }
-
-  /// Split text into sentences for granular selection.
   static List<String> _splitSentences(String text) {
     if (text.trim().isEmpty) return [];
-    // Split on sentence-ending punctuation followed by space/newline
     final raw = text
         .replaceAll(RegExp(r'\r\n|\r'), '\n')
         .split(RegExp(r'(?<=[.!?।])\s+'))
         .map((s) => s.trim())
         .where((s) => s.isNotEmpty)
         .toList();
+    // If no sentence boundaries found, split by newlines
+    if (raw.length <= 1 && text.contains('\n')) {
+      return text
+          .split('\n')
+          .map((s) => s.trim())
+          .where((s) => s.isNotEmpty)
+          .toList();
+    }
     return raw;
   }
 }

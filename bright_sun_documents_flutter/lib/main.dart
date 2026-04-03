@@ -8,9 +8,7 @@ import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const BrightSunDocumentsApp());
 }
 
@@ -23,12 +21,12 @@ class BrightSunDocumentsApp extends StatelessWidget {
       create: (_) => AuthService(),
       child: Consumer<AuthService>(
         builder: (context, authService, _) {
-          final router = createRouter(authService);
+          final appRouter = AppRouter(authService: authService);
           return MaterialApp.router(
             title: 'Bright Sun Documents',
-            theme: AppTheme.theme,
-            routerConfig: router,
             debugShowCheckedModeBanner: false,
+            theme: AppTheme.theme,
+            routerConfig: appRouter.router,
           );
         },
       ),

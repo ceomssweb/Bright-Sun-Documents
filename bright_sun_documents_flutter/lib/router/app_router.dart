@@ -1,58 +1,69 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../services/auth_service.dart';
-import '../screens/home_page/home_page_screen.dart';
-import '../screens/document_request/document_request_screen.dart';
-import '../screens/forgot_password/forgot_password_screen.dart';
-import '../screens/verify_email/verify_email_screen.dart';
-import '../screens/translate_document/translate_document_screen.dart';
+import '../screens/auth/login_screen.dart';
+import '../screens/auth/forgot_password_screen.dart';
+import '../screens/auth/verify_email_screen.dart';
+import '../screens/dashboard/dashboard_screen.dart';
+import '../screens/translate/translate_screen.dart';
 
-GoRouter createRouter(AuthService authService) {
-  return GoRouter(
-    initialLocation: '/home-page',
+class AppRouter {
+  final AuthService authService;
+
+  AppRouter({required this.authService});
+
+  late final GoRouter router = GoRouter(
+    refreshListenable: authService,
+    initialLocation: '/',
     redirect: (context, state) {
-      final isLoggedIn = authService.isLoggedIn;
-      final isAuthRoute = state.matchedLocation == '/home-page' ||
-          state.matchedLocation == '/register-user' ||
-          state.matchedLocation == '/forgot-password' ||
-          state.matchedLocation == '/verify-email-address';
+      final loggedIn = authService.currentUser != null;
+      final loggingIn = state.matchedLocation == '/';
+      final goingToForgot = state.matchedLocation == '/forgot-password';
+      final goingToVerify = state.matchedLocation == '/verify-email';
 
-      if (isLoggedIn && isAuthRoute) {
-        return '/document-request';
-      }
-      if (!isLoggedIn && !isAuthRoute) {
-        return '/home-page';
-      }
+      if (!loggedIn && !loggingIn && !goingToForgot) return '/';
+      if (loggedIn && !authService.currentUser!.emailVerified && !goingToVerify) return '/verify-email';
+      if (loggedIn && authService.currentUser!.emailVerified && (loggingIn || goingToVerify)) return '/dashboard';
       return null;
     },
     routes: [
       GoRoute(
-        path: '/home-page',
-        builder: (context, state) => const HomePageScreen(),
-      ),
-      GoRoute(
         path: '/',
-        redirect: (context, state) => '/document-request',
-      ),
-      GoRoute(
-        path: '/document-request',
-        builder: (context, state) => const DocumentRequestScreen(),
-      ),
-      GoRoute(
-        path: '/translate-document',
-        builder: (context, state) => const TranslateDocumentScreen(),
+        builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: '/forgot-password',
         builder: (context, state) => const ForgotPasswordScreen(),
       ),
       GoRoute(
-        path: '/verify-email-address',
+        path: '/verify-email',
         builder: (context, state) => const VerifyEmailScreen(),
       ),
       GoRoute(
-        path: '/register-user',
-        builder: (context, state) => const HomePageScreen(),
+        path: '/dashboard',
+        builder: (context, state) => const DashboardScreen(),
+      ),
+      GoRoute(
+        path: '/translate',
+        builder: (context, state) => const TranslateScreen(),
       ),
     ],
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+            const SizedBox(height: 12),
+            Text('Page not found', style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 8),
+            FilledButton(
+              onPressed: () => context.go('/'),
+              child: const Text('Go Home'),
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }
